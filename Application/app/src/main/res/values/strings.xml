@@ -1,3 +1,17 @@
 <resources>
-    <string name="app_name">Application</string>
+    <string name="app_name">CCApplication</string>
+    <string name="productCode">Product code:</string>
+    <string name="allergens">Allergens:</string>
+    <string name="brands">Brands:</string>
+    <string name="categories">Categories:</string>
+    <string name="productName">Name:</string>
+    <string name="expirationDate">Expiration date:</string>
+    <string name="ingredients">Ingredients:</string>
+    <string name="labels">Labels:</string>
+    <string name="purchasePlace">Purchase place: </string>
+    <string name="quantity">Quantity:</string>
+    <string name="image">Product Image</string>
+    <string name="nutriments">Nutriments:</string>
+    <string name="codeLabel">Code:</string>
+    <string name="productDetails">Product details:</string>
 </resources>
