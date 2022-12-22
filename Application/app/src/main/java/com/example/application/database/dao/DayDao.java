@@ -1,6 +1,7 @@
 package com.example.application.database.dao;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
@@ -23,7 +24,10 @@ public interface DayDao {
     @Update
     void update(Day... days);
 
+    @Delete
+    void delete(Day... days);
+
     @Transaction
     @Query("SELECT * FROM day WHERE day_id = :date")
-    List<DayWithServings> get(Date date);
+    DayWithServings get(Date date);
 }

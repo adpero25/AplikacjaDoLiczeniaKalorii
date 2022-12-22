@@ -18,5 +18,5 @@ public interface OpenFoodFactDao {
 
     @Transaction
     @Query("SELECT * FROM open_food_fact WHERE code = :code")
-    List<OpenFoodFactWithMeal> get(String code);
+    OpenFoodFactWithMeal get(String code);
 }

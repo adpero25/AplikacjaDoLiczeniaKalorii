@@ -32,4 +32,7 @@ public interface CategoryDao {
     @Transaction
     @Query("SELECT * FROM category")
     List<CategoryWithMeals> getAll();
+
+    @Query("SELECT * FROM category")
+    List<Category> getAllWithoutMeals();
 }
