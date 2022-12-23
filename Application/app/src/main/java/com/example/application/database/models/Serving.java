@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName="serving",
@@ -22,6 +23,14 @@ import androidx.room.PrimaryKey;
                     parentColumns = "day_id",
                     childColumns = "day_id"
             )
+        },
+        indices = {
+            @Index(
+                    value = "meal_id"
+            ),
+            @Index(
+                    value = "day_id"
+            )
         }
 )
 public class Serving {
@@ -31,15 +40,15 @@ public class Serving {
 
     @ColumnInfo(name = "meal_id")
     @NonNull
-    public Long mealId;
+    public Long mealId = (long) -1;
 
     @ColumnInfo(name = "day_id")
     @NonNull
-    public Long dayId;
+    public Long dayId = (long) -1;
 
     @ColumnInfo(name = "serving_size")
     @NonNull
-    public double servingSize;
+    public Double servingSize = 0.0;
 }
 
 

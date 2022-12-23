@@ -18,23 +18,23 @@ public class CategoriesRepository extends Repository {
 
     private final CategoryDao categoryDao;
 
-    CategoriesRepository(Application application) {
+    public CategoriesRepository(Application application) {
         super(application);
 
         categoryDao = database.categoryDao();
     }
 
-    CategoriesRepository(CaloriesDatabase database) {
+    public CategoriesRepository(CaloriesDatabase database) {
         super(database);
 
         categoryDao = database.categoryDao();
     }
 
-    void insert(Category category) {
+    public void insert(Category category) {
         queryExecutor.execute(() -> categoryDao.insert(category));
     }
 
-    void insert(String categoryName) {
+    public void insert(String categoryName) {
         insert(new Category(){{
             name = categoryName;
         }});
@@ -44,15 +44,15 @@ public class CategoriesRepository extends Repository {
         queryExecutor.execute(() -> categoryDao.update(category));
     }
 
-    void delete(Category category) {
+    public void delete(Category category) {
         queryExecutor.execute(() -> categoryDao.delete(category));
     }
 
-    CompletableFuture<List<CategoryWithMeals>> getAll(){
+    public CompletableFuture<List<CategoryWithMeals>> getAll(){
         return CompletableFuture.supplyAsync(categoryDao::getAll, queryExecutor);
     }
 
-    CompletableFuture<List<CategoryWithMeals>> getAllWithoutMeals(){
+    public CompletableFuture<List<CategoryWithMeals>> getAllWithoutMeals(){
         return CompletableFuture.supplyAsync(categoryDao::getAll, queryExecutor);
     }
 }

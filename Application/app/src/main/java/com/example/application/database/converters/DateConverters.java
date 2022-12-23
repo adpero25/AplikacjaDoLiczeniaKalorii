@@ -17,7 +17,7 @@ public class DateConverters {
         int year = (int) (hashedDate / 10000);
 
         Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day);
+        cal.set(year, month, day,0,0,0);
         Date date = cal.getTime();
 
         return date;

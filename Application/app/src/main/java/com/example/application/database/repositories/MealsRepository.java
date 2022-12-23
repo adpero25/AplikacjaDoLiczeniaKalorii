@@ -19,25 +19,25 @@ public class MealsRepository extends Repository {
     private final MealDao mealDao;
     private final OpenFoodFactDao openFoodFactDao;
 
-    MealsRepository(Application application) {
+    public MealsRepository(Application application) {
         super(application);
 
         mealDao = database.mealDao();
         openFoodFactDao = database.openFoodFactDao();
     }
 
-    MealsRepository(CaloriesDatabase database) {
+    public MealsRepository(CaloriesDatabase database) {
         super(database);
 
         mealDao = database.mealDao();
         openFoodFactDao = database.openFoodFactDao();
     }
 
-    void insert(Meal meal) {
+    public void insert(Meal meal) {
         queryExecutor.execute(() -> mealDao.insert(meal));
     }
 
-    void insertWithBarcode(Meal meal, String barcode) {
+    public void insertWithBarcode(Meal meal, String barcode) {
         queryExecutor.execute(
                 () -> {
                     long newMealId = mealDao.insert(meal);
@@ -49,19 +49,19 @@ public class MealsRepository extends Repository {
         );
     }
 
-    void update(Meal meal) {
+    public void update(Meal meal) {
         queryExecutor.execute(() -> mealDao.update(meal));
     }
 
-    void delete(Meal meal) {
+    public void delete(Meal meal) {
         queryExecutor.execute(() -> mealDao.delete(meal));
     }
 
-    CompletableFuture<OpenFoodFactWithMeal> getByBarcode(String barcode){
+    public CompletableFuture<OpenFoodFactWithMeal> getByBarcode(String barcode){
         return CompletableFuture.supplyAsync(() -> openFoodFactDao.get(barcode), queryExecutor);
     }
 
-    CompletableFuture<List<MealWithOpenFoodFact>> getAll(){
+    public CompletableFuture<List<MealWithOpenFoodFact>> getAll(){
         return CompletableFuture.supplyAsync(mealDao::getAll, queryExecutor);
     }
 }

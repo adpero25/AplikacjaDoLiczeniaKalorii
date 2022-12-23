@@ -15,13 +15,13 @@ public class DaysRepository extends Repository {
 
     private final DayDao dayDao;
 
-    DaysRepository(Application application) {
+    public DaysRepository(Application application) {
         super(application);
 
         dayDao = database.dayDao();
     }
 
-    DaysRepository(CaloriesDatabase database) {
+    public DaysRepository(CaloriesDatabase database) {
         super(database);
 
         dayDao = database.dayDao();
@@ -31,19 +31,19 @@ public class DaysRepository extends Repository {
         queryExecutor.execute(() -> dayDao.insert(day));
     }
 
-    void update(Day day) {
+    public void update(Day day) {
         queryExecutor.execute(() -> dayDao.update(day));
     }
 
-    void delete(Day day) {
+    public void delete(Day day) {
         queryExecutor.execute(() -> dayDao.delete(day));
     }
 
-    CompletableFuture<DayWithServings> getOrCreateToday(){
+    public CompletableFuture<DayWithServings> getOrCreateToday(){
         return getOrCreateByDate(new Date());
     }
 
-    CompletableFuture<DayWithServings> getOrCreateByDate(Date date){
+    public CompletableFuture<DayWithServings> getOrCreateByDate(Date date){
         return CompletableFuture.supplyAsync(() -> {
             DayWithServings day;
             try {
@@ -53,7 +53,7 @@ public class DaysRepository extends Repository {
             }
 
             if(day == null){
-                insert(new Day() {{
+                dayDao.insert(new Day() {{
                     dayId = date;
                 }});
             }
@@ -66,7 +66,7 @@ public class DaysRepository extends Repository {
         }, queryExecutor);
     }
 
-    CompletableFuture<DayWithServings> getByDate(Date date){
+    public CompletableFuture<DayWithServings> getByDate(Date date){
         return CompletableFuture.supplyAsync(() -> dayDao.get(date), queryExecutor);
     }
 }

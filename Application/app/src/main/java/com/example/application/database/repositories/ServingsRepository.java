@@ -19,13 +19,13 @@ public class ServingsRepository extends Repository {
 
     private final ServingDao servingDao;
 
-    ServingsRepository(Application application) {
+    public ServingsRepository(Application application) {
         super(application);
 
         servingDao = database.servingDao();
     }
 
-    ServingsRepository(CaloriesDatabase database) {
+    public ServingsRepository(CaloriesDatabase database) {
         super(database);
 
         servingDao = database.servingDao();
@@ -43,15 +43,15 @@ public class ServingsRepository extends Repository {
         }});
     }
 
-    void update(Serving serving) {
+    public void update(Serving serving) {
         queryExecutor.execute(() -> servingDao.update(serving));
     }
 
-    void delete(Serving serving) {
+    public void delete(Serving serving) {
         queryExecutor.execute(() -> servingDao.delete(serving));
     }
 
-    CompletableFuture<List<ServingWithMeal>> getByDate(Date date){
+    public CompletableFuture<List<ServingWithMeal>> getByDate(Date date){
         return CompletableFuture.supplyAsync(() -> servingDao.get(date), queryExecutor);
     }
 }
