@@ -1,0 +1,318 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "394598c70138a90b52dad237de2a39fd",
+    "entities": [
+      {
+        "tableName": "day",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`day_id` INTEGER, `glasses_of_water` INTEGER NOT NULL, `steps_count` INTEGER NOT NULL, `hasPracticed` INTEGER NOT NULL, PRIMARY KEY(`day_id`))",
+        "fields": [
+          {
+            "fieldPath": "dayId",
+            "columnName": "day_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "glassesOfWater",
+            "columnName": "glasses_of_water",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stepsCount",
+            "columnName": "steps_count",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "hasPracticed",
+            "columnName": "hasPracticed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "day_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "serving",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`serving_id` INTEGER, `meal_id` INTEGER NOT NULL, `day_id` INTEGER NOT NULL, `serving_size` REAL NOT NULL, PRIMARY KEY(`serving_id`), FOREIGN KEY(`meal_id`) REFERENCES `meal`(`meal_id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`day_id`) REFERENCES `day`(`day_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "servingId",
+            "columnName": "serving_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mealId",
+            "columnName": "meal_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dayId",
+            "columnName": "day_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "servingSize",
+            "columnName": "serving_size",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "serving_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_serving_meal_id",
+            "unique": false,
+            "columnNames": [
+              "meal_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_serving_meal_id` ON `${TABLE_NAME}` (`meal_id`)"
+          },
+          {
+            "name": "index_serving_day_id",
+            "unique": false,
+            "columnNames": [
+              "day_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_serving_day_id` ON `${TABLE_NAME}` (`day_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "meal",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "meal_id"
+            ],
+            "referencedColumns": [
+              "meal_id"
+            ]
+          },
+          {
+            "table": "day",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "day_id"
+            ],
+            "referencedColumns": [
+              "day_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "open_food_fact",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`open_food_fact_id` INTEGER, `meal_id` INTEGER NOT NULL, `code` TEXT NOT NULL, `json_object` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`open_food_fact_id`), FOREIGN KEY(`meal_id`) REFERENCES `meal`(`meal_id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "openFoodFactId",
+            "columnName": "open_food_fact_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "mealId",
+            "columnName": "meal_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "openFoodFactJsonObject",
+            "columnName": "json_object",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "open_food_fact_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_open_food_fact_code",
+            "unique": true,
+            "columnNames": [
+              "code"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_open_food_fact_code` ON `${TABLE_NAME}` (`code`)"
+          },
+          {
+            "name": "index_open_food_fact_meal_id",
+            "unique": false,
+            "columnNames": [
+              "meal_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_open_food_fact_meal_id` ON `${TABLE_NAME}` (`meal_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "meal",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "meal_id"
+            ],
+            "referencedColumns": [
+              "meal_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "meal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`meal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_id` INTEGER, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `picture_path` TEXT, `calories` REAL NOT NULL, `carbohydrates` REAL NOT NULL, `fats` REAL NOT NULL, `proteins` REAL NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `category`(`category_id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "mealId",
+            "columnName": "meal_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "picturePath",
+            "columnName": "picture_path",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "nutritionalValues.calories",
+            "columnName": "calories",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nutritionalValues.carbohydrates",
+            "columnName": "carbohydrates",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nutritionalValues.fats",
+            "columnName": "fats",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nutritionalValues.proteins",
+            "columnName": "proteins",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "meal_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_meal_category_id",
+            "unique": false,
+            "columnNames": [
+              "category_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_meal_category_id` ON `${TABLE_NAME}` (`category_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "category",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "category_id"
+            ],
+            "referencedColumns": [
+              "category_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`category_id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "categoryId",
+            "columnName": "category_id",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "category_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '394598c70138a90b52dad237de2a39fd')"
+    ]
+  }
+}
