@@ -1,12 +1,16 @@
-package com.example.application;
+package com.example.application.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.application.Activities.Scanner.Product;
+import com.example.application.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -16,38 +20,36 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
     Product product;
     TextView code_TextView;
     TextView allergens_TextView;
-    TextView brands_TextView;
     TextView categories_TextView;
-    TextView expiration_date_TextView;
     TextView ingredients_text_TextView;
-    TextView labels_TextView;
     TextView product_name_TextView;
-    TextView purchase_places_TextView;
     TextView quantity_TextView;
     TextView nutriments_TextView;
     ImageView productImage;
     String noData = "No data!";
+    Button addMacroBTN;
+    Button saveProductBTN;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_product_details);
 
+        //brands_TextView = findViewById(R.id.brandsTextView);
+        //expiration_date_TextView = findViewById(R.id.expirationDateTextView);
+        //labels_TextView = findViewById(R.id.labelsTextView);
+        //purchase_places_TextView = findViewById(R.id.purchasePlaceTextView);
         code_TextView = findViewById(R.id.codeTextView);
         product_name_TextView = findViewById(R.id.productNameTextView);
-        brands_TextView = findViewById(R.id.brandsTextView);
         categories_TextView = findViewById(R.id.categoriesTextView);
-        expiration_date_TextView = findViewById(R.id.expirationDateTextView);
         ingredients_text_TextView = findViewById(R.id.ingredientsTextView);
         allergens_TextView = findViewById(R.id.allergensTextView);
         productImage = findViewById(R.id.productImageView);
-        labels_TextView = findViewById(R.id.labelsTextView);
-        purchase_places_TextView = findViewById(R.id.purchasePlaceTextView);
         quantity_TextView = findViewById(R.id.quantityTextView);
         nutriments_TextView = findViewById(R.id.nutrimentsTextView);
 
         Intent intent = getIntent();
-
         product = (Product) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
 
         if(product != null) {
@@ -66,16 +68,6 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
             else
                 categories_TextView.setText( noData  );
 
-            if(product.getBrands() != null)
-                brands_TextView.setText(  product.getBrands()  );
-            else
-                brands_TextView.setText( noData );
-
-            if(!product.getExpiration_date().isEmpty())
-                expiration_date_TextView.setText( product.getExpiration_date() );
-            else
-                expiration_date_TextView.setText( noData );
-
             if(product.getIngredients_text_pl() != null)
                 ingredients_text_TextView.setText( product.getIngredients_text_pl().toUpperCase(Locale.ROOT)  );
             else if (product.getIngredients_text_en() != null)
@@ -84,19 +76,9 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
                 ingredients_text_TextView.setText( noData.toUpperCase(Locale.ROOT) );
 
             if(product.getAllergens() != null)
-                allergens_TextView.setText( product.getAllergens() );
+                allergens_TextView.setText( product.getAllergens().replace(',', '\n') );
             else
                 allergens_TextView.setText( noData );
-
-            if(product.getLabels() != null)
-                labels_TextView.setText( product.getLabels() );
-            else
-                labels_TextView.setText( noData );
-
-            if(product.getPurchase_places() != null)
-                purchase_places_TextView.setText( product.getPurchase_places() );
-            else
-                purchase_places_TextView.setText( noData );
 
             if(product.getQuantity() != null)
                 quantity_TextView.setText( product.getQuantity() );
@@ -110,7 +92,6 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
             else
                 nutriments_TextView.setText( noData );
 
-
             if(product.getImages() != null) {
                 String url = product.getImages().getFront().getDisplay().getPlURL();
                 if(url == null)
@@ -123,5 +104,22 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
                 productImage.setImageResource(R.drawable.ic_baseline_product);
             }
         }
+
+        addMacroBTN = findViewById(R.id.addMacroButton);
+        saveProductBTN = findViewById(R.id.saveProductButton);
+
+        addMacroBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // add product
+            }
+        });
+
+        addMacroBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // add macro to calculations
+            }
+        });
     }
 }

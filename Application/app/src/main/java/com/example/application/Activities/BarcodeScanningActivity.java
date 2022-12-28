@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.application.Activities.Scanner.Product;
+import com.example.application.Activities.Scanner.ProductContainer;
+import com.example.application.Activities.Scanner.ProductService;
+import com.example.application.Activities.Scanner.RetrofitInstance;
+import com.example.application.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -34,19 +39,18 @@ import retrofit2.Response;
 
 public class BarcodeScanningActivity extends AppCompatActivity {
 
+    public static final String PRODUCT_DETAILS = "PRODUCT_DETAILS";
+    private static final int REQUEST_CAMERA_PERMISSION = 201;
     private SurfaceView surfaceView;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
-    private static final int REQUEST_CAMERA_PERMISSION = 201;
     private TextView barcodeText;
     private String barcodeData;
-    //This class provides methods to play DTMF tones
     private ToneGenerator toneGen1;
-    public static final String PRODUCT_DETAILS = "PRODUCT_DETAILS";
     Button searchBtn;
     int howManySamples = 15;
     int howManySamplesRead;
-
+    boolean activityRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,6 @@ public class BarcodeScanningActivity extends AppCompatActivity {
         barcodeText.setVisibility(View.INVISIBLE);
         howManySamplesRead = 0;
     }
-
 
     private void initialiseDetectorsAndSources() {
 
@@ -105,20 +108,19 @@ public class BarcodeScanningActivity extends AppCompatActivity {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-                // Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+
                 if (barcodes.size() != 0) {
                     howManySamplesRead++;
 
-                    if (howManySamplesRead == howManySamples) { // display product details view
+                    if (howManySamplesRead >= howManySamples) { // display product details view
                         barcodeData = barcodes.valueAt(0).displayValue;
                         fetchProductData(barcodeData);
                         searchBtn.setVisibility(View.VISIBLE);
-                        howManySamplesRead = 0;
                     }
 
                     searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -154,47 +156,60 @@ public class BarcodeScanningActivity extends AppCompatActivity {
         super.onResume();
         getSupportActionBar().hide();
         initialiseDetectorsAndSources();
+        activityRunning = false;
     }
 
     private void fetchProductData(String query) {
-
+        howManySamplesRead = 0;
         ProductService productService = RetrofitInstance.getRertrofitInstance().create(ProductService.class);
+        try {
 
-        Call<ProductContainer> productsApiCall = productService.findProducts(query + ".json");
+            Call<ProductContainer> productsApiCall = productService.findProducts(query + ".json");
 
-        productsApiCall.enqueue(new Callback<ProductContainer>() {
-            @Override
-            public void onResponse(@NonNull Call<ProductContainer> call, @NonNull Response<ProductContainer> response) {
-                if (response.body() != null) {
-                    setupProductView(response.body().getProduct());
+            productsApiCall.enqueue(new Callback<ProductContainer>() {
+                @Override
+                public void onResponse(@NonNull Call<ProductContainer> call, @NonNull Response<ProductContainer> response) {
+                    if (response.body() != null) {
+                        setupProductView(response.body().getProduct());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(@NonNull Call<ProductContainer> call, @NonNull Throwable t) {
-                Snackbar.make(findViewById(R.id.scanner_view), "Something went wrong! Try again later.",
-                        BaseTransientBottomBar.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<ProductContainer> call, @NonNull Throwable t) {
+                    Snackbar.make(findViewById(R.id.scanner_view), "Something went wrong! Check your internet connection and try again later.",
+                            BaseTransientBottomBar.LENGTH_LONG).show();
+                    timeout(3);
+                }
+            });
+        }
+        catch (Exception e) {
+            Snackbar.make(findViewById(R.id.scanner_view), "No such product in database, sorry!",
+                    BaseTransientBottomBar.LENGTH_LONG).show();
+            timeout(3);
+        }
     }
 
     private void setupProductView(Product product) {
 
-        if(product != null) {
-            Intent intent = new Intent(BarcodeScanningActivity.this, ScannedProductDetailsActivity.class);
-            toneGen1.startTone(ToneGenerator.TONE_SUP_PIP, 120);
-            intent.putExtra(PRODUCT_DETAILS, product);
-            startActivity(intent);
-        }
-        else {
-            Toast.makeText(getApplicationContext(), "Product not found", Toast.LENGTH_SHORT).show();
-            toneGen1.startTone(ToneGenerator.TONE_SUP_PIP, 120);
+        if(!activityRunning) {
+            if (product != null) {
+                activityRunning = true;
+                Intent intent = new Intent(BarcodeScanningActivity.this, ScannedProductDetailsActivity.class);
+                toneGen1.startTone(ToneGenerator.TONE_SUP_PIP, 120);
+                intent.putExtra(PRODUCT_DETAILS, product);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "Product not found", Toast.LENGTH_SHORT).show();
+                toneGen1.startTone(ToneGenerator.TONE_CDMA_DIAL_TONE_LITE, 120);
+                timeout(1.5);
+            }
         }
     }
 
-    private boolean checkNullOrEmpty(String title) {
-        return title != null && TextUtils.isEmpty(title);
+    private void timeout(double seconds) {
+        // timeout for seconds seconds
+        long start = System.currentTimeMillis();
+        double end = start + seconds * 1000;
+        while (System.currentTimeMillis() < end) {}
     }
-
-
 }

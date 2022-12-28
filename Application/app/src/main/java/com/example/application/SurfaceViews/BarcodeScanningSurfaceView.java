@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.SurfaceViews;
 
 import android.content.Context;
 import android.graphics.Canvas;

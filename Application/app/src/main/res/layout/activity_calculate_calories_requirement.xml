@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="#000000"
     android:orientation="vertical"
-    tools:context=".CalculateCaloriesRequirement">
+    tools:context=".Activities.CalculateCaloriesRequirement">
 
     <ScrollView
         android:layout_width="match_parent"

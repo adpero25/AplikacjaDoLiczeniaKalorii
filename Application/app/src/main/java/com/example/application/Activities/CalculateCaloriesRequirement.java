@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +14,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.application.R;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.enums.ActivityIndicator;

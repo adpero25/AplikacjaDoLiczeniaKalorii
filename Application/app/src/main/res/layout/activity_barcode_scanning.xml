@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BarcodeScanningActivity"
+    tools:context=".Activities.BarcodeScanningActivity"
     android:background="#000000"
     android:id="@+id/scanner_view" >
 
-    <com.example.application.BarcodeScanningSurfaceView
+    <com.example.application.SurfaceViews.BarcodeScanningSurfaceView
         android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="500dp"
@@ -22,9 +22,10 @@
         android:layout_width="352dp"
         android:layout_height="75dp"
         android:layout_marginBottom="4dp"
+        android:gravity="center"
         android:padding="5dp"
         android:text="Barcode Text"
-        android:textAlignment="center"
+        android:textColor="#00F0FF"
         android:textSize="25sp"
         app:layout_constraintBottom_toTopOf="@+id/surface_view"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +37,7 @@
         android:layout_height="61dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="#FF0000"
+        android:background="#00F0FF"
         android:text="Search again"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
