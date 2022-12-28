@@ -1,4 +1,6 @@
-package com.example.application;
+package com.example.application.Activities.Scanner;
+
+import com.example.application.Activities.Scanner.ProductContainer;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

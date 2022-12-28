@@ -14,4 +14,7 @@
     <string name="nutriments">Nutriments:</string>
     <string name="codeLabel">Code:</string>
     <string name="productDetails">Product details:</string>
+    <string name="addMacroButton">Add Macro</string>
+    <string name="saveProductButton">Save product</string>
+    <string name="macroInfo">Info: nutriments are given for 100 g of product.</string>
 </resources>
