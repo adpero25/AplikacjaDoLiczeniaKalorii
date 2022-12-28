@@ -10,6 +10,8 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.application.database.models.enums.MealType;
+
 @Entity(tableName="meal",
         foreignKeys ={
             @ForeignKey(
@@ -44,4 +46,5 @@ public class Meal {
     @NonNull
     @Embedded
     public NutritionalValues nutritionalValues = new NutritionalValues();
+
 }

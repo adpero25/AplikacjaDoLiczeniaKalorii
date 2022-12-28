@@ -7,10 +7,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.example.application.database.repositories.DaysRepository;
+
+import com.example.application.Activities.BarcodeScanningActivity;
+import com.example.application.Activities.CalculateCaloriesRequirement;
 import com.example.application.R;
+import com.example.application.database.CaloriesDatabase;
+import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
+import com.example.application.database.repositories.DaysRepository;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int CALCULATE_DAILY_REQUIREMENTS_REQUEST = 1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
                     sb.append(day.day.glassesOfWater);
                     textView.setText(sb);
                 });
+                CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
+                List<DayWithDailyRequirementsAndServings> tmp =  db.dailyRequirementsDao().getDayWithServingsWithDailyRequirements();
+
             }
         });
 
@@ -60,5 +73,19 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        Button calculateRequirement = findViewById(R.id.calculateRequirementBTN);
+        calculateRequirement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, CalculateCaloriesRequirement.class);
+                startActivityForResult(intent, CALCULATE_DAILY_REQUIREMENTS_REQUEST);
+            }
+        });
+
+
     }
+
+
+
 }
