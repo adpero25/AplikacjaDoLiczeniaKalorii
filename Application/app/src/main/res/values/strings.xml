@@ -37,4 +37,7 @@
     <string name="calculateRequirementLabel">Calculate daily requirement</string>
     <string name="registerWaterText">Register</string>
     <string name="glassesOfWater">Water: %d glasses</string>
+    <string name="addMacroButton">Add Macro</string>
+    <string name="saveProductButton">Save product</string>
+    <string name="macroInfo">Info: nutriments are given for 100 g of product.</string>
 </resources>

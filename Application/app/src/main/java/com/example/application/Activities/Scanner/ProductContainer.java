@@ -1,5 +1,6 @@
-package com.example.application;
+package com.example.application.Activities.Scanner;
 
+import com.example.application.Activities.Scanner.Product;
 import com.google.gson.annotations.SerializedName;
 
 public class ProductContainer {

@@ -1,6 +1,5 @@
-package com.example.application;
+package com.example.application.Activities;
 
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,6 +10,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.application.Activities.BarcodeScanningActivity;
+import com.example.application.Activities.CalculateCaloriesRequirement;
+import com.example.application.R;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
 import com.example.application.database.repositories.DaysRepository;
