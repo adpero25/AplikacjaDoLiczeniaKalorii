@@ -64,4 +64,8 @@
         <item name="android:layout_marginLeft">10sp</item>
 
     </style>
+    <style name="progress_bar">
+        <item name="android:layout_marginRight">20sp</item>
+        <item name="android:layout_marginLeft">20sp</item>
+    </style>
 </resources>

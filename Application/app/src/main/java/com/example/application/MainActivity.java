@@ -4,9 +4,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.application.database.CaloriesDatabase;
@@ -17,12 +19,24 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final int CALCULATE_DAILY_REQUIREMENTS_REQUEST = 1;
+    public static final String SHARED_PREFERENCES_FILE_NAME = "CaloriesCalculatorPreferences";
+    public static final String WATER_GLASSES_KEY = "water_glasses";
 
+    TextView waterLabel;
+    Button registerWaterButton;
+    ProgressBar waterProgressBar;
+
+    public int dailyGlassesOfWater = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        waterLabel = findViewById(R.id.howManyWaterToday);
+        registerWaterButton = findViewById(R.id.registerWater);
+        waterProgressBar = findViewById(R.id.waterProgress);
+
         Button scanProduct = findViewById(R.id.scanCodeBTN);
         scanProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,5 +99,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onPause() {
+        super.onPause();
 
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+
+
+        preferencesEditor.putInt(WATER_GLASSES_KEY, dailyGlassesOfWater);
+        preferencesEditor.apply();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+
+        dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
+
+        waterLabel.setText(getString(R.string.glassesOfWater, dailyGlassesOfWater));
+    }
 }

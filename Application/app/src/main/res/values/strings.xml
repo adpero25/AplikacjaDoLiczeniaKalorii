@@ -35,4 +35,6 @@
     <string name="VeryActive">Hard excercise 6-7 days/week</string>
     <string name="ActivityFrequency">Frequency of activity</string>
     <string name="calculateRequirementLabel">Calculate daily requirement</string>
+    <string name="registerWaterText">Register</string>
+    <string name="glassesOfWater">Water: %d glasses</string>
 </resources>
