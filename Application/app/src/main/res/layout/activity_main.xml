@@ -36,6 +36,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loadDayBTN" />
 
+    <Button
+        android:id="@+id/calculateRequirementBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/calculateRequirementLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addGlassOfWaterBTN" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
@@ -46,5 +56,5 @@
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addGlassOfWaterBTN" />
+        app:layout_constraintTop_toBottomOf="@+id/calculateRequirementBTN" />
 </androidx.constraintlayout.widget.ConstraintLayout>

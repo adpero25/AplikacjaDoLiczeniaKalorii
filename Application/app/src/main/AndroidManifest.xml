@@ -10,6 +10,7 @@
         android:required="true" />
 
     <application
+        android:name=".CaloriesCalculatorContext"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,6 +21,13 @@
         android:theme="@style/Theme.AppCompat.DayNight"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="31">
+        <activity
+            android:name=".CalculateCaloriesRequirement"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".ScannedProductDetailsActivity"
             android:exported="false">

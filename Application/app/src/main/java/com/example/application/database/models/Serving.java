@@ -9,6 +9,11 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import com.example.application.database.converters.MealTypeConverter;
+import com.example.application.database.models.enums.MealType;
+
+import java.util.Enumeration;
+
 @Entity(tableName="serving",
         foreignKeys ={
             @ForeignKey(
@@ -49,6 +54,9 @@ public class Serving {
     @ColumnInfo(name = "serving_size")
     @NonNull
     public Double servingSize = 0.0;
-}
 
+    @NonNull
+    @ColumnInfo(name = "meal_type", defaultValue = "1")
+    public MealType mealType = MealType.Breakfast;
+}
 
