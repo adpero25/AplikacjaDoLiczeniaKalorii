@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.Activities.Scanner;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -25,8 +25,7 @@ public class Nutriments implements Serializable {
     private String sugars_100g;
 
     public String toStringEn() {
-        return  "Values per 100g of product \n" +
-                " - Proteins: " + proteins_100g + " g,\n" +
+        return  " - Proteins: " + proteins_100g + " g,\n" +
                 " - Carbohydrates: " + carbohydrates_100g + " g,\n" +
                 " - Sugars: " + sugars_100g + " g,\n" +
                 " - Fat: " + fat_100g + " g,\n" +
@@ -38,8 +37,7 @@ public class Nutriments implements Serializable {
     }
 
     public String toStringPl() {
-        return  "Wartości podawane na 100g produktu: \n" +
-                " - Białko: " + proteins_100g + " g,\n" +
+        return  " - Białko: " + proteins_100g + " g,\n" +
                 " - Węglowodany: " + carbohydrates_100g + " g,\n" +
                 " - Cukier: " + sugars_100g + " g,\n" +
                 " - Tłuszcz: " + fat_100g + " g,\n" +

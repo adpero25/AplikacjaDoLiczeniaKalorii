@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.Activities.Scanner;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

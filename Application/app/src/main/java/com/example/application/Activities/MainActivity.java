@@ -1,4 +1,4 @@
-package com.example.application;
+package com.example.application.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,8 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.application.database.repositories.DaysRepository;
+import com.example.application.R;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -60,10 +60,5 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-
     }
-
-
-
 }
