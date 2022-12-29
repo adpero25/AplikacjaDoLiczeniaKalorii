@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.application.Activities.BarcodeScanningActivity;
-import com.example.application.Activities.CalculateCaloriesRequirement;
 import com.example.application.R;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
@@ -24,12 +22,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Button scanProduct = findViewById(R.id.scanCodeBTN);
         scanProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BarcodeScanningActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddingServingActivity.class);
                 startActivity(intent);
             }
         });
