@@ -40,4 +40,12 @@
     <string name="addMacroButton">Add Macro</string>
     <string name="saveProductButton">Save product</string>
     <string name="macroInfo">Info: nutriments are given for 100 g of product.</string>
+    <string name="submit">Submit</string>
+    <string name="addWaterAmountLabel">How many water glasses have you drank?</string>
+    <string name="setDailyWaterRequirement">Set daily water glasses requirement</string>
+    <string name="channel_name">Idk some channel name</string>
+    <string name="channel_description">more than less unknown channel</string>
+    <string name="waterNotificationText">Remember to stay hydrated</string>
+    <string name="waterNotificationBigText">Remember to stay hydrated. We haven\'t seen you registering any water ammount for a while.</string>
+    <string name="registerOneGlass">Add one glass</string>
 </resources>

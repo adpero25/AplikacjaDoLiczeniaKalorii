@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#1A1A1A</color>
     <color name="outer_background">#000000</color>
+    <color name="progress_bar_empty">#292929</color>
+    <color name="progress_bar_fill">#00F0FF</color>
 </resources>
