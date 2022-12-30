@@ -6,6 +6,7 @@
         <item name="android:layout_marginTop">5sp</item>
         <item name="android:layout_marginBottom">5sp</item>
         <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
     <style name="view_title">
         <item name="android:textSize">28sp</item>
@@ -69,5 +70,40 @@
     </style>
     <style name="AccentButton" parent="Widget.Material3.Button">
         <item name="materialThemeOverlay">@style/Theme.Application.AccentButton</item>
+    </style>
+    <style name="progress_bar">
+        <item name="android:layout_marginRight">20sp</item>
+        <item name="android:layout_marginLeft">20sp</item>
+        <item name="android:layout_marginTop">10sp</item>
+        <item name="android:progressTint">@color/progress_bar_fill</item>
+        <item name="android:progressBackgroundTint">@color/progress_bar_empty</item>
+    </style>
+    <style name="popup_button">
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:layout_marginLeft">10sp</item>
+        <item name="android:layout_marginBottom">10sp</item>
+        <item name="android:layout_marginTop">5sp</item>
+    </style>
+    <style name="popup_input">
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:layout_marginLeft">10sp</item>
+        <item name="android:layout_marginTop">5sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+    <style name="popup_title">
+        <item name="android:layout_marginRight">10sp</item>
+        <item name="android:layout_marginLeft">10sp</item>
+        <item name="android:layout_marginTop">10sp</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+    <style name="popup_window">
+        <item name="android:background">@drawable/popup_drawable</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingLeft">10dp</item>
     </style>
 </resources>

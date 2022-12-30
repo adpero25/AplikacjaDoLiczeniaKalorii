@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/popupLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="@style/popup_window"
+    >
+
+    <TextView
+        android:id="@+id/popupText"
+        style="@style/popup_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp" />
+
+    <EditText
+        android:id="@+id/WaterEnteredValue"
+        style="@style/popup_input"
+
+        android:layout_height="wrap_content"
+        android:layout_below="@id/popupText"
+
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/acceptWaterAmountButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/WaterEnteredValue"
+        style="@style/popup_button"
+        android:text="@string/submit"
+        />
+
+
+</RelativeLayout>
