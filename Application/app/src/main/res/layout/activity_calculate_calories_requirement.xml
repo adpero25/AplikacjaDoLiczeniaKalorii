@@ -156,6 +156,14 @@
                 android:orientation="horizontal">
 
                 <Button
+                    android:id="@+id/CancelCalculationButton"
+                    style="@style/btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/CancelButtonText" />
+
+                <Button
                     android:id="@+id/ConfirmDataButton"
                     style="@style/btn"
                     android:layout_width="wrap_content"
@@ -163,13 +171,6 @@
                     android:layout_weight="1"
                     android:text="@string/ConfirmButtonText" />
 
-                <Button
-                    android:id="@+id/CancelCalculationButton"
-                    style="@style/btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/CancelButtonText" />
             </LinearLayout>
 
         </LinearLayout>

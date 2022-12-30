@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/listMargin"
+    android:orientation="vertical"
+    tools:context=".Activities.AddingServingActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            style="@style/inner_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+    <TextView
+        android:id="@+id/textView6"
+        style="@style/labels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+
+        android:gravity="start|center_vertical"
+        android:text="Name:" />
+
+    <EditText
+        style="@style/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+
+        android:inputType="text" />
+
+
+    <TextView
+        style="@style/labels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+
+        android:gravity="start|center_vertical"
+        android:text="Desc:" />
+
+    <EditText
+        style="@style/input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+
+        android:inputType="textMultiLine" />
+    <TextView
+        style="@style/labels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ActivityFrequency" />
+
+    <Spinner
+        android:id="@+id/ActivityRateSpinner"
+        style="@style/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:strokeColor="@color/white">
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="Calories:" />
+
+        <EditText
+            android:id="@+id/CaloriesInput"
+            style="@style/input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+
+            android:layout_weight="1.8"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight=".4"
+            android:gravity="start|center_vertical"
+            android:text="kcal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:strokeColor="@color/white">
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="Carbohydrates:" />
+
+        <EditText
+            android:id="@+id/CarbohydratesInput"
+            style="@style/input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+
+            android:layout_weight="1.8"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight=".4"
+            android:gravity="start|center_vertical"
+            android:text="g" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:strokeColor="@color/white">
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="Proteins:" />
+
+        <EditText
+            android:id="@+id/ProteinsInput"
+            style="@style/input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+
+            android:layout_weight="1.8"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight=".4"
+            android:gravity="start|center_vertical"
+            android:text="g" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:strokeColor="@color/white">
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:text="Fats:" />
+
+        <EditText
+            android:id="@+id/FatInput"
+            style="@style/input"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+
+            android:layout_weight="1.8"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            style="@style/labels"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight=".4"
+            android:gravity="start|center_vertical"
+            android:text="g" />
+    </LinearLayout>
+
+
+            <Button
+                android:id="@+id/scanCodeBTN"
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_marginTop="@dimen/listElementMarginTopBottom"
+                android:layout_marginBottom="@dimen/listElementMarginTopBottom"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="0dp"
+                android:text="@string/scan"
+                android:textAppearance="@style/ButtonText"
+                android:theme="@style/AccentButton"
+                app:cornerRadius="25dp" />
+
+
+    <!--<ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ScrollView>
+--></LinearLayout>
+            </ScrollView>
+</LinearLayout>

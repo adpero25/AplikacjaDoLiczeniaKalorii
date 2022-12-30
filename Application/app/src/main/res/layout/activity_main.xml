@@ -13,6 +13,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="44dp"
         android:text="Scan Product"
+        android:textAppearance="@style/ButtonText"
+        android:theme="@style/AccentButton"
+        app:cornerRadius="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,16 +26,23 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
         android:text="Load day obj from DB"
+        android:textAppearance="@style/ButtonText"
+        android:theme="@style/AccentButton"
+        app:cornerRadius="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scanCodeBTN" />
 
     <Button
+
         android:id="@+id/addGlassOfWaterBTN"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
         android:text="Add glass of water"
+        android:textAppearance="@style/ButtonText"
+        android:theme="@style/AccentButton"
+        app:cornerRadius="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loadDayBTN" />
 
@@ -43,6 +53,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
         android:text="@string/calculateRequirementLabel"
+        android:textAppearance="@style/ButtonText"
+        android:theme="@style/AccentButton"
+        app:cornerRadius="25dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addGlassOfWaterBTN" />
 
