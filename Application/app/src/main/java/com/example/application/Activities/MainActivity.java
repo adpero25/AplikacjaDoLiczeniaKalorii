@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         dismissNotification();
         startWaterNotificationService();
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         scanProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, BarcodeScanningActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddingServingActivity.class);
                 startActivity(intent);
             }
         });

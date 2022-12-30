@@ -18,9 +18,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_cc_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.DayNight"
+        android:theme="@style/Theme.Application"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.AddingServingActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Activities.AddingMealActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".Activities.CalculateCaloriesRequirement"
             android:exported="false">

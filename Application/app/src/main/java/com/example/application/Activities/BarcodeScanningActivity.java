@@ -147,14 +147,12 @@ public class BarcodeScanningActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        getSupportActionBar().hide();
         cameraSource.release();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getSupportActionBar().hide();
         initialiseDetectorsAndSources();
         activityRunning = false;
     }
