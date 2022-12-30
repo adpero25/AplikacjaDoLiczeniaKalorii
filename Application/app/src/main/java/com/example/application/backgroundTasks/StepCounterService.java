@@ -13,7 +13,10 @@ import android.os.IBinder;
 import android.widget.Toast;
 
 import com.example.application.Activities.MainActivity;
+import com.example.application.CaloriesCalculatorContext;
 import com.example.application.database.CaloriesDatabase;
+import com.example.application.database.models.Day;
+import com.example.application.database.repositories.DaysRepository;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
@@ -153,6 +156,7 @@ public class StepCounterService extends Service {
 
         public Walk() {
             // stepLength = height / 4 + 37;
+            // weight =
         }
 
         public void Reset() {
@@ -173,6 +177,14 @@ public class StepCounterService extends Service {
 
     private class ResetCounterTask extends TimerTask {
         public void run() {
+
+            DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
+
+            repo.getOrCreateToday().thenAccept((day) -> {
+                day.day.stepsCount = (int) walk.stepsMade;
+                repo.update(day.day);
+            } );
+
             walk.Reset();
             saveData();
             initSensor();

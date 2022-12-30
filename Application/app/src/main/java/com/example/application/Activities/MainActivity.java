@@ -40,12 +40,14 @@ import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.broadcastReceivers.WaterBroadcastReceiver;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
+import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -267,6 +269,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         updateWaterLabel();
+
 
     }
 
