@@ -49,7 +49,7 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
-    private static final int stepsTarget = 5000;
+    private static int stepsTarget = 5000;
     private boolean stepCounterServiceBound = false;
     public static final int CALCULATE_DAILY_REQUIREMENTS_REQUEST = 1;
     public static final String SHARED_PREFERENCES_FILE_NAME = "CaloriesCalculatorPreferences";
@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar waterProgressBar;
     ProgressBar stepProgress;
     Button addDailyWaterRequirement;
+    Button setStepTarget;
     public int dailyGlassesOfWater = 0;
     public static final int waterNotification = 10;
 
@@ -87,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         stepProgress = findViewById(R.id.stepsProgress);
         stepProgress.setMax(stepsTarget);
         addDailyWaterRequirement = findViewById(R.id.dailyWaterRequirement);
+        setStepTarget = findViewById(R.id.dailyStepTarget);
         totalStepsTextView = findViewById(R.id.howManyStepsToday);
         totalDistanceTextView = findViewById(R.id.distanceToday);
         totalCaloriesBurntTextView = findViewById(R.id.caloriesBurnedToday);
@@ -152,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                     day.day.glassesOfWater += 1;
                     repo.update(day.day);
                 });
+                updateWaterLabel();
             }
         });
 
@@ -184,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
                 submitButton.setOnClickListener(view ->{
                     if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
+                        popupWindow.dismiss();
                         return;
                     }
                     int value = Integer.parseInt(enteredValue.getText().toString());
@@ -219,12 +223,46 @@ public class MainActivity extends AppCompatActivity {
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
                 submitButton.setOnClickListener(view ->{
-
+                    if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
+                        popupWindow.dismiss();
+                        return;
+                    }
                     dailyGlassesOfWater = Integer.parseInt(enteredValue.getText().toString());
-
                     updateWaterLabel();
+                    popupWindow.dismiss();
                 });
 
+            }
+        });
+
+        setStepTarget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.popup_window, null);
+                TextView text = popupView.findViewById(R.id.popupText);
+                EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
+                Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
+
+                text.setText(R.string.setDailyStepTarget);
+                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                boolean focusable = true;
+                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+                submitButton.setOnClickListener(view -> {
+                    if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
+                        popupWindow.dismiss();
+                        return;
+                    }
+
+                    walk.stepsTarget = Integer.parseInt(enteredValue.getText().toString());
+                    stepProgress.setMax(walk.stepsTarget);
+
+                    popupWindow.dismiss();
+                });
             }
         });
 
@@ -235,8 +273,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Bind to StepCounterService
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Bind to StepCounterService
             Intent intent = new Intent(this, StepCounterService.class);
             bindService(intent, connection, Context.BIND_AUTO_CREATE);
         }
@@ -245,7 +282,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
 
@@ -253,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
         preferencesEditor.putInt(WATER_GLASSES_KEY, dailyGlassesOfWater);
         preferencesEditor.apply();
 
+        scService.saveData();
     }
 
     @Override
@@ -268,7 +305,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        scService.saveData();
     }
 
     private void updateWaterLabel(){
@@ -316,13 +352,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startStepCounterService() {
-        if(checkStarted()) {
-            startService(new Intent(this, StepCounterService.class));
-            serviceStarted();
-        }
+
+        startService(new Intent(this, StepCounterService.class));
+ //       serviceStarted();
     }
 
-    private void serviceStarted() {
+/*    private void serviceStarted() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(STEP_COUNTER_KEY, true);
@@ -333,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         boolean serviceStarted = sharedPreferences.getBoolean(STEP_COUNTER_KEY, false);
         return serviceStarted;
-    }
+    }*/
 
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection connection = new ServiceConnection() {
@@ -347,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
             int period = 500;
             Date date = new Date();
             Timer timer = new Timer();
-            timer.schedule(new MainActivity.GetWalk(), date, period); // downloads walk class every 500ms when MainActivity is running on the foreground
+            timer.schedule(new MainActivity.GetWalk(), date, period); // downloads walk object every 500ms when MainActivity is running on the foreground
         }
 
         @Override
@@ -364,19 +399,10 @@ public class MainActivity extends AppCompatActivity {
 
             MainActivity.this.runOnUiThread((Runnable) () -> {
                 stepProgress.setProgress((int)walk.stepsMade);
-                totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int)walk.stepsMade, stepsTarget));
-                totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, calculateDistance(walk.stepsMade)));
-                totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, calculateCalories(walk.stepsMade)));
+                totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int)walk.stepsMade, walk.stepsTarget));
+                totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, walk.calculateDistance()));
+                totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateCaloriesBurnt()));
             });
         }
-
-        private double calculateDistance(float stepsMade) {
-            return (stepsMade * 78) / 100;
-        }
-
-        private double calculateCalories(float stepsMade) {
-            return (stepsMade * 0.041);  // one step burn 0,04 - 0,05 kcal
-        }
     }
-
 }
