@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -78,6 +79,10 @@
 
         </receiver>
         <service android:name=".backgroundTasks.NotifyAboutWater" android:exported="false"></service>
+        <service
+            android:name=".backgroundTasks.StepCounterService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

@@ -3,17 +3,25 @@ package com.example.application.Activities;
 import static androidx.core.app.NotificationCompat.EXTRA_NOTIFICATION_ID;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,25 +32,40 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
+import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.broadcastReceivers.WaterBroadcastReceiver;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
 import com.example.application.database.repositories.DaysRepository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int ACTIVITY_PERMISSION = 100;
+    private static final int stepsTarget = 5000;
+    private boolean stepCounterServiceBound = false;
     public static final int CALCULATE_DAILY_REQUIREMENTS_REQUEST = 1;
     public static final String SHARED_PREFERENCES_FILE_NAME = "CaloriesCalculatorPreferences";
     public static final String WATER_GLASSES_KEY = "water_glasses";
+    public static final String STEP_COUNTER_KEY = "service_started";
     public static final String CHANNEL_ID = "WATER_CHANNEL_ID";
 
     TextView waterLabel;
+    TextView totalStepsTextView;
+    TextView totalDistanceTextView;
+    TextView totalCaloriesBurntTextView;
+    StepCounterService.Walk walk;
+    StepCounterService scService;
     Button registerWaterButton;
     ProgressBar waterProgressBar;
+    ProgressBar stepProgress;
     Button addDailyWaterRequirement;
     public int dailyGlassesOfWater = 0;
     public static final int waterNotification = 10;
@@ -61,7 +84,27 @@ public class MainActivity extends AppCompatActivity {
         waterLabel = findViewById(R.id.howManyWaterToday);
         registerWaterButton = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
+        stepProgress = findViewById(R.id.stepsProgress);
+        stepProgress.setMax(stepsTarget);
         addDailyWaterRequirement = findViewById(R.id.dailyWaterRequirement);
+        totalStepsTextView = findViewById(R.id.howManyStepsToday);
+        totalDistanceTextView = findViewById(R.id.distanceToday);
+        totalCaloriesBurntTextView = findViewById(R.id.caloriesBurnedToday);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
+                        ACTIVITY_PERMISSION);
+            }
+
+            startStepCounterService();
+        }
+        else {
+            ConstraintLayout stepCounterContainer = findViewById(R.id.stepsContainer);
+            stepCounterContainer.setMaxHeight(0);
+        }
 
         Button scanProduct = findViewById(R.id.scanCodeBTN);
         scanProduct.setOnClickListener(new View.OnClickListener() {
@@ -189,6 +232,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            // Bind to StepCounterService
+            Intent intent = new Intent(this, StepCounterService.class);
+            bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        }
+    }
 
     @Override
     protected void onPause() {
@@ -211,6 +263,12 @@ public class MainActivity extends AppCompatActivity {
 
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        scService.saveData();
     }
 
     private void updateWaterLabel(){
@@ -255,6 +313,70 @@ public class MainActivity extends AppCompatActivity {
     private void startWaterNotificationService(){
         Intent intent = new Intent(this, NotifyAboutWater.class);
         startService(intent);
+    }
+
+    private void startStepCounterService() {
+        if(checkStarted()) {
+            startService(new Intent(this, StepCounterService.class));
+            serviceStarted();
+        }
+    }
+
+    private void serviceStarted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(STEP_COUNTER_KEY, true);
+        editor.apply();
+    }
+
+    private boolean checkStarted() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        boolean serviceStarted = sharedPreferences.getBoolean(STEP_COUNTER_KEY, false);
+        return serviceStarted;
+    }
+
+    /** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection connection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            StepCounterService.LocalBinder binder = (StepCounterService.LocalBinder) service;
+            scService = binder.getService();
+            stepCounterServiceBound = true;
+
+            int period = 500;
+            Date date = new Date();
+            Timer timer = new Timer();
+            timer.schedule(new MainActivity.GetWalk(), date, period); // downloads walk class every 500ms when MainActivity is running on the foreground
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            stepCounterServiceBound = false;
+        }
+
+    };
+
+    public class GetWalk extends TimerTask {
+        @Override
+        public void run() {
+            walk = scService.GetWalk();
+
+            MainActivity.this.runOnUiThread((Runnable) () -> {
+                stepProgress.setProgress((int)walk.stepsMade);
+                totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int)walk.stepsMade, stepsTarget));
+                totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, calculateDistance(walk.stepsMade)));
+                totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, calculateCalories(walk.stepsMade)));
+            });
+        }
+
+        private double calculateDistance(float stepsMade) {
+            return (stepsMade * 78) / 100;
+        }
+
+        private double calculateCalories(float stepsMade) {
+            return (stepsMade * 0.041);  // one step burn 0,04 - 0,05 kcal
+        }
     }
 
 }

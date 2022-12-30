@@ -144,5 +144,8 @@
     <string name="change">Change</string>
     <string name="my_meals">My meals</string>
     <string name="scan">Scan product</string>
+    <string name="stepsMade">Steps: %d / %d</string>
+    <string name="distanceMade">Total distance today: %.2f m</string>
+    <string name="caloriesBurnt">Calories burnt: ~ %.2f kcal</string>
 
 </resources>
