@@ -64,4 +64,8 @@ public class MealsRepository extends Repository {
     public CompletableFuture<List<MealWithOpenFoodFact>> getAll(){
         return CompletableFuture.supplyAsync(mealDao::getAll, queryExecutor);
     }
+
+    public CompletableFuture<List<MealWithOpenFoodFact>> getAllWithoutCategory(){
+        return CompletableFuture.supplyAsync(mealDao::getAllWithoutCategory, queryExecutor);
+    }
 }

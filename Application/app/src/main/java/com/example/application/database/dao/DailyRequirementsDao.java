@@ -25,7 +25,7 @@ public interface DailyRequirementsDao {
     @Delete
     void delete(DailyRequirements... requirements);
 
-
+    @Transaction
     @Query("SELECT * FROM day")
     List<DayWithDailyRequirementsAndServings> getDayWithServingsWithDailyRequirements();
 }

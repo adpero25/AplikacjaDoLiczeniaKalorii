@@ -30,8 +30,8 @@ public class CategoriesRepository extends Repository {
         categoryDao = database.categoryDao();
     }
 
-    public void insert(Category category) {
-        queryExecutor.execute(() -> categoryDao.insert(category));
+    public CompletableFuture<Long> insert(Category category) {
+        return CompletableFuture.supplyAsync(()->categoryDao.insert(category));
     }
 
     public void insert(String categoryName) {
@@ -50,6 +50,10 @@ public class CategoriesRepository extends Repository {
 
     public CompletableFuture<List<CategoryWithMeals>> getAll(){
         return CompletableFuture.supplyAsync(categoryDao::getAll, queryExecutor);
+    }
+
+    public CompletableFuture<Category> getByName(String name){
+        return CompletableFuture.supplyAsync(()->categoryDao.getByName(name), queryExecutor);
     }
 
     public CompletableFuture<List<CategoryWithMeals>> getAllWithoutMeals(){

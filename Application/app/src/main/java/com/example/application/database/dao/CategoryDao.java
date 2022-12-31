@@ -33,6 +33,9 @@ public interface CategoryDao {
     @Query("SELECT * FROM category")
     List<CategoryWithMeals> getAll();
 
+    @Query("SELECT * FROM category where name = :name")
+    Category getByName(String name);
+
     @Query("SELECT * FROM category")
     List<Category> getAllWithoutMeals();
 }

@@ -40,6 +40,7 @@ import retrofit2.Response;
 public class BarcodeScanningActivity extends AppCompatActivity {
 
     public static final String PRODUCT_DETAILS = "PRODUCT_DETAILS";
+    public static final String BARCODE = "BARCODE";
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     private SurfaceView surfaceView;
     private BarcodeDetector barcodeDetector;
@@ -168,7 +169,7 @@ public class BarcodeScanningActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(@NonNull Call<ProductContainer> call, @NonNull Response<ProductContainer> response) {
                     if (response.body() != null) {
-                        setupProductView(response.body().getProduct());
+                        setupProductView(response.body().getProduct(),query);
                     }
                 }
 
@@ -187,7 +188,7 @@ public class BarcodeScanningActivity extends AppCompatActivity {
         }
     }
 
-    private void setupProductView(Product product) {
+    private void setupProductView(Product product,String barcode) {
 
         if(!activityRunning) {
             if (product != null) {
@@ -195,6 +196,8 @@ public class BarcodeScanningActivity extends AppCompatActivity {
                 Intent intent = new Intent(BarcodeScanningActivity.this, ScannedProductDetailsActivity.class);
                 toneGen1.startTone(ToneGenerator.TONE_SUP_PIP, 120);
                 intent.putExtra(PRODUCT_DETAILS, product);
+                intent.putExtra(BARCODE, barcode);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "Product not found", Toast.LENGTH_SHORT).show();

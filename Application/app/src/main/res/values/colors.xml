@@ -9,9 +9,6 @@
     <color name="background_2">#333333</color>
     <color name="outer_background">#000000</color>
 
-    <color name="progress_bar_empty">#292929</color>
-    <color name="progress_bar_fill">#00F0FF</color>
-
     <color name="light_accent">#11A9B3</color>
     <color name="light_background_0">#D6D6D6</color>
     <color name="light_background_1">#F6F6F6</color>

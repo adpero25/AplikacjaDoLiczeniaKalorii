@@ -35,7 +35,7 @@ public class ServingsRepository extends Repository {
         queryExecutor.execute(() -> servingDao.insert(serving));
     }
 
-    void insert(Day day, Meal meal, double protionSize) {
+    public void insert(Day day, Meal meal, double protionSize) {
         insert(new Serving(){{
             dayId = DateConverters.dateToTimestamp(day.dayId);
             mealId = meal.mealId;
