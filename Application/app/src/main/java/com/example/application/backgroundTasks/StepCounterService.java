@@ -1,5 +1,6 @@
 package com.example.application.backgroundTasks;
 
+import android.app.AlarmManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -38,8 +39,7 @@ public class StepCounterService extends Service {
     Sensor stepCounterSensor;
     private Walk walk;
 
-    public StepCounterService() {
-    }
+    public StepCounterService() { }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -48,24 +48,14 @@ public class StepCounterService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         initSensor();
 
-        //the Date and time at which you want to execute counting reset
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
-            long millis = System.currentTimeMillis();
-            java.sql.Date dateFormat = new java.sql.Date(millis);
-            Date date = dateFormatter.parse(  dateFormat + " 23:59:00" );
-            Timer timer = new Timer();
-            long period = 24 * 60 * 60 * 1000; //24h in milliseconds
-            timer.schedule(new ResetCounterTask(), date, period);
+            Date d = new Date();
+            if (d.getHours() == 0 && d.getMinutes() == 0)
+                resetWalk();
         }
-        catch (Exception e) {
-            Toast.makeText(this, "Couldn't set timer for step counter: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-
+        catch (Exception e) { }
         return START_STICKY;
     }
 
@@ -84,10 +74,9 @@ public class StepCounterService extends Service {
     @Override
     public void onDestroy() {
         saveData();
-        //serviceStopped();
     }
 
-    private void initSensor() {
+    public void initSensor() {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
@@ -107,13 +96,6 @@ public class StepCounterService extends Service {
 
         }, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
-
-/*    private void serviceStopped() {
-        SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(MainActivity.STEP_COUNTER_KEY, false);
-        editor.apply();
-    }*/
 
     public void saveData() {
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
@@ -137,6 +119,10 @@ public class StepCounterService extends Service {
         if(walk == null)
             loadData();
         return this.walk;
+    }
+
+    public void ResetWalk() {
+        resetWalk();
     }
 
     public class LocalBinder extends Binder {
@@ -175,19 +161,16 @@ public class StepCounterService extends Service {
         }
     }
 
-    private class ResetCounterTask extends TimerTask {
-        public void run() {
+    private void resetWalk() {
+        DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
 
-            DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
+        repo.getOrCreateToday().thenAccept((day) -> {
+            day.day.stepsCount += (int) walk.stepsMade;
+            repo.update(day.day);
+        } );
 
-            repo.getOrCreateToday().thenAccept((day) -> {
-                day.day.stepsCount = (int) walk.stepsMade;
-                repo.update(day.day);
-            } );
-
-            walk.Reset();
-            saveData();
-            initSensor();
-        }
+        walk.Reset();
+        saveData();
+        initSensor();
     }
 }

@@ -10,6 +10,7 @@ import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -43,6 +44,8 @@ import com.example.application.database.models.junctions.DayWithDailyRequirement
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -102,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                         ACTIVITY_PERMISSION);
             }
-
+            //serviceStopped();
             startStepCounterService();
         }
         else {
@@ -268,6 +271,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        setStepTarget.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                scService.ResetWalk();
+                return true;
+            }
+        });
+
         updateWaterLabel();
 
 
@@ -355,15 +366,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startStepCounterService() {
-
         startService(new Intent(this, StepCounterService.class));
- //       serviceStarted();
+
+        SimpleDateFormat df = new SimpleDateFormat("hh:mm");
+        try {
+            Date date = df.parse("00:00");
+
+            Intent ishintent = new Intent(this, StepCounterService.class);
+            PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, PendingIntent.FLAG_IMMUTABLE);
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarm.cancel(pintent);
+            alarm.setRepeating(AlarmManager.RTC_WAKEUP, date.getTime(), AlarmManager.INTERVAL_DAY, pintent);
+        }
+        catch (Exception e) { }
     }
 
-/*    private void serviceStarted() {
+    private void serviceStarted() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(STEP_COUNTER_KEY, true);
+        editor.apply();
+    }
+
+    private void serviceStopped() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(STEP_COUNTER_KEY, false);
         editor.apply();
     }
 
@@ -371,7 +399,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         boolean serviceStarted = sharedPreferences.getBoolean(STEP_COUNTER_KEY, false);
         return serviceStarted;
-    }*/
+    }
 
     /** Defines callbacks for service binding, passed to bindService() */
     private ServiceConnection connection = new ServiceConnection() {
