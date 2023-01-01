@@ -1,6 +1,7 @@
 package com.example.application.backgroundTasks;
 
 import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -52,12 +53,45 @@ public class StepCounterService extends Service {
 
         try {
             Date d = new Date();
-            if (d.getHours() == 0 && d.getMinutes() == 0)
-                resetWalk();
+            if (d.getHours() == 23 && d.getMinutes() == 59) {
+                SaveDataAndResetWalk();
+                SetAlarm();
+            }
+
         }
         catch (Exception e) { }
         return START_STICKY;
     }
+
+    private void SetAlarm() {
+        try {
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            LocalDate now = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                now = LocalDate.now().plusDays(1);
+            }
+            Date date = dateFormatter.parse(now + " 23:59:00");
+
+            Intent ishintent = new Intent(this, StepCounterService.class);
+            PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, PendingIntent.FLAG_MUTABLE);
+            AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            alarm.cancel(pintent);
+            alarm.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), pintent);
+        }
+        catch (Exception e) {}
+    }
+
+    private void SaveDataAndResetWalk() {
+        DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
+        int steps = (int) walk.stepsMade;
+        repo.getOrCreateToday().thenAccept((day) -> {
+            day.day.stepsCount += steps;
+            repo.update(day.day);
+        } );
+
+        resetWalk();
+    }
+
 
     @Override
     public void onCreate() {
@@ -115,14 +149,27 @@ public class StepCounterService extends Service {
             walk = new Walk();
     }
 
-    public Walk GetWalk() {
+    public synchronized Walk GetWalk() {
         if(walk == null)
             loadData();
         return this.walk;
     }
 
-    public void ResetWalk() {
+    public int GetWalkStepsAndReset() {
+        if(walk == null)
+            loadData();
+
+        int stepsMade = (int) walk.stepsMade;
+
         resetWalk();
+
+        return stepsMade;
+    }
+
+    private synchronized void resetWalk() {
+        walk.Reset();
+        saveData();
+        initSensor();
     }
 
     public class LocalBinder extends Binder {
@@ -159,18 +206,5 @@ public class StepCounterService extends Service {
             // Liczba kroków x długość kroku (km)) x 0,5 x waga osoby (kg)
             return (float)(stepsMade * stepLength / 100000 * 0.5 * weight);
         }
-    }
-
-    private void resetWalk() {
-        DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
-
-        repo.getOrCreateToday().thenAccept((day) -> {
-            day.day.stepsCount += (int) walk.stepsMade;
-            repo.update(day.day);
-        } );
-
-        walk.Reset();
-        saveData();
-        initSensor();
     }
 }
