@@ -182,7 +182,7 @@ public class AddingMealActivity extends AppCompatActivity {
         repo.getAll().thenAccept((list)->{  runOnUiThread(()-> {
 
             Category category = new Category();
-            category.name = "No category";
+            category.name = getString(R.string.nullCategory);
 
             CategoryWithMeals categoryWithMeals = new CategoryWithMeals();
             categoryWithMeals.category=category;

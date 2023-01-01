@@ -26,7 +26,7 @@
                 style="@style/view_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="New meal" />
+                android:text="@string/new_meal" />
 
 
             <TextView
@@ -36,7 +36,7 @@
                 android:layout_margin="0dp"
 
                 android:gravity="start|center_vertical"
-                android:text="Name:" />
+                android:text="@string/name" />
 
             <EditText
                 android:id="@+id/nameField"
@@ -55,7 +55,7 @@
                 android:layout_margin="0dp"
 
                 android:gravity="start|center_vertical"
-                android:text="Desc:" />
+                android:text="@string/desc" />
 
             <EditText
                 android:id="@+id/descField"
@@ -86,7 +86,7 @@
                         style="@style/labels"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Category" />
+                        android:text="@string/category" />
 
                     <Spinner
                         android:id="@+id/categorySpinner"
@@ -104,7 +104,7 @@
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:padding="0dp"
-                    android:text="Add"
+                    android:text="@string/add"
                     android:textAppearance="@style/ButtonText"
                     android:theme="@style/AccentButton"
                     app:cornerRadius="25dp" />
@@ -124,7 +124,7 @@
                     android:layout_margin="0dp"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
-                    android:text="Calories:" />
+                    android:text="@string/calories" />
 
                 <EditText
                     android:id="@+id/caloriesInput"
@@ -159,7 +159,7 @@
                     android:layout_margin="0dp"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
-                    android:text="Carbohydrates:" />
+                    android:text="@string/carbohydrates" />
 
                 <EditText
                     android:id="@+id/carbohydratesInput"
@@ -194,7 +194,7 @@
                     android:layout_margin="0dp"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
-                    android:text="Proteins:" />
+                    android:text="@string/proteins" />
 
                 <EditText
                     android:id="@+id/proteinsInput"
@@ -229,7 +229,7 @@
                     android:layout_margin="0dp"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
-                    android:text="Fats:" />
+                    android:text="@string/fats" />
 
                 <EditText
                     android:id="@+id/fatInput"
@@ -261,7 +261,7 @@
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:padding="0dp"
-                android:text="Add meal"
+                android:text="@string/add_meal"
                 android:textAppearance="@style/ButtonText"
                 android:theme="@style/AccentButton"
                 app:cornerRadius="25dp" />

@@ -144,5 +144,16 @@
     <string name="change">Change</string>
     <string name="my_meals">My meals</string>
     <string name="scan">Scan product</string>
+    <string name="nullCategory">No category</string>
+    <string name="amount">Amount</string>
+    <string name="new_meal">New meal</string>
+    <string name="name">Name:</string>
+    <string name="desc">Desc:</string>
+    <string name="category">Category</string>
+    <string name="calories">Calories:</string>
+    <string name="carbohydrates">Carbohydrates:</string>
+    <string name="proteins">Proteins:</string>
+    <string name="fats">Fats:</string>
+    <string name="add_meal">Add meal</string>
 
 </resources>

@@ -120,7 +120,7 @@ public class AddingServingActivity extends AppCompatActivity {
                             EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
                             Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
 
-                            text.setText("Amount");
+                            text.setText(R.string.amount);
                             enteredValue.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
                             int width = LinearLayout.LayoutParams.WRAP_CONTENT;
