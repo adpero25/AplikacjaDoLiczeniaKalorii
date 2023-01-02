@@ -3,14 +3,18 @@ package com.example.application.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.ToneGenerator;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.application.Activities.Scanner.Product;
 import com.example.application.R;
+import com.example.application.database.models.Meal;
+import com.example.application.database.repositories.MealsRepository;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -18,6 +22,7 @@ import java.util.Locale;
 public class ScannedProductDetailsActivity extends AppCompatActivity {
 
     Product product;
+    String barcode;
     TextView code_TextView;
     TextView allergens_TextView;
     TextView categories_TextView;
@@ -29,6 +34,7 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
     String noData = "No data!";
     Button addMacroBTN;
     Button saveProductBTN;
+
 
 
     @Override
@@ -51,6 +57,7 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         product = (Product) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
+        barcode = (String) intent.getSerializableExtra(BarcodeScanningActivity.BARCODE);
 
         if(product != null) {
 
@@ -105,20 +112,25 @@ public class ScannedProductDetailsActivity extends AppCompatActivity {
             }
         }
 
-        addMacroBTN = findViewById(R.id.addMacroButton);
         saveProductBTN = findViewById(R.id.saveProductButton);
 
-        addMacroBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // add product
-            }
-        });
+        MealsRepository repo = new MealsRepository( getApplication());
 
-        addMacroBTN.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // add macro to calculations
+        repo.getByBarcode(barcode).thenAccept((meal)->{
+            if(meal!=null && meal.meal != null ){
+                runOnUiThread(()-> {
+                    ((ViewGroup) saveProductBTN.getParent()).removeView(saveProductBTN);
+                });
+            }else{
+                saveProductBTN.setOnClickListener((view) -> {
+                    runOnUiThread(()-> {
+                        Intent newIntent = new Intent(ScannedProductDetailsActivity.this, AddingMealActivity.class);
+                        newIntent.putExtra(BarcodeScanningActivity.PRODUCT_DETAILS, product);
+                        newIntent.putExtra(BarcodeScanningActivity.BARCODE, barcode);
+
+                        startActivity(newIntent);
+                    });
+                });
             }
         });
     }

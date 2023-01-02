@@ -34,7 +34,7 @@ public class DateConverters {
         Long hashedDate = new Long(0);
 
         hashedDate += calendar.get(Calendar.YEAR)*10000;
-        hashedDate += calendar.get(Calendar.MONTH)*100;
+        hashedDate += (1+calendar.get(Calendar.MONTH))*100; //...
         hashedDate += calendar.get(Calendar.DAY_OF_MONTH);
 
         return hashedDate;

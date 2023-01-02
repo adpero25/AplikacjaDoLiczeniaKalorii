@@ -35,7 +35,7 @@ import java.util.concurrent.Executors;
 @TypeConverters({ActivityIndicatorConverter.class, MassTargetConverter.class, MealTypeConverter.class})
 
 @androidx.room.Database(
-        version = 3,
+        version = 4,
         exportSchema = true,
         entities = {Day.class, Serving.class, OpenFoodFact.class, Meal.class, Category.class, DailyRequirements.class},
         autoMigrations = {
@@ -47,9 +47,11 @@ import java.util.concurrent.Executors;
                       from = 2,
                       to = 3,
                       spec = Migrationfrom2to3.class
-
-                )
-
+                ),
+                @AutoMigration(
+                        from = 3,
+                        to = 4
+                ),
         }
 )
 public abstract class CaloriesDatabase extends RoomDatabase {

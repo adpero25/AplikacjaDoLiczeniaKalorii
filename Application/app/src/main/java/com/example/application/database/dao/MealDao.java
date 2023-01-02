@@ -29,4 +29,8 @@ public interface MealDao {
     @Transaction
     @Query("SELECT * FROM meal")
     List<MealWithOpenFoodFact> getAll();
+
+    @Transaction
+    @Query("SELECT * FROM meal WHERE category_id IS NULL")
+    List<MealWithOpenFoodFact> getAllWithoutCategory();
 }
