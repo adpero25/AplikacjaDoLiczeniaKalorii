@@ -83,11 +83,6 @@
             android:exported="false" >
         </receiver>
 
-        <receiver
-            android:name=".broadcastReceivers.StepCounterBroadcastReceiver"
-            android:exported="false" >
-        </receiver>
-
         <service
             android:name=".backgroundTasks.NotifyAboutWater"
             android:exported="false" />
