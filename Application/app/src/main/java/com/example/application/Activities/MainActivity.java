@@ -22,7 +22,9 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -40,6 +42,7 @@ import com.example.application.CaloriesCalculatorContext;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
+import com.example.application.broadcastReceivers.StepCounterBroadcastReceiver;
 import com.example.application.broadcastReceivers.WaterBroadcastReceiver;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
@@ -56,6 +59,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String WATER_GLASSES_KEY = "water_glasses";
     public static final String STEP_COUNTER_KEY = "service_started";
     public static final String CHANNEL_ID = "WATER_CHANNEL_ID";
+    public static final String COUNTER_RESET = "COUNTER_RESET";
 
     TextView waterLabel;
     TextView totalStepsTextView;
@@ -379,31 +386,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startStepCounterService() {
-        startService(new Intent(this, StepCounterService.class));
+        Intent intent = new Intent(this, StepCounterService.class);
 
-        try {
-/*            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 50);
-            calendar.set(Calendar.SECOND, 0);*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startService(intent);
+        }
 
+
+        /*try {
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 LocalDate now = LocalDate.now();
                 Date date = dateFormatter.parse(now + " 23:59:00");
 
-                Intent ishintent = new Intent(this, StepCounterService.class);
+                Intent ishintent = new Intent(this, StepCounterBroadcastReceiver.class);
                 PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, PendingIntent.FLAG_MUTABLE);
-                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
                 alarm.cancel(pintent);
-                alarm.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), pintent);
+                alarm.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, date.getTime(), pintent);
             }
         }
-        catch (Exception e) {
-            int c = 1;
-        }
+        catch (Exception ignored) { }
+*/
     }
 
     private void serviceStarted() {
@@ -461,4 +466,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
     }
+
+
 }
