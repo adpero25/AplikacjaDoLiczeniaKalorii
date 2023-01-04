@@ -1,19 +1,13 @@
 package com.example.application.Activities;
 
-import static androidx.core.app.NotificationCompat.EXTRA_NOTIFICATION_ID;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -34,28 +28,19 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
-import com.example.application.broadcastReceivers.WaterBroadcastReceiver;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
-import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -66,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String WATER_GLASSES_KEY = "water_glasses";
     public static final String STEP_COUNTER_KEY = "service_started";
     public static final String CHANNEL_ID = "WATER_CHANNEL_ID";
+    public static final String COUNTER_RESET = "COUNTER_RESET";
 
     TextView waterLabel;
     TextView totalStepsTextView;
@@ -327,11 +313,13 @@ public class MainActivity extends AppCompatActivity {
 
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
 
+        stepCounterServiceBound = true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        stepCounterServiceBound = false;
     }
 
     private void updateWaterLabel(){
@@ -379,30 +367,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startStepCounterService() {
-        startService(new Intent(this, StepCounterService.class));
+        Intent intent = new Intent(this, StepCounterService.class);
 
-        try {
-/*            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 23);
-            calendar.set(Calendar.MINUTE, 50);
-            calendar.set(Calendar.SECOND, 0);*/
-
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                LocalDate now = LocalDate.now();
-                Date date = dateFormatter.parse(now + " 23:59:00");
-
-                Intent ishintent = new Intent(this, StepCounterService.class);
-                PendingIntent pintent = PendingIntent.getService(this, 0, ishintent, PendingIntent.FLAG_MUTABLE);
-                AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                alarm.cancel(pintent);
-                alarm.setExact(AlarmManager.RTC_WAKEUP, date.getTime(), pintent);
-            }
-        }
-        catch (Exception e) {
-            int c = 1;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startService(intent);
         }
     }
 
@@ -451,14 +419,16 @@ public class MainActivity extends AppCompatActivity {
     public class GetWalk extends TimerTask {
         @Override
         public void run() {
-            walk = scService.GetWalk();
-
-            MainActivity.this.runOnUiThread((Runnable) () -> {
-                stepProgress.setProgress((int)walk.stepsMade);
-                totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int)walk.stepsMade, walk.stepsTarget));
-                totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, walk.calculateDistance()));
-                totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateCaloriesBurnt()));
-            });
+            if(stepCounterServiceBound) {
+                walk = scService.GetWalk();
+                MainActivity.this.runOnUiThread((Runnable) () -> {
+                    Log.d("GET_WALK", "GET WALK Running");
+                    stepProgress.setProgress((int) walk.stepsMade);
+                    totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int) walk.stepsMade, walk.stepsTarget));
+                    totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, walk.calculateDistance()));
+                    totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateCaloriesBurnt()));
+                });
+            }
         }
     }
 }
