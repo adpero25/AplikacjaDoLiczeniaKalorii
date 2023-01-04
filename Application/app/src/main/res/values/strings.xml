@@ -159,4 +159,5 @@
     <string name="distanceMade">Total distance today: %.2f m</string>
     <string name="caloriesBurnt">Calories burnt: ~ %.2f kcal</string>
     <string name="setDailyStepTarget">Set target</string>
+    <string name="setDailyCaloriesRequirementManually">Set daily macro nutrients requirement</string>
 </resources>

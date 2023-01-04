@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.ManuallyAddDailyRequirements">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/inner_container">
+
+
+            <TextView
+                android:id="@+id/CaloriesRequirement"
+                style="@style/labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calories" />
+
+            <EditText
+                android:id="@+id/daily_caloriesRequirementInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/ProteinLabel"
+                style="@style/labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/proteins" />
+
+            <EditText
+                android:id="@+id/daily_proteinsInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/fatLabel"
+                style="@style/labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fats" />
+
+            <EditText
+                android:id="@+id/daily_fatInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/carbohydratesLabel"
+                style="@style/labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/carbohydrates" />
+
+            <EditText
+                android:id="@+id/daily_carbohydratesInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/FieldsNotRequired"
+                style="@style/subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/FieldsNotRequired" />
+
+            <TextView
+                android:id="@+id/AgeLabel"
+                style="@style/labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/AgeText" />
+
+            <EditText
+                android:id="@+id/daily_ageInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberSigned" />
+
+            <TextView
+                android:id="@+id/WeightLabel"
+                style="@style/labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/WeightText" />
+
+            <EditText
+                android:id="@+id/daily_weightInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/HeightLabel"
+                style="@style/labels"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/HeightText" />
+
+            <EditText
+                android:id="@+id/daily_heightInput"
+                style="@style/input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/daily_cancelButton"
+                    style="@style/btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/CancelButtonText"
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp"/>
+
+                <Button
+                    android:id="@+id/daily_confirmDataButton"
+                    style="@style/btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/ConfirmButtonText"
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

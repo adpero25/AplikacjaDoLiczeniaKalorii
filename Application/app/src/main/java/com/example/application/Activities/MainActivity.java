@@ -59,6 +59,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
+    private static final int ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST = 20;
     private static int stepsTarget = 5000;
     private boolean stepCounterServiceBound = false;
     public static final int CALCULATE_DAILY_REQUIREMENTS_REQUEST = 1;
@@ -294,7 +295,11 @@ public class MainActivity extends AppCompatActivity {
 
         updateWaterLabel();
 
-
+        Button manuallyCaloriesRequirement = findViewById(R.id.dailyCaloriesRequirementManually);
+        manuallyCaloriesRequirement.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, ManuallyAddDailyRequirements.class);
+                startActivityForResult(intent, ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST);
+        });
     }
 
     @Override

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -23,6 +23,13 @@
         android:theme="@style/Theme.Application"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.ManuallyAddDailyRequirements"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".Activities.AddingServingActivity"
             android:exported="false">
@@ -76,14 +83,18 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <receiver android:name=".broadcastReceivers.WaterBroadcastReceiver" android:exported="false">
 
-        </receiver>
-        <service android:name=".backgroundTasks.NotifyAboutWater" android:exported="false"></service>
+        <receiver
+            android:name=".broadcastReceivers.WaterBroadcastReceiver"
+            android:exported="false"></receiver>
+
+        <service
+            android:name=".backgroundTasks.NotifyAboutWater"
+            android:exported="false" />
         <service
             android:name=".backgroundTasks.StepCounterService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
     </application>
 
 </manifest>
