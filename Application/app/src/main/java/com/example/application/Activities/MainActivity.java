@@ -280,7 +280,11 @@ public class MainActivity extends AppCompatActivity {
 
         updateWaterLabel();
 
-
+        Button checkProgress = findViewById(R.id.checkProgress);
+        checkProgress.setOnClickListener(v -> {
+            Intent intent = new Intent(this, UserParametersList.class);
+            startActivity(intent);
+        });
     }
 
     @Override

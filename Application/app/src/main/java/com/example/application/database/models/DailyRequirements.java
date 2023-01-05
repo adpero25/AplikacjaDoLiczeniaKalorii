@@ -9,11 +9,16 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import com.example.application.database.converters.DateConverters;
 import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
 
+import java.util.Date;
+
 @Entity(tableName = "daily_requirements")
+@TypeConverters({DateConverters.class})
 public class DailyRequirements {
 
     @PrimaryKey
@@ -43,4 +48,7 @@ public class DailyRequirements {
     @NonNull
     @ColumnInfo(name = "mass_target")
     public MassTarget massTarget = MassTarget.Maintenance;
+
+    @ColumnInfo(name = "entry_date")
+    public Date entryDate;
 }

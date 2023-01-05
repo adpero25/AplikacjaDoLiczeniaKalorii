@@ -21,6 +21,8 @@ import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Date;
+
 public class CalculateCaloriesRequirement extends AppCompatActivity {
 
     EditText AgeBox;
@@ -92,6 +94,8 @@ public class CalculateCaloriesRequirement extends AppCompatActivity {
             requirements.nutritionalValuesTarget.proteins = protein;
             requirements.nutritionalValuesTarget.fats = fat;
             requirements.nutritionalValuesTarget.carbohydrates = carb;
+
+            requirements.entryDate = new Date();
 
             CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
             db.dailyRequirementsDao().insert(requirements);

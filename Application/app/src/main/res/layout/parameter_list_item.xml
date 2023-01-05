@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/inner_container"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <ImageView
+        android:id="@+id/weightImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_baseline_scale_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/parameter_list_image"
+        />
+
+    <TextView
+        android:id="@+id/weightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/weightImage"
+        app:layout_constraintTop_toTopOf="@id/weightImage"
+        style="@style/parameter_list_text"
+        />
+
+    <ImageView
+        android:id="@+id/heightImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_baseline_height_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/weightImage"
+        style="@style/parameter_list_image"
+        />
+
+    <TextView
+        android:id="@+id/heightValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/heightImage"
+        app:layout_constraintTop_toTopOf="@id/heightImage"
+        style="@style/parameter_list_text"
+        />
+
+    <TextView
+        android:id="@+id/ageValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/weightImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/parameter_list_text"
+        />
+
+    <TextView
+        android:id="@+id/entryDateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/heightImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/parameter_list_text"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
