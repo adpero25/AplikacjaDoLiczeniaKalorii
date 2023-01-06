@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -73,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         dismissNotification();
-        startWaterNotificationService();
+        if(!isServiceRunning(NotifyAboutWater.class)){
+            startWaterNotificationService();
+        }
+
         createNotificationChannel();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
@@ -361,9 +366,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private void startWaterNotificationService(){
         Intent intent = new Intent(this, NotifyAboutWater.class);
-        startService(intent);
+            startService(intent);
     }
 
     private void startStepCounterService() {
