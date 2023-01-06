@@ -12,6 +12,8 @@ import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.Date;
+
 public class ManuallyAddDailyRequirements extends AppCompatActivity {
 
     EditText caloriesInput;
@@ -44,11 +46,13 @@ public class ManuallyAddDailyRequirements extends AppCompatActivity {
                         .setAction("Action", null).show();
                 return;
             }
+
             DailyRequirements dailyRequirements = new DailyRequirements();
             dailyRequirements.nutritionalValuesTarget.calories = Double.parseDouble(caloriesInput.getText().toString());
             dailyRequirements.nutritionalValuesTarget.proteins = Double.parseDouble(proteinsInput.getText().toString());
             dailyRequirements.nutritionalValuesTarget.carbohydrates = Double.parseDouble(carbohydratesInput.getText().toString());
             dailyRequirements.nutritionalValuesTarget.fats = Double.parseDouble(fatInput.getText().toString());
+            dailyRequirements.entryDate = new Date();
 
             if(checkNullOrEmpty(ageInput.getText().toString())){
                 dailyRequirements.age = Integer.parseInt(ageInput.getText().toString());
