@@ -95,14 +95,4 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingLeft">10dp</item>
     </style>
-    <style name="parameter_list_image">
-        <item name="android:layout_marginBottom">10dp</item>
-        <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-    </style>
-    <style name="parameter_list_text">
-        <item name="android:layout_marginRight">10dp</item>
-        <item name="android:layout_marginLeft">10dp</item>
-    </style>
 </resources>
