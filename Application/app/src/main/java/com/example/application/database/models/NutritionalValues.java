@@ -3,7 +3,9 @@ package com.example.application.database.models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 
-public class NutritionalValues {
+import java.io.Serializable;
+
+public class NutritionalValues implements Serializable {
     @NonNull
     public Double calories = new Double(0);
 

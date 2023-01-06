@@ -38,4 +38,7 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM category")
     List<Category> getAllWithoutMeals();
+
+    @Query("SELECT * FROM category WHERE category_id=:id")
+    Category getById(Long id);
 }

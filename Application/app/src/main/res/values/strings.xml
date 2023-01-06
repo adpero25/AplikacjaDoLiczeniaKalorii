@@ -165,4 +165,6 @@
     <string name="age">Age: %d</string>
     <string name="progressTitle">That\'s how your body parameters were changing</string>
     <string name="setDailyCaloriesRequirementManually">Set daily macro nutrients requirement</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
