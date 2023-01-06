@@ -286,10 +286,17 @@ public class MainActivity extends AppCompatActivity {
 
         updateWaterLabel();
 
+
+        Button checkProgress = findViewById(R.id.checkProgress);
+        checkProgress.setOnClickListener(v -> {
+            Intent intent = new Intent(this, UserParametersList.class);
+            startActivity(intent);
+
         Button manuallyCaloriesRequirement = findViewById(R.id.dailyCaloriesRequirementManually);
         manuallyCaloriesRequirement.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, ManuallyAddDailyRequirements.class);
                 startActivityForResult(intent, ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST);
+
         });
     }
 

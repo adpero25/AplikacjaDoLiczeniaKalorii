@@ -159,5 +159,10 @@
     <string name="distanceMade">Total distance today: %.2f m</string>
     <string name="caloriesBurnt">Calories burnt: ~ %.2f kcal</string>
     <string name="setDailyStepTarget">Set target</string>
+    <string name="date">"Date: "</string>
+    <string name="checkProgress">Check progress</string>
+    <string name="somethingWrongWithDate">Sorry, there was a problem with date</string>
+    <string name="age">Age: %d</string>
+    <string name="progressTitle">That\'s how your body parameters were changing</string>
     <string name="setDailyCaloriesRequirementManually">Set daily macro nutrients requirement</string>
 </resources>
