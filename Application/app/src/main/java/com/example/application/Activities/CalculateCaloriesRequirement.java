@@ -1,7 +1,12 @@
 package com.example.application.Activities;
 
+import static com.example.application.Activities.ManuallyAddDailyRequirements.USER_DATA_KEY;
+import static com.example.application.Activities.ManuallyAddDailyRequirements.USER_DATA_SHARED_PREFERENCES_FILE_NAME;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,6 +25,7 @@ import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.Date;
 
@@ -96,6 +102,15 @@ public class CalculateCaloriesRequirement extends AppCompatActivity {
             requirements.nutritionalValuesTarget.carbohydrates = carb;
 
             requirements.entryDate = new Date();
+
+            if(requirements.height != 0 && requirements.weight != 0) {
+                SharedPreferences userDataSharedPreferences = getSharedPreferences(USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = userDataSharedPreferences.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(requirements);
+                editor.putString(USER_DATA_KEY, json);
+                editor.apply();
+            }
 
             CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
             db.dailyRequirementsDao().insert(requirements);
