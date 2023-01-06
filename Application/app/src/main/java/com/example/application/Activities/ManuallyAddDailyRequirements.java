@@ -46,7 +46,7 @@ public class ManuallyAddDailyRequirements extends AppCompatActivity {
                         .setAction("Action", null).show();
                 return;
             }
-            
+
             DailyRequirements dailyRequirements = new DailyRequirements();
             dailyRequirements.nutritionalValuesTarget.calories = Double.parseDouble(caloriesInput.getText().toString());
             dailyRequirements.nutritionalValuesTarget.proteins = Double.parseDouble(proteinsInput.getText().toString());

@@ -289,8 +289,10 @@ public class MainActivity extends AppCompatActivity {
 
         Button checkProgress = findViewById(R.id.checkProgress);
         checkProgress.setOnClickListener(v -> {
-            Intent intent = new Intent(this, UserParametersList.class);
-            startActivity(intent);
+                    Intent intent = new Intent(this, UserParametersList.class);
+                    startActivity(intent);
+                });
+
 
         Button manuallyCaloriesRequirement = findViewById(R.id.dailyCaloriesRequirementManually);
         manuallyCaloriesRequirement.setOnClickListener(v -> {
