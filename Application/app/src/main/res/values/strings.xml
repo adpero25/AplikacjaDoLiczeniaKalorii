@@ -165,4 +165,9 @@
     <string name="age">Age: %d</string>
     <string name="progressTitle">That\'s how your body parameters were changing</string>
     <string name="setDailyCaloriesRequirementManually">Set daily macro nutrients requirement</string>
+    <string name="distanceDetails">Distance: %.2f meters</string>
+    <string name="unableToLoadStepsHistory">Unable to open steps history, restart application and try again!</string>
+    <string name="totalDistanceEverMade">Total distance made: %.2f (km)</string>
+    <string name="totalStepsEverMade">Total steps made: %d </string>
+    <string name="dateDetails">Date: %s</string>
 </resources>

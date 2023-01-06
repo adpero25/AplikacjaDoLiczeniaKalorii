@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.StepsHistoryActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginTop="24dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/steps_history_list_item" />
+
+    <TextView
+        android:id="@+id/totalDistanceEverMade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/totalDistanceEverMade"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:layout_marginRight="20dp" />
+
+    <TextView
+        android:id="@+id/totalStepsEverMade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/totalStepsEverMade"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        tools:layout_marginRight="20dp" />
+
+    <FrameLayout
+        android:id="@+id/stepsFragment"
+        android:name="com.example.application.Fragments.StepsDetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+    </FrameLayout>
+
+
+</LinearLayout>

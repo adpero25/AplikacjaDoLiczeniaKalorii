@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -47,7 +46,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
     private static final int ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST = 20;
-    private static int stepsTarget = 5000;
+    public static int STEPS_TARGET = 5000;
     private boolean stepCounterServiceBound = false;
     public static final int CALCULATE_DAILY_REQUIREMENTS_REQUEST = 1;
     public static final String SHARED_PREFERENCES_FILE_NAME = "CaloriesCalculatorPreferences";
@@ -88,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
         registerWaterButton = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
         stepProgress = findViewById(R.id.stepsProgress);
-        stepProgress.setMax(stepsTarget);
+        stepProgress.setMax(STEPS_TARGET);
         addDailyWaterRequirement = findViewById(R.id.dailyWaterRequirement);
         setStepTarget = findViewById(R.id.dailyStepTarget);
         totalStepsTextView = findViewById(R.id.howManyStepsToday);
         totalDistanceTextView = findViewById(R.id.distanceToday);
         totalCaloriesBurntTextView = findViewById(R.id.caloriesBurnedToday);
+        ConstraintLayout stepCounterContainer = findViewById(R.id.stepsContainer);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION)
@@ -104,9 +104,16 @@ public class MainActivity extends AppCompatActivity {
             }
             //serviceStopped();
             startStepCounterService();
+
+            stepCounterContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, StepsHistoryActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
         else {
-            ConstraintLayout stepCounterContainer = findViewById(R.id.stepsContainer);
             stepCounterContainer.setMaxHeight(0);
         }
 
@@ -455,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
                     stepProgress.setProgress((int) walk.stepsMade);
                     totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int) walk.stepsMade, walk.stepsTarget));
                     totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, walk.calculateDistance()));
-                    totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateCaloriesBurnt()));
+                    totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateBurnedCalories()));
                 });
             }
         }

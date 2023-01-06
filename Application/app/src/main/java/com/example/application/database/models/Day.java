@@ -46,6 +46,14 @@ public class Day {
     @NonNull
     public Integer stepsCount = new Integer(0);
 
+    @ColumnInfo(name = "total_distance", defaultValue = "0.0")
+    @NonNull
+    public Double totalDistance = 0.0;
+
+    @ColumnInfo(name = "burned_calories", defaultValue = "0.0")
+    @NonNull
+    public Double burnedCalories = 0.0;
+
     @NonNull
     @ColumnInfo(name = "has_practiced")
     public Boolean hasPracticed = new Boolean(false);

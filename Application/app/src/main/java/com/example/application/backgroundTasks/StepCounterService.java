@@ -184,8 +184,7 @@ public class StepCounterService extends Service {
             loadData();
 
         int stepsMade = (int) walk.stepsMade;
-
-        resetWalk();
+        SaveDataAndResetWalk();
 
         return stepsMade;
     }
@@ -194,8 +193,13 @@ public class StepCounterService extends Service {
 
         DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
         int steps = (int) walk.stepsMade;
+        double distance =  walk.calculateDistance();
+        double calories =  walk.calculateBurnedCalories();
+
         repo.getOrCreateToday().thenAccept((day) -> {
             day.day.stepsCount += steps;
+            day.day.totalDistance += distance;
+            day.day.burnedCalories += calories;
             repo.update(day.day);
         } );
 
@@ -248,9 +252,8 @@ public class StepCounterService extends Service {
             return (stepsMade * this.stepLength) / 100;
         }
 
-        public double calculateCaloriesBurnt() {
-            return stepsMade * stepLength / 100000 * 0.5 * weight; // Liczba kroków x długość kroku (km)) x 0,5 x waga osoby (kg)
-        }
+        // Liczba kroków x długość kroku (km)) x 0,5 x waga osoby (kg)
+        public double calculateBurnedCalories() { return stepsMade * stepLength / 100000 * 0.5 * weight; }
     }
 
     public class ResetService extends TimerTask {
