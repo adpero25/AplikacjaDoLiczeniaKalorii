@@ -32,6 +32,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".Activities.ManuallyAddDailyRequirements"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Activities.AddingServingActivity"
             android:exported="false">
             <meta-data
@@ -87,7 +94,9 @@
 
         <receiver
             android:name=".broadcastReceivers.WaterBroadcastReceiver"
-            android:exported="false"></receiver>
+
+            android:exported="false">
+        </receiver>
 
         <service
             android:name=".backgroundTasks.NotifyAboutWater"
