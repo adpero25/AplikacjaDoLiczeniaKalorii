@@ -30,4 +30,8 @@ public interface DayDao {
     @Transaction
     @Query("SELECT * FROM day WHERE day_id = :date")
     DayWithServings get(Date date);
+
+    @Transaction
+    @Query("SELECT * FROM day")
+    List<Day> getAll();
 }

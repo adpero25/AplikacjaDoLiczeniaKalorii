@@ -23,9 +23,12 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.application.Activities.CalculateCaloriesRequirement;
 import com.example.application.Activities.MainActivity;
+import com.example.application.Activities.ManuallyAddDailyRequirements;
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.database.CaloriesDatabase;
+import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.repositories.DaysRepository;
 import com.google.gson.Gson;
 
@@ -62,7 +65,7 @@ public class StepCounterService extends Service {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 LocalDate now = LocalDate.now();
-                Date date = dateFormatter.parse(now + " 23:59:00");
+                Date date = dateFormatter.parse(now + " 23:50:00");
 
                 int period = 24*60*60*1000; // period 24h
                 Timer timer = new Timer(COUNTER_RESET);
@@ -150,8 +153,24 @@ public class StepCounterService extends Service {
         String savedWalk = sharedPreferences.getString(WALK_KEY, null);
         if(savedWalk != null)
             walk = new Gson().fromJson(savedWalk, Walk.class);
-        else
-            walk = new Walk();
+        else {
+            DailyRequirements rq = GetUserData();
+            if(rq != null)
+                walk = new Walk(rq.weight, rq.height);
+            else
+                walk = new Walk();
+        }
+    }
+
+    protected DailyRequirements GetUserData() {
+
+        SharedPreferences userDataSharedPreferences = getSharedPreferences(ManuallyAddDailyRequirements.USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        String savedData = userDataSharedPreferences.getString(ManuallyAddDailyRequirements.USER_DATA_KEY, null);
+
+        if (savedData != null) {
+            return new Gson().fromJson(savedData, DailyRequirements.class);
+        }
+        return null;
     }
 
     public synchronized Walk GetWalk() {
@@ -165,8 +184,7 @@ public class StepCounterService extends Service {
             loadData();
 
         int stepsMade = (int) walk.stepsMade;
-
-        resetWalk();
+        SaveDataAndResetWalk();
 
         return stepsMade;
     }
@@ -175,8 +193,13 @@ public class StepCounterService extends Service {
 
         DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
         int steps = (int) walk.stepsMade;
+        double distance =  walk.calculateDistance();
+        double calories =  walk.calculateBurnedCalories();
+
         repo.getOrCreateToday().thenAccept((day) -> {
             day.day.stepsCount += steps;
+            day.day.totalDistance += distance;
+            day.day.burnedCalories += calories;
             repo.update(day.day);
         } );
 
@@ -185,8 +208,18 @@ public class StepCounterService extends Service {
 
     private synchronized void resetWalk() {
         walk.Reset();
+        setWalkData();
         saveData();
         initSensor();
+    }
+
+    private void setWalkData() {
+        DailyRequirements rq = GetUserData();
+        if(rq != null)
+        {
+            walk.weight = rq.weight;
+            walk.stepLength = (rq.height / 4) + 37;
+        }
     }
 
     public class LocalBinder extends Binder {
@@ -200,13 +233,14 @@ public class StepCounterService extends Service {
         public boolean sensorSet = false;
         public float stepsMade = 0f;
         public float startingStepsCounter;
-        public float stepLength = 78.0f;  // step length in cm
-        public float weight = 80.0f;  // weight in kg
+        public double stepLength = 71;  // step length in cm
+        public double weight = 70;  // weight in kg
         public int stepsTarget = 5000;
 
-        public Walk() {
-            // stepLength = height / 4 + 37;
-            // weight =
+        public Walk() { }
+        public Walk(double _weight, double _height) {
+            this.weight = _weight;
+            this.stepLength = (_height / 4) + 37;
         }
 
         public void Reset() {
@@ -214,15 +248,12 @@ public class StepCounterService extends Service {
             stepsMade = 0;
         }
 
-        public float calculateDistance() {
-
+        public double calculateDistance() {
             return (stepsMade * this.stepLength) / 100;
         }
 
-        public float calculateCaloriesBurnt() {
-            // Liczba kroków x długość kroku (km)) x 0,5 x waga osoby (kg)
-            return (float)(stepsMade * stepLength / 100000 * 0.5 * weight);
-        }
+        // Liczba kroków x długość kroku (km)) x 0,5 x waga osoby (kg)
+        public double calculateBurnedCalories() { return stepsMade * stepLength / 100000 * 0.5 * weight; }
     }
 
     public class ResetService extends TimerTask {

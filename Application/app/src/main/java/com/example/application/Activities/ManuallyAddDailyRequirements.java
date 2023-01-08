@@ -2,6 +2,8 @@ package com.example.application.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -11,11 +13,14 @@ import com.example.application.R;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import java.util.Date;
 
 public class ManuallyAddDailyRequirements extends AppCompatActivity {
 
+    public static final String USER_DATA_KEY = "USER_DATA_KEY";
+    public static final String USER_DATA_SHARED_PREFERENCES_FILE_NAME = "USER_DATA_SHARED_PREFERENCES_FILE_NAME";
     EditText caloriesInput;
     EditText proteinsInput;
     EditText carbohydratesInput;
@@ -64,6 +69,15 @@ public class ManuallyAddDailyRequirements extends AppCompatActivity {
 
             if(checkNullOrEmpty(weightInput.getText().toString())){
                 dailyRequirements.weight = Double.parseDouble(weightInput.getText().toString());
+            }
+
+            if(dailyRequirements.height != 0 && dailyRequirements.weight != 0) {
+                SharedPreferences userDataSharedPreferences = getSharedPreferences(USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = userDataSharedPreferences.edit();
+                Gson gson = new Gson();
+                String json = gson.toJson(dailyRequirements);
+                editor.putString(USER_DATA_KEY, json);
+                editor.apply();
             }
 
             CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());

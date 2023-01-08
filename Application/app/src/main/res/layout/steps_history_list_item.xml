@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="100dp"
+    android:layout_height="150dp"
+    style="@style/inner_container">
+
+    <com.example.application.SurfaceViews.StepProgressSurfaceView
+        android:id="@+id/progressValue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="25dp"
+        android:rotation="180">
+
+    </com.example.application.SurfaceViews.StepProgressSurfaceView>
+
+    <TextView
+        android:id="@+id/stepsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
+        android:text="12000"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:translationZ="10dp" />
+
+    <TextView
+        android:id="@+id/dateValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:text="2010"
+        android:textAlignment="center" />
+
+</RelativeLayout>
