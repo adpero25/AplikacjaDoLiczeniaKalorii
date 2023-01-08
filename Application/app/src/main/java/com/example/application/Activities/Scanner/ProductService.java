@@ -10,3 +10,4 @@ public interface ProductService {
     @GET("api/v0/product/{code}")
     Call<ProductContainer> findProducts(@Path("code") String query);
 }
+
