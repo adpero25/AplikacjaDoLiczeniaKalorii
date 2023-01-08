@@ -1,6 +1,5 @@
 package com.example.application.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -19,11 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.application.R;
 import com.example.application.database.models.Category;
 import com.example.application.database.models.junctions.CategoryWithMeals;
-import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 import com.example.application.database.repositories.CategoriesRepository;
-import com.example.application.database.repositories.MealsRepository;
-
-import java.util.Arrays;
 
 
 public class ManageCategoriesActivity extends AppCompatActivity {
@@ -100,7 +95,7 @@ public class ManageCategoriesActivity extends AppCompatActivity {
 
         listRoot.post(() -> {
 
-            View categoryListItem = inflater.inflate(R.layout.meal_list_item_crud, null);
+            View categoryListItem = inflater.inflate(R.layout.two_buttons_list_item, null);
             ((TextView) categoryListItem.findViewById(R.id.name)).setText(elem.category.name);
             listRoot.addView(categoryListItem);
 

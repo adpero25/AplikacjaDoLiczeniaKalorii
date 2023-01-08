@@ -2,16 +2,10 @@ package com.example.application.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +15,7 @@ import com.example.application.database.models.Category;
 import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 import com.example.application.database.repositories.CategoriesRepository;
-import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.MealsRepository;
-import com.example.application.database.repositories.ServingsRepository;
 
 
 public class ManageMealsActivity extends AppCompatActivity {
@@ -87,7 +79,7 @@ public class ManageMealsActivity extends AppCompatActivity {
                 categoryListItem.setText(elem.category.name);
                 listRoot.addView(categoryListItem);
                 for (MealWithOpenFoodFact meal : elem.meals) {
-                    View mealListItem = inflater.inflate(R.layout.meal_list_item_crud, null);
+                    View mealListItem = inflater.inflate(R.layout.two_buttons_list_item, null);
                     ((TextView) mealListItem.findViewById(R.id.name)).setText(meal.meal.name);
                     listRoot.addView(mealListItem);
 
