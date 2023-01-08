@@ -40,7 +40,7 @@ public class CategoriesRepository extends Repository {
         }});
     }
 
-    void update(Category category) {
+    public void update(Category category) {
         queryExecutor.execute(() -> categoryDao.update(category));
     }
 
@@ -58,5 +58,9 @@ public class CategoriesRepository extends Repository {
 
     public CompletableFuture<List<CategoryWithMeals>> getAllWithoutMeals(){
         return CompletableFuture.supplyAsync(categoryDao::getAll, queryExecutor);
+    }
+
+    public CompletableFuture<Category> getById(Long categoryId) {
+        return CompletableFuture.supplyAsync(()->categoryDao.getById(categoryId), queryExecutor);
     }
 }
