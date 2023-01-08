@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="44dp"
-                android:text="Scan Product"
+                android:text="@string/scan"
                 android:textAppearance="@style/ButtonText"
                 android:theme="@style/AccentButton"
                 app:cornerRadius="25dp"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="4dp"
-                android:text="Load day obj from DB"
+                android:text="@string/loadDayob"
                 android:textAppearance="@style/ButtonText"
                 android:theme="@style/AccentButton"
                 app:cornerRadius="25dp"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="4dp"
-                android:text="Add glass of water"
+                android:text="@string/registerOneGlass"
                 android:textAppearance="@style/ButtonText"
                 android:theme="@style/AccentButton"
                 app:cornerRadius="25dp"
@@ -247,7 +247,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Manage meals"
+                android:text="@string/manageMeals"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dailyCaloriesRequirementManually" />
 
@@ -257,7 +257,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:text="Manage categories"
+                android:text="@string/manageCategories"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageMeals" />
 
