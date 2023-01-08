@@ -1,5 +1,6 @@
 package com.example.application.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -30,18 +31,25 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.application.Activities.Scanner.MealInfo;
+import com.example.application.Activities.Scanner.MealSuggestionService;
+import com.example.application.Activities.Scanner.RetrofitInstance;
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
 import com.example.application.database.repositories.DaysRepository;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -130,7 +138,41 @@ public class MainActivity extends AppCompatActivity {
         loadDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DaysRepository repo = new DaysRepository(getApplication());
+                MealSuggestionService mealSuggestionService = RetrofitInstance.getSpoonacularClientInstance().create(MealSuggestionService.class);
+                try {
+                    Call<MealInfo> productsApiCall = mealSuggestionService.loadMeal(716429L);
+
+                    productsApiCall.enqueue(new Callback<com.example.application.Activities.Scanner.MealInfo>() {
+                        @Override
+                        public void onResponse(@NonNull Call<MealInfo> call, @NonNull Response<MealInfo> response) {
+                            if (response.body() != null) {
+                                TextView textView = findViewById(R.id.textView);
+                                StringBuilder sb = new StringBuilder();
+
+                                sb.append("url = ");
+                                sb.append(response.body().getSourceUrl());
+                                sb.append(System.getProperty("line.separator"));
+                                sb.append("mins = ");
+                                sb.append(response.body().getReadyInMinutes());
+                                sb.append(System.getProperty("line.separator"));
+                                sb.append("serv = ");
+                                sb.append(response.body().getServings());
+                                textView.setText(sb);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<MealInfo> call, @NonNull Throwable t) {
+                            Snackbar.make(findViewById(R.id.scanner_view), "Something went wrong! Check your internet connection and try again later.",
+                                    BaseTransientBottomBar.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                catch (Exception e) {
+                    Snackbar.make(findViewById(R.id.scanner_view), "No such product in database, sorry!",
+                            BaseTransientBottomBar.LENGTH_LONG).show();
+                }
+                /*              DaysRepository repo = new DaysRepository(getApplication());
 
                 repo.getOrCreateToday().thenAccept((day)->{
                     TextView textView = findViewById(R.id.textView);
@@ -148,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
                 List<DayWithDailyRequirementsAndServings> tmp =  db.dailyRequirementsDao().getDayWithServingsWithDailyRequirements();
-
+*/
             }
         });
 

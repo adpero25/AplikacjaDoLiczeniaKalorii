@@ -19,6 +19,7 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.application.Activities.Scanner.MealInfo;
 import com.example.application.Activities.Scanner.Product;
 import com.example.application.R;
 import com.example.application.database.models.Category;
@@ -51,6 +52,9 @@ public class AddingMealActivity extends AppCompatActivity {
 
     String barcode;
     Product product;
+
+    MealInfo mealInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,10 @@ public class AddingMealActivity extends AppCompatActivity {
         try {
             product = (Product) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
             barcode = (String) intent.getSerializableExtra(BarcodeScanningActivity.BARCODE);
+        } catch (Exception ignored) {}
+
+        try {
+            mealInfo = (MealInfo) intent.getSerializableExtra(SuggestedMealActivity.MEAL_INFO);
         } catch (Exception ignored) {}
 
         try {
@@ -94,6 +102,15 @@ public class AddingMealActivity extends AppCompatActivity {
             CarbohydratesField.setText(product.getNutriments().getCarbohydrates_100g());
             ProteinsField.setText(product.getNutriments().getProteins_100g());
             FatField.setText(product.getNutriments().getFat_100g());
+        }
+
+        if(mealInfo!=null){
+            NameField.setText(mealInfo.getTitle());
+
+            CaloriesField.setText(mealInfo.getCalories().toString());
+            CarbohydratesField.setText(mealInfo.getCarbohydrates().toString());
+            ProteinsField.setText(mealInfo.getProtein().toString());
+            FatField.setText(mealInfo.getFat().toString());
         }
 
         if(editMeal !=null){

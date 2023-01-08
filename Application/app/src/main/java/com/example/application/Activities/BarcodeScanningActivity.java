@@ -160,7 +160,7 @@ public class BarcodeScanningActivity extends AppCompatActivity {
 
     private void fetchProductData(String query) {
         howManySamplesRead = 0;
-        ProductService productService = RetrofitInstance.getRertrofitInstance().create(ProductService.class);
+        ProductService productService = RetrofitInstance.getOpenFoodFactsClientInstance().create(ProductService.class);
         try {
 
             Call<ProductContainer> productsApiCall = productService.findProducts(query + ".json");

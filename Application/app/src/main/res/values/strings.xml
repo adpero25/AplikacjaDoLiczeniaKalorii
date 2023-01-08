@@ -175,4 +175,7 @@
     <string name="loadDayob">Load day obj from DB</string>
     <string name="manageCategories">Manage categories</string>
     <string name="manageMeals">Manage meals</string>
+    <string name="suggestedMeals">Suggested meals</string>
+    <string name="mealDetails">Meal details:</string>
+    <string name="openBrowser">Open browser</string>
 </resources>
