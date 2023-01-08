@@ -307,6 +307,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST);
 
         });
+
+        Button manageMeals = findViewById(R.id.manageMeals);
+        manageMeals.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ManageMealsActivity.class);
+            startActivity(intent);
+        });
+
+        Button manageCategories = findViewById(R.id.manageCategories);
+        manageCategories.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ManageCategoriesActivity.class);
+            startActivity(intent);
+        });
+
+
     }
 
     @Override

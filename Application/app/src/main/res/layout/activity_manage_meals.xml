@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/listMargin"
+    android:orientation="vertical"
+    tools:context=".Activities.AddingServingActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/listElementMarginTopBottom"
+        android:background="@drawable/rounded_edge"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="@dimen/listElementMarginTopBottom"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        app:strokeColor="@color/white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/listElementMarginTopBottom">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:strokeColor="@color/white">
+
+                <TextView
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="@string/my_meals"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/addNewMealBTN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp" />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <AbsoluteLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/rounded_edge_inset_shadow">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/meal_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/listElementMarginTopBottom"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    app:strokeColor="@color/white"></LinearLayout>
+            </ScrollView>
+        </AbsoluteLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

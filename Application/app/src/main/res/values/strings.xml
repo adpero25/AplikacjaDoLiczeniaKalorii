@@ -170,4 +170,6 @@
     <string name="totalDistanceEverMade">Total distance made: %.2f (km)</string>
     <string name="totalStepsEverMade">Total steps made: %d </string>
     <string name="dateDetails">Date: %s</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>
