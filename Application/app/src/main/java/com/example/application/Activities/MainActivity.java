@@ -1,5 +1,6 @@
 package com.example.application.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -30,18 +31,27 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.application.Activities.Scanner.MealInfo;
+import com.example.application.Activities.Scanner.MealSuggestionService;
+import com.example.application.Activities.Scanner.RetrofitInstance;
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
+import com.example.application.database.models.Day;
+import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -69,14 +79,29 @@ public class MainActivity extends AppCompatActivity {
     public int dailyGlassesOfWater = 0;
     public static final int waterNotification = 10;
 
+    DayWithServings currentDay;
+
+    public DayWithServings getCurrentDay(){
+        return currentDay;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_new);
+
         dismissNotification();
         if(!isServiceRunning(NotifyAboutWater.class)){
             startWaterNotificationService();
+        }
+
+        if(currentDay ==null){
+            DaysRepository repo = new DaysRepository(getApplication());
+            repo.getOrCreateToday().thenAccept((newDay)->{
+                currentDay = newDay;
+                recreate();
+            });
         }
 
         createNotificationChannel();
@@ -87,12 +112,11 @@ public class MainActivity extends AppCompatActivity {
         registerWaterButton = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
         stepProgress = findViewById(R.id.stepsProgress);
-        addDailyWaterRequirement = findViewById(R.id.dailyWaterRequirement);
+        stepProgress.setMax(STEPS_TARGET);
         setStepTarget = findViewById(R.id.dailyStepTarget);
         totalStepsTextView = findViewById(R.id.howManyStepsToday);
         totalDistanceTextView = findViewById(R.id.distanceToday);
         totalCaloriesBurntTextView = findViewById(R.id.caloriesBurnedToday);
-        stepProgress.setMax(STEPS_TARGET);
         ConstraintLayout stepCounterContainer = findViewById(R.id.stepsContainer);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -117,64 +141,9 @@ public class MainActivity extends AppCompatActivity {
             stepCounterContainer.setMaxHeight(0);
         }
 
-        Button scanProduct = findViewById(R.id.scanCodeBTN);
-        scanProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddingServingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button loadDay = findViewById(R.id.loadDayBTN);
-        loadDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DaysRepository repo = new DaysRepository(getApplication());
-
-                repo.getOrCreateToday().thenAccept((day)->{
-                    TextView textView = findViewById(R.id.textView);
-                    StringBuilder sb = new StringBuilder();
-
-                    //dlaczego StringBuilder nie ma metody appendLine()?
-                    //dlaczego java nie ma extension methods żebyśmy se sami ją dodali?
-                    //dlaczego wyciąganie znaku nowej lini wymaga użycia stringa?
-                    sb.append("day_id = ");
-                    sb.append(day.day.dayId);
-                    sb.append(System.getProperty("line.separator"));
-                    sb.append("glasses_of_water = ");
-                    sb.append(day.day.glassesOfWater);
-                    textView.setText(sb);
-                });
-                CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
-                List<DayWithDailyRequirementsAndServings> tmp =  db.dailyRequirementsDao().getDayWithServingsWithDailyRequirements();
-
-            }
-        });
 
 
-        Button addGlassOfWater = findViewById(R.id.addGlassOfWaterBTN);
-        addGlassOfWater.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DaysRepository repo = new DaysRepository(getApplication());
 
-                repo.getOrCreateToday().thenAccept((day)->{
-                    day.day.glassesOfWater += 1;
-                    repo.update(day.day);
-                });
-                updateWaterLabel();
-            }
-        });
-
-        Button calculateRequirement = findViewById(R.id.calculateRequirementBTN);
-        calculateRequirement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CalculateCaloriesRequirement.class);
-                startActivityForResult(intent, CALCULATE_DAILY_REQUIREMENTS_REQUEST);
-            }
-        });
 
         registerWaterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,36 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     updateWaterLabel();
                 });
 
-
-            }
-        });
-
-        addDailyWaterRequirement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_window, null);
-                TextView text = popupView.findViewById(R.id.popupText);
-                EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
-                Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
-
-                text.setText(R.string.setDailyWaterRequirement);
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true;
-                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                submitButton.setOnClickListener(view ->{
-                    if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
-                        popupWindow.dismiss();
-                        return;
-                    }
-                    dailyGlassesOfWater = Integer.parseInt(enteredValue.getText().toString());
-                    updateWaterLabel();
-                    popupWindow.dismiss();
-                });
 
             }
         });
@@ -294,19 +233,6 @@ public class MainActivity extends AppCompatActivity {
         updateWaterLabel();
 
 
-        Button checkProgress = findViewById(R.id.checkProgress);
-        checkProgress.setOnClickListener(v -> {
-                    Intent intent = new Intent(this, UserParametersList.class);
-                    startActivity(intent);
-                });
-
-
-        Button manuallyCaloriesRequirement = findViewById(R.id.dailyCaloriesRequirementManually);
-        manuallyCaloriesRequirement.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, ManuallyAddDailyRequirements.class);
-                startActivityForResult(intent, ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST);
-
-        });
     }
 
     @Override
@@ -445,7 +371,6 @@ public class MainActivity extends AppCompatActivity {
             timer.schedule(new MainActivity.GetWalk(), date, period); // downloads walk object every 500ms when MainActivity is running on the foreground
         }
 
-
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             stepCounterServiceBound = false;
@@ -458,12 +383,6 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             if(stepCounterServiceBound) {
                 walk = scService.GetWalk();
-
-                if(STEPS_TARGET != walk.stepsTarget) {
-                    STEPS_TARGET = walk.stepsTarget;
-                    stepProgress.setMax(walk.stepsTarget);
-                }
-
                 MainActivity.this.runOnUiThread((Runnable) () -> {
                     Log.d("GET_WALK", "GET WALK Running");
                     stepProgress.setProgress((int) walk.stepsMade);

@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.application.database.models.Category;
-import com.example.application.database.models.Day;
-import com.example.application.database.models.Meal;
-import com.example.application.database.models.Serving;
 import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 import com.example.application.database.repositories.CategoriesRepository;
@@ -30,8 +27,6 @@ import com.example.application.R;
 import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.MealsRepository;
 import com.example.application.database.repositories.ServingsRepository;
-
-import java.util.Arrays;
 
 
 public class AddingServingActivity extends AppCompatActivity {
@@ -103,7 +98,7 @@ public class AddingServingActivity extends AppCompatActivity {
                 categoryListItem.setText(elem.category.name);
                 listRoot.addView(categoryListItem);
                 for (MealWithOpenFoodFact meal : elem.meals) {
-                    View mealListItem = inflater.inflate(R.layout.meal_list_item, null);
+                    View mealListItem = inflater.inflate(R.layout.one_button_list_item, null);
                     ((TextView) mealListItem.findViewById(R.id.name)).setText(meal.meal.name);
                     listRoot.addView(mealListItem);
 

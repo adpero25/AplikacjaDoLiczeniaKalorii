@@ -12,6 +12,8 @@ import androidx.room.PrimaryKey;
 
 import com.example.application.database.models.enums.MealType;
 
+import java.io.Serializable;
+
 @Entity(tableName="meal",
         foreignKeys ={
             @ForeignKey(
@@ -27,7 +29,7 @@ import com.example.application.database.models.enums.MealType;
             )
         }
 )
-public class Meal {
+public class Meal implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "meal_id")
     public Long mealId;

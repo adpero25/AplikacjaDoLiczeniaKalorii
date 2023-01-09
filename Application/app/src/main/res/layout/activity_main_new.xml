@@ -1,89 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity">
-
-
     <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/scanCodeBTN"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="44dp"
-                android:text="@string/scan"
-                android:textAppearance="@style/ButtonText"
-                android:theme="@style/AccentButton"
-                app:cornerRadius="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/loadDayBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/loadDayob"
-                android:textAppearance="@style/ButtonText"
-                android:theme="@style/AccentButton"
-                app:cornerRadius="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scanCodeBTN" />
+                <Button
+                    android:id="@+id/scanCodeBTN"
+                    android:layout_weight="1"
 
-            <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:text=""
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp"
+                    app:icon="@android:drawable/ic_media_previous"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconSize="28dp" />
+                <TextView
+                    android:id="@+id/dayTextView"
+                    android:text="01.01.2023"
+android:gravity="center"
+                    android:layout_width="0dp"
 
-                android:id="@+id/addGlassOfWaterBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/registerOneGlass"
-                android:textAppearance="@style/ButtonText"
-                android:theme="@style/AccentButton"
-                app:cornerRadius="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loadDayBTN" />
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
 
-            <Button
-                android:id="@+id/calculateRequirementBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="4dp"
-                android:text="@string/calculateRequirementLabel"
-                android:textAppearance="@style/ButtonText"
-                android:theme="@style/AccentButton"
-                app:cornerRadius="25dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addGlassOfWaterBTN" />
+                    />
+                <Button
+                    android:id="@+id/scanCodeBTN2"
+                    android:layout_weight="1"
 
-            <TextView
-                android:id="@+id/textView"
-                style="@style/labels"
-                android:layout_width="0dp"
-                android:layout_height="47dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:text="TextView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/calculateRequirementBTN" />
-
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:text=""
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp"
+                    app:icon="@android:drawable/ic_media_next"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconSize="28dp"/>
+            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stepsContainer"
@@ -93,7 +71,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView">
+                tools:layout_editor_absoluteY="310dp">
 
 
                 <TextView
@@ -155,6 +133,9 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:text="@string/setDailyStepTarget"
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -190,6 +171,9 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
                     android:text="@string/registerWaterText"
+                    android:textAppearance="@style/ButtonText"
+                    android:theme="@style/AccentButton"
+                    app:cornerRadius="25dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -210,68 +194,26 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <Button
-                android:id="@+id/dailyWaterRequirement"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/setDailyWaterRequirement"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/waterContainer" />
-
-
-            <Button
-                android:id="@+id/checkProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/checkProgress"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dailyWaterRequirement" />
-
-            <Button
-                android:id="@+id/dailyCaloriesRequirementManually"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/setDailyCaloriesRequirementManually"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/checkProgress" />
-
-            <Button
-                android:id="@+id/manageMeals"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/manageMeals"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dailyCaloriesRequirementManually" />
-
-            <Button
-                android:id="@+id/manageCategories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/manageCategories"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageMeals" />
-
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_container_view"
+                android:name="com.example.application.Fragments.MealSuggestionsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.example.application.Fragments.MealSuggestionsFragment"
-                tools:layout="@layout/fragment_meal_sugesstions"
+                style="@style/inner_container"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCategories"
-                />
+                tools:layout="@layout/fragment_meal_sugesstions" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragment_container_view2"
+                android:name="com.example.application.Fragments.ServingsFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/inner_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/manageCategories"
+                tools:layout="@layout/fragment_servings_list" />
+
+
+        </LinearLayout>
     </ScrollView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>

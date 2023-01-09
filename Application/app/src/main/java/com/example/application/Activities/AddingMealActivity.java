@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,21 +19,20 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.application.Activities.Scanner.MealInfo;
 import com.example.application.Activities.Scanner.Product;
 import com.example.application.R;
 import com.example.application.database.models.Category;
 import com.example.application.database.models.Meal;
 import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.repositories.CategoriesRepository;
-import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.MealsRepository;
 
 import java.util.Arrays;
-import java.util.function.Function;
 
 public class AddingMealActivity extends AppCompatActivity {
 
-    Meal EditMeal;
+    Meal editMeal;
 
     EditText NameField;
     EditText DescField;
@@ -49,11 +47,14 @@ public class AddingMealActivity extends AppCompatActivity {
 
     Spinner CategorySpinner;
 
-    String selectedCategory = "";
+    String selectedCategory;
     String[] categories;
 
     String barcode;
     Product product;
+
+    MealInfo mealInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +68,11 @@ public class AddingMealActivity extends AppCompatActivity {
         } catch (Exception ignored) {}
 
         try {
-            EditMeal = (Meal) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
+            mealInfo = (MealInfo) intent.getSerializableExtra(SuggestedMealActivity.MEAL_INFO);
+        } catch (Exception ignored) {}
+
+        try {
+            editMeal = (Meal) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
         } catch (Exception ignored) {}
 
         NameField = findViewById(R.id.nameField);
@@ -83,6 +88,7 @@ public class AddingMealActivity extends AppCompatActivity {
 
         CategorySpinner = findViewById(R.id.categorySpinner);
 
+        updateCategories(0);
 
         if(product!=null){
 
@@ -98,40 +104,99 @@ public class AddingMealActivity extends AppCompatActivity {
             FatField.setText(product.getNutriments().getFat_100g());
         }
 
-        updateCategories(0);
+        if(mealInfo!=null){
+            NameField.setText(mealInfo.getTitle());
 
-        ConfirmButton.setOnClickListener((view)->{
-            Meal newMeal = new Meal();
+            CaloriesField.setText(mealInfo.getCalories().toString());
+            CarbohydratesField.setText(mealInfo.getCarbohydrates().toString());
+            ProteinsField.setText(mealInfo.getProtein().toString());
+            FatField.setText(mealInfo.getFat().toString());
+        }
 
-            newMeal.name = NameField.getText().toString();
-            newMeal.description = DescField.getText().toString();
+        if(editMeal !=null){
 
-            newMeal.nutritionalValues.calories =        Double.parseDouble(CaloriesField.getText().toString().isEmpty()?"0":CaloriesField.getText().toString());
-            newMeal.nutritionalValues.carbohydrates =   Double.parseDouble(CarbohydratesField.getText().toString().isEmpty()?"0":CarbohydratesField.getText().toString());
-            newMeal.nutritionalValues.proteins =        Double.parseDouble(ProteinsField.getText().toString().isEmpty()?"0":ProteinsField.getText().toString());
-            newMeal.nutritionalValues.fats =            Double.parseDouble(FatField.getText().toString().isEmpty()?"0":FatField.getText().toString());
 
-            newMeal.picturePath = "";//TODO ?
-            CategoriesRepository repo = new CategoriesRepository(getApplication());
+            NameField.setText(editMeal.name);
+            DescField.setText(editMeal.description);
 
-            repo.getByName(selectedCategory).thenAccept((category)->{
-                if(category!=null){
-                    newMeal.categoryId=category.categoryId;
-                }
 
-                if(barcode != null && !barcode.isEmpty()){
-                    new MealsRepository(getApplication()).insertWithBarcode(newMeal,barcode);
-                }else {
-                    new MealsRepository(getApplication()).insert(newMeal);
-                }
 
-                Intent newIntent = new Intent(AddingMealActivity.this, AddingServingActivity.class);
-                newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(newIntent);
+            CaloriesField.setText(editMeal.nutritionalValues.calories.toString());
+            CarbohydratesField.setText(editMeal.nutritionalValues.carbohydrates.toString());
+            ProteinsField.setText(editMeal.nutritionalValues.proteins.toString());
+            FatField.setText(editMeal.nutritionalValues.fats.toString());
 
+
+            ((TextView)findViewById(R.id.addNewMealBTN)).setText(R.string.edit);
+        }
+
+
+
+        if(editMeal==null) {
+
+
+            ConfirmButton.setOnClickListener((view) -> {
+                Meal newMeal = new Meal();
+
+                newMeal.name = NameField.getText().toString();
+                newMeal.description = DescField.getText().toString();
+
+                newMeal.nutritionalValues.calories = Double.parseDouble(CaloriesField.getText().toString().isEmpty() ? "0" : CaloriesField.getText().toString());
+                newMeal.nutritionalValues.carbohydrates = Double.parseDouble(CarbohydratesField.getText().toString().isEmpty() ? "0" : CarbohydratesField.getText().toString());
+                newMeal.nutritionalValues.proteins = Double.parseDouble(ProteinsField.getText().toString().isEmpty() ? "0" : ProteinsField.getText().toString());
+                newMeal.nutritionalValues.fats = Double.parseDouble(FatField.getText().toString().isEmpty() ? "0" : FatField.getText().toString());
+
+                newMeal.picturePath = "";//TODO ?
+                CategoriesRepository repo = new CategoriesRepository(getApplication());
+
+                repo.getByName(selectedCategory).thenAccept((category) -> {
+                    if (category != null) {
+                        newMeal.categoryId = category.categoryId;
+                    }
+
+                    if (barcode != null && !barcode.isEmpty()) {
+                        new MealsRepository(getApplication()).insertWithBarcode(newMeal, barcode);
+                    } else {
+                        new MealsRepository(getApplication()).insert(newMeal);
+                    }
+
+                    if(product!=null){
+                        Intent newIntent = new Intent(AddingMealActivity.this, AddingServingActivity.class);
+                        newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(newIntent);
+                    }
+                    finish();
+                });
             });
-        });
+        }else {
+            ConfirmButton.setOnClickListener((view) -> {
 
+                editMeal.name = NameField.getText().toString();
+                editMeal.description = DescField.getText().toString();
+
+                editMeal.nutritionalValues.calories = Double.parseDouble(CaloriesField.getText().toString().isEmpty() ? "0" : CaloriesField.getText().toString());
+                editMeal.nutritionalValues.carbohydrates = Double.parseDouble(CarbohydratesField.getText().toString().isEmpty() ? "0" : CarbohydratesField.getText().toString());
+                editMeal.nutritionalValues.proteins = Double.parseDouble(ProteinsField.getText().toString().isEmpty() ? "0" : ProteinsField.getText().toString());
+                editMeal.nutritionalValues.fats = Double.parseDouble(FatField.getText().toString().isEmpty() ? "0" : FatField.getText().toString());
+
+                CategoriesRepository repo = new CategoriesRepository(getApplication());
+
+                repo.getByName(selectedCategory).thenAccept((category) -> {
+                    if (category != null) {
+                        editMeal.categoryId = category.categoryId;
+                    }
+
+                        new MealsRepository(getApplication()).update(editMeal);
+
+                    finish();
+/*
+                    Intent newIntent = new Intent(AddingMealActivity.this, ManageMealsActivity.class);
+                    newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(newIntent);
+*/
+                });
+            });
+        }
         AddCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,6 +270,20 @@ public class AddingMealActivity extends AppCompatActivity {
 
                 }
             });
+
+            if(editMeal !=null && selectedCategory == null){
+
+                repo.getById(editMeal.categoryId).thenAccept((category2)->{
+
+                    for (int i =0; i< categories.length; i++){
+                        if(categories[i].equals(category2.name)){
+                            CategorySpinner.setSelection(i);
+                            selectedCategory = categories[i];
+                        }
+                    }
+                });
+
+            }
 
             CategorySpinner.setSelection(newCategory);
             selectedCategory = categories[newCategory];

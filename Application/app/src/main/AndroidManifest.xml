@@ -40,6 +40,28 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".Activities.ManageMealsActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Activities.ManageCategoriesActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".Activities.SuggestedMealActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".Activities.ManuallyAddDailyRequirements"
             android:screenOrientation="portrait"
             android:exported="false">
