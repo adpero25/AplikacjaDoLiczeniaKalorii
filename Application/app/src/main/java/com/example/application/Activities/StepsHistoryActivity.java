@@ -99,21 +99,9 @@ public class StepsHistoryActivity extends AppCompatActivity {
         public void bind(Day _day){
             this.currentDay = _day;
 
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", new Locale("PL"));
-                    java.util.Date date = currentDay.dayId;
-                    String s = dateFormatter.format(date);
-
-                    StepsTextView.setText(currentDay.stepsCount.toString());
-                    DateTextView.setText(currentDay.dayId.getMonth() + "-" + currentDay.dayId.getDate());
-                    ProgressBar.setProgress(currentDay.stepsCount);
-                }
-            }
-            catch (Exception ignored) {
-                Toast.makeText(getApplicationContext(), R.string.unableToLoadStepsHistory, Toast.LENGTH_SHORT).show();
-                return;
-            }
+            StepsTextView.setText(currentDay.stepsCount.toString());
+            DateTextView.setText(currentDay.dayId.getMonth() + "-" + currentDay.dayId.getDate());
+            ProgressBar.setProgress(currentDay.stepsCount);
         }
 
         @Override
