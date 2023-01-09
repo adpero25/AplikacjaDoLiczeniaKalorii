@@ -32,7 +32,6 @@ public class StepsHistoryActivity extends AppCompatActivity {
     private List<Day> days;
     private StepsAdapter adapter;
     private RecyclerView recyclerView;
-    private int MaxVal = 5000;
     private double totalDistance = 0;
     private int totalSteps = 0;
     private StepsDetailsFragment stepsDetailsFragment;
@@ -93,7 +92,7 @@ public class StepsHistoryActivity extends AppCompatActivity {
             StepsTextView = itemView.findViewById(R.id.stepsValue);
             DateTextView = itemView.findViewById(R.id.dateValue);
             ProgressBar = itemView.findViewById(R.id.progressValue);
-            ProgressBar.setMax(MaxVal);
+            ProgressBar.setMax(MainActivity.STEPS_TARGET);
             ProgressBar.setOnClickListener(this);
         }
 

@@ -87,12 +87,12 @@ public class MainActivity extends AppCompatActivity {
         registerWaterButton = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
         stepProgress = findViewById(R.id.stepsProgress);
-        stepProgress.setMax(STEPS_TARGET);
         addDailyWaterRequirement = findViewById(R.id.dailyWaterRequirement);
         setStepTarget = findViewById(R.id.dailyStepTarget);
         totalStepsTextView = findViewById(R.id.howManyStepsToday);
         totalDistanceTextView = findViewById(R.id.distanceToday);
         totalCaloriesBurntTextView = findViewById(R.id.caloriesBurnedToday);
+        stepProgress.setMax(STEPS_TARGET);
         ConstraintLayout stepCounterContainer = findViewById(R.id.stepsContainer);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -445,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
             timer.schedule(new MainActivity.GetWalk(), date, period); // downloads walk object every 500ms when MainActivity is running on the foreground
         }
 
+
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
             stepCounterServiceBound = false;
@@ -457,6 +458,12 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             if(stepCounterServiceBound) {
                 walk = scService.GetWalk();
+
+                if(STEPS_TARGET != walk.stepsTarget) {
+                    STEPS_TARGET = walk.stepsTarget;
+                    stepProgress.setMax(walk.stepsTarget);
+                }
+
                 MainActivity.this.runOnUiThread((Runnable) () -> {
                     Log.d("GET_WALK", "GET WALK Running");
                     stepProgress.setProgress((int) walk.stepsMade);
