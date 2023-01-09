@@ -39,6 +39,8 @@ import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
+import com.example.application.database.models.Day;
+import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -77,14 +79,29 @@ public class MainActivity extends AppCompatActivity {
     public int dailyGlassesOfWater = 0;
     public static final int waterNotification = 10;
 
+    DayWithServings currentDay;
+
+    public DayWithServings getCurrentDay(){
+        return currentDay;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_new);
+
         dismissNotification();
         if(!isServiceRunning(NotifyAboutWater.class)){
             startWaterNotificationService();
+        }
+
+        if(currentDay ==null){
+            DaysRepository repo = new DaysRepository(getApplication());
+            repo.getOrCreateToday().thenAccept((newDay)->{
+                currentDay = newDay;
+                recreate();
+            });
         }
 
         createNotificationChannel();
@@ -96,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
         waterProgressBar = findViewById(R.id.waterProgress);
         stepProgress = findViewById(R.id.stepsProgress);
         stepProgress.setMax(STEPS_TARGET);
-        addDailyWaterRequirement = findViewById(R.id.dailyWaterRequirement);
         setStepTarget = findViewById(R.id.dailyStepTarget);
         totalStepsTextView = findViewById(R.id.howManyStepsToday);
         totalDistanceTextView = findViewById(R.id.distanceToday);
@@ -125,98 +141,9 @@ public class MainActivity extends AppCompatActivity {
             stepCounterContainer.setMaxHeight(0);
         }
 
-        Button scanProduct = findViewById(R.id.scanCodeBTN);
-        scanProduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddingServingActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        Button loadDay = findViewById(R.id.loadDayBTN);
-        loadDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MealSuggestionService mealSuggestionService = RetrofitInstance.getSpoonacularClientInstance().create(MealSuggestionService.class);
-                try {
-                    Call<MealInfo> productsApiCall = mealSuggestionService.loadMeal(716429L);
-
-                    productsApiCall.enqueue(new Callback<com.example.application.Activities.Scanner.MealInfo>() {
-                        @Override
-                        public void onResponse(@NonNull Call<MealInfo> call, @NonNull Response<MealInfo> response) {
-                            if (response.body() != null) {
-                                TextView textView = findViewById(R.id.textView);
-                                StringBuilder sb = new StringBuilder();
-
-                                sb.append("url = ");
-                                sb.append(response.body().getSourceUrl());
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append("mins = ");
-                                sb.append(response.body().getReadyInMinutes());
-                                sb.append(System.getProperty("line.separator"));
-                                sb.append("serv = ");
-                                sb.append(response.body().getServings());
-                                textView.setText(sb);
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<MealInfo> call, @NonNull Throwable t) {
-                            Snackbar.make(findViewById(R.id.scanner_view), "Something went wrong! Check your internet connection and try again later.",
-                                    BaseTransientBottomBar.LENGTH_LONG).show();
-                        }
-                    });
-                }
-                catch (Exception e) {
-                    Snackbar.make(findViewById(R.id.scanner_view), "No such product in database, sorry!",
-                            BaseTransientBottomBar.LENGTH_LONG).show();
-                }
-                /*              DaysRepository repo = new DaysRepository(getApplication());
-
-                repo.getOrCreateToday().thenAccept((day)->{
-                    TextView textView = findViewById(R.id.textView);
-                    StringBuilder sb = new StringBuilder();
-
-                    //dlaczego StringBuilder nie ma metody appendLine()?
-                    //dlaczego java nie ma extension methods żebyśmy se sami ją dodali?
-                    //dlaczego wyciąganie znaku nowej lini wymaga użycia stringa?
-                    sb.append("day_id = ");
-                    sb.append(day.day.dayId);
-                    sb.append(System.getProperty("line.separator"));
-                    sb.append("glasses_of_water = ");
-                    sb.append(day.day.glassesOfWater);
-                    textView.setText(sb);
-                });
-                CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
-                List<DayWithDailyRequirementsAndServings> tmp =  db.dailyRequirementsDao().getDayWithServingsWithDailyRequirements();
-*/
-            }
-        });
 
 
-        Button addGlassOfWater = findViewById(R.id.addGlassOfWaterBTN);
-        addGlassOfWater.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DaysRepository repo = new DaysRepository(getApplication());
 
-                repo.getOrCreateToday().thenAccept((day)->{
-                    day.day.glassesOfWater += 1;
-                    repo.update(day.day);
-                });
-                updateWaterLabel();
-            }
-        });
-
-        Button calculateRequirement = findViewById(R.id.calculateRequirementBTN);
-        calculateRequirement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, CalculateCaloriesRequirement.class);
-                startActivityForResult(intent, CALCULATE_DAILY_REQUIREMENTS_REQUEST);
-            }
-        });
 
         registerWaterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,36 +179,6 @@ public class MainActivity extends AppCompatActivity {
                     updateWaterLabel();
                 });
 
-
-            }
-        });
-
-        addDailyWaterRequirement.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_window, null);
-                TextView text = popupView.findViewById(R.id.popupText);
-                EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
-                Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
-
-                text.setText(R.string.setDailyWaterRequirement);
-                int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                boolean focusable = true;
-                final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-                popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                submitButton.setOnClickListener(view ->{
-                    if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
-                        popupWindow.dismiss();
-                        return;
-                    }
-                    dailyGlassesOfWater = Integer.parseInt(enteredValue.getText().toString());
-                    updateWaterLabel();
-                    popupWindow.dismiss();
-                });
 
             }
         });
@@ -334,33 +231,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         updateWaterLabel();
-
-
-        Button checkProgress = findViewById(R.id.checkProgress);
-        checkProgress.setOnClickListener(v -> {
-                    Intent intent = new Intent(this, UserParametersList.class);
-                    startActivity(intent);
-                });
-
-
-        Button manuallyCaloriesRequirement = findViewById(R.id.dailyCaloriesRequirementManually);
-        manuallyCaloriesRequirement.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, ManuallyAddDailyRequirements.class);
-                startActivityForResult(intent, ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST);
-
-        });
-
-        Button manageMeals = findViewById(R.id.manageMeals);
-        manageMeals.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ManageMealsActivity.class);
-            startActivity(intent);
-        });
-
-        Button manageCategories = findViewById(R.id.manageCategories);
-        manageCategories.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ManageCategoriesActivity.class);
-            startActivity(intent);
-        });
 
 
     }
