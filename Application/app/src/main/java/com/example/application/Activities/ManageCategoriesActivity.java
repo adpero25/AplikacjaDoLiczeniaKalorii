@@ -21,7 +21,7 @@ import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.repositories.CategoriesRepository;
 
 
-public class ManageCategoriesActivity extends AppCompatActivity {
+public class ManageCategoriesActivity extends DrawerActivity {
 
     ViewGroup listRoot;
 

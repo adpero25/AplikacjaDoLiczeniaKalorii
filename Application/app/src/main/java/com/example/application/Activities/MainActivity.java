@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,29 +32,20 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.application.Activities.Scanner.MealInfo;
-import com.example.application.Activities.Scanner.MealSuggestionService;
-import com.example.application.Activities.Scanner.RetrofitInstance;
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends DrawerActivity {
     private static final int ACTIVITY_PERMISSION = 100;
     private static final int ADD_MANUALLY_DAILY_REQUIREMENTS_REQUEST = 20;
     public static int STEPS_TARGET = 5000;
@@ -104,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        createNotificationChannel();
+
+
+                createNotificationChannel();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
 
@@ -258,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);

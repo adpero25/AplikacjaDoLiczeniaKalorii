@@ -18,7 +18,7 @@ import com.example.application.database.repositories.CategoriesRepository;
 import com.example.application.database.repositories.MealsRepository;
 
 
-public class ManageMealsActivity extends AppCompatActivity {
+public class ManageMealsActivity extends DrawerActivity {
 
     ViewGroup listRoot;
 

@@ -1,28 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
-        android:id="@+id/main_item"
-        android:title="test1">
-        <menu>
-            <item
-                android:id="@+id/inbox_item"
-                android:icon="@android:drawable/ic_media_previous"
-
-                android:title="test2"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/outbox_item"
-                android:icon="@android:drawable/ic_media_previous"
-
-                android:title="test3"
-                android:checkable="true"/>
-            <item
-                android:id="@+id/favourites_item"
-                android:icon="@android:drawable/ic_media_previous"
-                android:title="test4"
-                android:checkable="true"/>
-        </menu>
-    </item>
-
+        android:id="@+id/navItem1"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="navItem1" />
+    <item
+        android:id="@+id/navItem2"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="navItem2" />
 </menu>

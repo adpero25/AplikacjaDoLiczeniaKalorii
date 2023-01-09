@@ -30,7 +30,7 @@ import com.example.application.database.repositories.MealsRepository;
 
 import java.util.Arrays;
 
-public class AddingMealActivity extends AppCompatActivity {
+public class AddingMealActivity extends DrawerActivity {
 
     Meal editMeal;
 

@@ -24,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SuggestedMealActivity extends AppCompatActivity {
+public class SuggestedMealActivity extends DrawerActivity {
 
     public static final String MEAL_INFO = "MEAL_INFO";
 

@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
-public class ScannedProductDetailsActivity extends AppCompatActivity {
+public class ScannedProductDetailsActivity extends DrawerActivity {
 
     Product product;
     String barcode;
