@@ -26,6 +26,7 @@
         tools:targetApi="31">
         <activity
             android:name=".Activities.StepsHistoryActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -33,6 +34,7 @@
         </activity>
         <activity
             android:name=".Activities.UserParametersList"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -40,6 +42,7 @@
         </activity>
         <activity
             android:name=".Activities.ManuallyAddDailyRequirements"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -47,6 +50,7 @@
         </activity>
         <activity
             android:name=".Activities.AddingServingActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -54,6 +58,7 @@
         </activity>
         <activity
             android:name=".Activities.AddingMealActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -61,6 +66,7 @@
         </activity>
         <activity
             android:name=".Activities.CalculateCaloriesRequirement"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -68,6 +74,7 @@
         </activity>
         <activity
             android:name=".Activities.ScannedProductDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -80,6 +87,7 @@
 
         <activity
             android:name=".Activities.BarcodeScanningActivity"
+            android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -87,7 +95,9 @@
         </activity>
         <activity
             android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -101,11 +111,12 @@
 
         <receiver
             android:name=".broadcastReceivers.WaterBroadcastReceiver"
-            android:exported="false"></receiver>
+            android:exported="false"/>
 
         <service
             android:name=".backgroundTasks.NotifyAboutWater"
             android:exported="false" />
+
         <service
             android:name=".backgroundTasks.StepCounterService"
             android:enabled="true"
