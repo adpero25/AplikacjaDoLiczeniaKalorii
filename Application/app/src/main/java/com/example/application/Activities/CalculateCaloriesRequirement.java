@@ -29,7 +29,7 @@ import com.google.gson.Gson;
 
 import java.util.Date;
 
-public class CalculateCaloriesRequirement extends AppCompatActivity {
+public class CalculateCaloriesRequirement extends DrawerActivity {
 
     EditText AgeBox;
     EditText WeightBox;

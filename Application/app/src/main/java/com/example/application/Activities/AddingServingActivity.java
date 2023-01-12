@@ -29,7 +29,7 @@ import com.example.application.database.repositories.MealsRepository;
 import com.example.application.database.repositories.ServingsRepository;
 
 
-public class AddingServingActivity extends AppCompatActivity {
+public class AddingServingActivity extends DrawerActivity {
 
     ViewGroup listRoot;
 

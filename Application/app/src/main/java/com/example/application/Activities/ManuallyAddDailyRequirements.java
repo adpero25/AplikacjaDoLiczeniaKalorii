@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 
 import java.util.Date;
 
-public class ManuallyAddDailyRequirements extends AppCompatActivity {
+public class ManuallyAddDailyRequirements extends DrawerActivity {
 
     public static final String USER_DATA_KEY = "USER_DATA_KEY";
     public static final String USER_DATA_SHARED_PREFERENCES_FILE_NAME = "USER_DATA_SHARED_PREFERENCES_FILE_NAME";

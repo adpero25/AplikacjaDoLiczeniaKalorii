@@ -37,7 +37,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BarcodeScanningActivity extends AppCompatActivity {
+public class BarcodeScanningActivity extends DrawerActivity {
 
     public static final String PRODUCT_DETAILS = "PRODUCT_DETAILS";
     public static final String BARCODE = "BARCODE";

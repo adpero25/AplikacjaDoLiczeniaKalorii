@@ -20,7 +20,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class UserParametersList extends AppCompatActivity {
+public class UserParametersList extends DrawerActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

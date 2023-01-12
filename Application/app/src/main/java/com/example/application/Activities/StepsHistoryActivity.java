@@ -27,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class StepsHistoryActivity extends AppCompatActivity {
+public class StepsHistoryActivity extends DrawerActivity {
 
     private List<Day> days;
     private StepsAdapter adapter;

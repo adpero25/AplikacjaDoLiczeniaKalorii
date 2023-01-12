@@ -55,7 +55,7 @@ public class MealSuggestionsFragment extends Fragment {
         listRoot = view.findViewById(R.id.list_root);
         listRoot.addView(inflater.inflate(R.layout.loading_list_item,null));
 
-        //loadMealsForDay(new Day());
+        loadMealsForDay(new Day());
         return view;
     }
 
