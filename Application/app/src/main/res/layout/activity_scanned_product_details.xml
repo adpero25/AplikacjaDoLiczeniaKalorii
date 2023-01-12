@@ -7,32 +7,32 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="20dp"
         tools:context=".Activities.ScannedProductDetailsActivity">
 
         <ImageView
             android:id="@+id/productImageView"
-            android:layout_width="126dp"
-            android:layout_height="163dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
+            android:layout_width="142dp"
+            android:layout_height="199dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
             android:contentDescription="@string/image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/ImageTextView" />
 
         <TextView
             android:id="@+id/ImageTextView"
-            android:layout_width="103dp"
-            android:layout_height="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/image"
             android:textAlignment="center"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/productImageView"
             app:layout_constraintStart_toStartOf="@+id/productImageView"
-            app:layout_constraintTop_toBottomOf="@+id/productImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
         <TextView
             android:id="@+id/textView14"
@@ -151,10 +151,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:padding="5dp"
             android:text="@string/categories"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/productImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -207,6 +208,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -218,7 +220,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nutrimentsTextView" />
-
 
         <Button
             android:id="@+id/saveProductButton"

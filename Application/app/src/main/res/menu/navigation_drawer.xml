@@ -53,13 +53,6 @@
         android:icon="@android:drawable/ic_media_previous"
         android:title="@string/stepsHistoryNavigation" />
     <item
-        android:id="@+id/navItemSuggestedMeals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checkable="true"
-        android:icon="@android:drawable/ic_media_previous"
-        android:title="@string/suggestedMealsNavigation" />
-    <item
         android:id="@+id/navItemUserParameters"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

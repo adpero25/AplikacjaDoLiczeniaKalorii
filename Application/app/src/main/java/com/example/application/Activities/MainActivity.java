@@ -3,12 +3,12 @@ package com.example.application.Activities;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.ActivityManager;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -266,6 +266,8 @@ public class MainActivity extends DrawerActivity {
         EatenCaloriesFragment caloriesFragment = (EatenCaloriesFragment) getSupportFragmentManager().findFragmentById(R.id.calories_fragment_container);
         caloriesFragment.refresh();
     }
+
+
 
     @Override
     protected void onStop() {
