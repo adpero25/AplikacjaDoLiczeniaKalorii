@@ -42,7 +42,7 @@
                 <TextView
                     android:id="@+id/dayTextView"
                     android:text="01.01.2023"
-android:gravity="center"
+                    android:gravity="center"
                     android:layout_width="0dp"
 
                     android:layout_weight="3"
@@ -67,7 +67,18 @@ android:gravity="center"
                     app:iconSize="28dp"/>
             </LinearLayout>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/calories_fragment_container"
+            android:name="com.example.application.Fragments.EatenCaloriesFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/inner_container"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout="@layout/fragment_eaten_calories">
+        </androidx.fragment.app.FragmentContainerView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stepsContainer"
                 style="@style/inner_container"
                 android:layout_width="match_parent"

@@ -1,54 +1,18 @@
 package com.example.application.Activities;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.TaskStackBuilder;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.example.application.CaloriesCalculatorContext;
 import com.example.application.R;
-import com.example.application.backgroundTasks.NotifyAboutWater;
-import com.example.application.backgroundTasks.StepCounterService;
-import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.models.junctions.DayWithServings;
-import com.example.application.database.repositories.DaysRepository;
 import com.google.android.material.navigation.NavigationView;
-
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public abstract class DrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -80,11 +44,35 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
         Intent newIntent = null;
 
         switch(item.getItemId()) {
-            case R.id.inbox_item:
+            case R.id.navItemAddMeal:
                 newIntent = new Intent( this, AddingMealActivity.class);
                 break;
-            case R.id.outbox_item:
+            case R.id.navItemAddServing:
+                newIntent = new Intent( this, AddingServingActivity.class);
+                break;
+            case R.id.navItemScanProduct:
+                newIntent = new Intent( this, BarcodeScanningActivity.class);
+                break;
+            case R.id.navItemCalculateCalories:
+                newIntent = new Intent( this, CalculateCaloriesRequirement.class);
+                break;
+            case R.id.navItemManageCategories:
+                newIntent = new Intent( this, ManageCategoriesActivity.class);
+                break;
+            case R.id.navItemManageMeals:
+                newIntent = new Intent( this, ManageMealsActivity.class);
+                break;
+            case R.id.navItemDailyRequirements:
+                newIntent = new Intent( this, ManuallyAddDailyRequirements.class);
+                break;
+            case R.id.navItemStepsHistory:
                 newIntent = new Intent( this, StepsHistoryActivity.class);
+                break;
+            case R.id.navItemSuggestedMeals:
+                newIntent = new Intent( this, SuggestedMealActivity.class);
+                break;
+            case R.id.navItemUserParameters:
+                newIntent = new Intent( this, UserParametersList.class);
                 break;
             default:
                 break;

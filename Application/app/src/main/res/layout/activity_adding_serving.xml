@@ -27,15 +27,15 @@
                 app:strokeColor="@color/white">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/caloriesRequirementTextView"
                     android:layout_width="0dip"
                     android:layout_height="match_parent"
                     android:layout_weight="22"
                     android:gravity="center_horizontal|center_vertical"
-                    android:text="Calories required: 3000 kcal" />
+                    android:text="@string/caloriesRequired" />
 
                 <Button
-                    android:id="@+id/scanCodeBTN1232"
+                    android:id="@+id/changeCaloriesRequirementBTN"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/change"

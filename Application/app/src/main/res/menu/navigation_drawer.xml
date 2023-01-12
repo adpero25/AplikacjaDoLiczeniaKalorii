@@ -1,13 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/navItem1"
+        android:id="@+id/navItemAddMeal"
         android:checkable="true"
         android:icon="@android:drawable/ic_media_previous"
-        android:title="navItem1" />
+        android:title="@string/newMealNavigation" />
     <item
-        android:id="@+id/navItem2"
+        android:id="@+id/navItemAddServing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:checkable="true"
         android:icon="@android:drawable/ic_media_previous"
-        android:title="navItem2" />
+        android:title="@string/addServingNavigation" />
+    <item
+        android:id="@+id/navItemScanProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/scanProductNavigation" />
+    <item
+        android:id="@+id/navItemCalculateCalories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/calculateCaloriesNavigation" />
+    <item
+        android:id="@+id/navItemManageCategories"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/mealCategoriesNavigation" />
+    <item
+        android:id="@+id/navItemManageMeals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/manageMealsNavigation" />
+    <item
+        android:id="@+id/navItemDailyRequirements"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/dailyRequirementsNavigation" />
+    <item
+        android:id="@+id/navItemStepsHistory"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/stepsHistoryNavigation" />
+    <item
+        android:id="@+id/navItemSuggestedMeals"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/suggestedMealsNavigation" />
+    <item
+        android:id="@+id/navItemUserParameters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checkable="true"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/userParametersNavigation" />
 </menu>

@@ -1,10 +1,11 @@
 package com.example.application.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.app.ActivityManager;
@@ -23,7 +24,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,13 +33,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.application.CaloriesCalculatorContext;
+import com.example.application.Fragments.EatenCaloriesFragment;
+import com.example.application.Fragments.StepsDetailsFragment;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
-import com.google.android.material.navigation.NavigationView;
 
 import java.util.Date;
 import java.util.Timer;
@@ -96,9 +97,7 @@ public class MainActivity extends DrawerActivity {
             });
         }
 
-
-
-                createNotificationChannel();
+        createNotificationChannel();
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
 
@@ -227,6 +226,8 @@ public class MainActivity extends DrawerActivity {
         updateWaterLabel();
 
 
+
+
     }
 
     @Override
@@ -260,6 +261,10 @@ public class MainActivity extends DrawerActivity {
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
 
         stepCounterServiceBound = true;
+
+        // Reload fragment
+        EatenCaloriesFragment caloriesFragment = (EatenCaloriesFragment) getSupportFragmentManager().findFragmentById(R.id.calories_fragment_container);
+        caloriesFragment.refresh();
     }
 
     @Override

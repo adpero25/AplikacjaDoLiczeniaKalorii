@@ -176,4 +176,24 @@
     <string name="loadDayob">Załaduj dzień z bazy</string>
     <string name="manageCategories">Zarządzaj kategoriami</string>
     <string name="manageMeals">Zarządzaj posiłkami</string>
+    <string name="suggestedMeals">Sugerowane posiłki</string>
+    <string name="mealDetails">Szczegóły posiłku</string>
+    <string name="openBrowser">Otwórz przeglądarkę</string>
+    <string name="servings">Dania</string>
+    <string name="newMealNavigation">Dodaj nowy posiłek</string>
+    <string name="stepsHistoryNavigation">Historia kroków</string>
+    <string name="scanProductNavigation">Skanuj kod produktu</string>
+    <string name="addServingNavigation">Dodaj danie</string>
+    <string name="dailyRequirementsNavigation">Dzienne zapotrzebowanie</string>
+    <string name="userParametersNavigation">Parametry użytkownika</string>
+    <string name="calculateCaloriesNavigation">Oblicz  zapotrzebowanie</string>
+    <string name="mealCategoriesNavigation">Kategorie posiłków</string>
+    <string name="manageMealsNavigation">Zarządzaj posiłkami</string>
+    <string name="suggestedMealsNavigation">Sugerowane dania</string>
+    <string name="caloriesRequired">Zapotrzebowanie: %d kcal</string>
+    <string name="eatenCalories">Kalorie: %.2f kcal</string>
+    <string name="eatenProteins">Białko: %.2f g</string>
+    <string name="eatenCarbohydrates">Węglowodany: %.2f g</string>
+    <string name="eatenFats">Tłuszcze: %.2f g</string>
+    <string name="caloriesProgress">%d / %d kcal</string>
 </resources>
