@@ -107,6 +107,8 @@ public class MainActivity extends DrawerActivity {
         waterLabel = findViewById(R.id.howManyWaterToday);
         registerWaterButton = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
+        waterProgressBar.setMax(dailyGlassesOfWater);
+
         stepProgress = findViewById(R.id.stepsProgress);
         stepProgress.setMax(STEPS_TARGET);
         setStepTarget = findViewById(R.id.dailyStepTarget);
@@ -174,6 +176,7 @@ public class MainActivity extends DrawerActivity {
                         repo.update(dayWithServings.day);
                     });
                     popupWindow.dismiss();
+                    currentDay.day.glassesOfWater += value;
                     setWaterLabel(currentDay.day);
                 });
 
@@ -471,7 +474,6 @@ public class MainActivity extends DrawerActivity {
 
     private void setWaterLabel(Day day){
         waterLabel.setText(getString(R.string.glassesOfWater, day.glassesOfWater));
-        waterProgressBar.setMax(dailyGlassesOfWater);
         waterProgressBar.setProgress(day.glassesOfWater);
     }
 
