@@ -48,7 +48,7 @@
         </RelativeLayout>
 
     <Button
-        android:id="@+id/scanCodeBTN"
+        android:id="@+id/previousDateBTN"
 
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"

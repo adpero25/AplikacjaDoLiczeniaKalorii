@@ -39,12 +39,18 @@ import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
+import com.example.application.database.dao.DayDao;
+import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
+import com.example.application.database.models.junctions.ServingWithMeal;
 import com.example.application.database.repositories.DaysRepository;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends DrawerActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -62,6 +68,7 @@ public class MainActivity extends DrawerActivity {
     TextView totalStepsTextView;
     TextView totalDistanceTextView;
     TextView totalCaloriesBurntTextView;
+    TextView currentDateTextView;
     StepCounterService.Walk walk;
     StepCounterService scService;
     Button registerWaterButton;
@@ -69,9 +76,11 @@ public class MainActivity extends DrawerActivity {
     ProgressBar stepProgress;
     Button addDailyWaterRequirement;
     Button setStepTarget;
+    Button previousDate;
+    Button nextDate;
     public int dailyGlassesOfWater = 0;
     public static final int waterNotification = 10;
-
+    EatenCaloriesFragment caloriesFragment;
     DayWithServings currentDay;
 
     public DayWithServings getCurrentDay(){
@@ -93,6 +102,7 @@ public class MainActivity extends DrawerActivity {
             DaysRepository repo = new DaysRepository(getApplication());
             repo.getOrCreateToday().thenAccept((newDay)->{
                 currentDay = newDay;
+                setCurrentDate(currentDay.day.dayId);
                 recreate();
             });
         }
@@ -101,6 +111,7 @@ public class MainActivity extends DrawerActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
 
+        currentDateTextView = findViewById(R.id.dayTextView);
         waterLabel = findViewById(R.id.howManyWaterToday);
         registerWaterButton = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
@@ -110,6 +121,8 @@ public class MainActivity extends DrawerActivity {
         totalStepsTextView = findViewById(R.id.howManyStepsToday);
         totalDistanceTextView = findViewById(R.id.distanceToday);
         totalCaloriesBurntTextView = findViewById(R.id.caloriesBurnedToday);
+        caloriesFragment = (EatenCaloriesFragment) getSupportFragmentManager().findFragmentById(R.id.calories_fragment_container);
+
         ConstraintLayout stepCounterContainer = findViewById(R.id.stepsContainer);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -226,8 +239,41 @@ public class MainActivity extends DrawerActivity {
         updateWaterLabel();
 
 
+        previousDate = findViewById(R.id.previousDateBTN);
+        previousDate.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplicationContext());
+                DayWithServings day =  db.dayDao().getByDate(getDayBefore(currentDay.day.dayId));
+                currentDay = day == null ? currentDay : day;
+                setCurrentDate(currentDay.day.dayId);
 
 
+
+            }
+        });
+
+
+        nextDate = findViewById(R.id.nextDateBTN);
+        nextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplicationContext());
+                DayWithServings day = db.dayDao().getByDate(getDayAfter(currentDay.day.dayId));
+                currentDay = day == null ? currentDay : day;
+                setCurrentDate(currentDay.day.dayId);
+
+
+
+            }
+        });
+
+    }
+
+    private void setCurrentDate(Date currentDay) {
+
+        currentDateTextView.setText(getResources().getString(R.string.currentDate, currentDay.getDate(), currentDay.getMonth(), currentDay.getYear()+1900));
     }
 
     @Override
@@ -263,8 +309,7 @@ public class MainActivity extends DrawerActivity {
         stepCounterServiceBound = true;
 
         // Reload fragment
-        EatenCaloriesFragment caloriesFragment = (EatenCaloriesFragment) getSupportFragmentManager().findFragmentById(R.id.calories_fragment_container);
-        caloriesFragment.refresh();
+        caloriesFragment.refresh(currentDay.day.dayId);
     }
 
 
@@ -393,5 +438,45 @@ public class MainActivity extends DrawerActivity {
                 });
             }
         }
+    }
+
+
+    private Date getDayBefore(Date date) {
+        Date dayBefore;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date.getTime() - 24 * 3600);
+        calendar.set(Calendar.AM_PM, 0);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        dayBefore = calendar.getTime();
+
+        return dayBefore;
+    }
+
+    private Date getDayAfter(Date date) {
+        Date dayAfter;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.AM_PM, 0);
+        calendar.set(Calendar.MONTH, date.getMonth());
+        calendar.set(Calendar.DAY_OF_MONTH, date.getDate() + 1);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        dayAfter = calendar.getTime();
+
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MONTH, new Date().getMonth() + 1);
+
+        Date currentDate = calendar.getTime();
+
+        if(dayAfter.before(currentDate))
+            return dayAfter;
+        else
+            return date;
     }
 }

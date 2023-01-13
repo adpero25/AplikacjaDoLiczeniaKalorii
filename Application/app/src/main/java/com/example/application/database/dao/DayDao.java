@@ -5,10 +5,12 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 import com.example.application.database.converters.DateConverters;
+import com.example.application.database.converters.NormalDateConverter;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 
@@ -30,6 +32,11 @@ public interface DayDao {
     @Transaction
     @Query("SELECT * FROM day WHERE day_id = :date")
     DayWithServings get(Date date);
+
+    @Transaction
+    @TypeConverters({NormalDateConverter.class})
+    @Query("SELECT * FROM day WHERE day_id = :date")
+    DayWithServings getByDate(Date date);
 
     @Transaction
     @Query("SELECT * FROM day")

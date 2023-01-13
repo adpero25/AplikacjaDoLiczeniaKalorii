@@ -58,7 +58,7 @@ public class EatenCaloriesFragment extends Fragment {
             }
         });
 
-        setData();
+        setData(new Date());
         return view;
     }
 
@@ -73,7 +73,7 @@ public class EatenCaloriesFragment extends Fragment {
 
     }
 
-    public void setData() {
+    public void setData(Date date) {
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         int caloriesTarget = sharedPreferences.getInt(CALORIES_REQUIREMENT, 2000);
@@ -88,7 +88,7 @@ public class EatenCaloriesFragment extends Fragment {
         caloriesEatenSurfaceView.setMaxValue(caloriesTarget);
 
         ServingsRepository repo = new ServingsRepository(CaloriesDatabase.getDatabase(getContext()));
-        CompletableFuture<List<ServingWithMeal>> food = repo.getByDate(new Date());
+        CompletableFuture<List<ServingWithMeal>> food = repo.getByDate(date);
         food.thenAccept( servingWithMeals -> {
 
             float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
@@ -109,7 +109,7 @@ public class EatenCaloriesFragment extends Fragment {
 
     }
 
-    public void refresh() {
-        setData();
+    public void refresh(Date date) {
+        setData(date);
     }
 }

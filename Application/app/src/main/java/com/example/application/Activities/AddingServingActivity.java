@@ -44,7 +44,7 @@ public class AddingServingActivity extends DrawerActivity {
         caloriesRequirementTextView = findViewById(R.id.caloriesRequirementTextView);
         setCaloiriesTextView();
 
-        findViewById(R.id.scanCodeBTN).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.previousDateBTN).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddingServingActivity.this, BarcodeScanningActivity.class);
