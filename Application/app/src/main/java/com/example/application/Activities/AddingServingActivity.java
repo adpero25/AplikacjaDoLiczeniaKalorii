@@ -42,7 +42,7 @@ public class AddingServingActivity extends DrawerActivity {
         setContentView(R.layout.activity_adding_serving);
 
         caloriesRequirementTextView = findViewById(R.id.caloriesRequirementTextView);
-        setCaloiriesTextView();
+        setCaloriesTextView();
 
         findViewById(R.id.previousDateBTN).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,7 +97,7 @@ public class AddingServingActivity extends DrawerActivity {
                     preferencesEditor.apply();
                     popupWindow.dismiss();
 
-                    setCaloiriesTextView();
+                    setCaloriesTextView();
                 });
             }
         });
@@ -106,7 +106,7 @@ public class AddingServingActivity extends DrawerActivity {
         loadMealList();
     }
 
-    private void setCaloiriesTextView() {
+    private void setCaloriesTextView() {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
 
@@ -186,8 +186,13 @@ public class AddingServingActivity extends DrawerActivity {
                                     return;
                                 }
 
-                                new DaysRepository(getApplication()).getOrCreateToday().thenAccept((day)->{
-                                    new ServingsRepository(getApplication()).insert(day.day, meal.meal, Double.parseDouble(enteredValue.getText().toString()));
+                                DaysRepository repo = new DaysRepository(getApplication());
+
+                                repo.getDayByDate(MainActivity.currentDay.day.dayId).thenAccept((day)-> {
+
+                                    ServingsRepository sr = new ServingsRepository(getApplication());
+
+                                    sr.insert(day.day, meal.meal, Double.parseDouble(enteredValue.getText().toString()));
                                 });
 
                                 popupWindow.dismiss();

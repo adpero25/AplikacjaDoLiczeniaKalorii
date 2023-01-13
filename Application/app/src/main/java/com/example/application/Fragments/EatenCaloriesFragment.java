@@ -73,7 +73,7 @@ public class EatenCaloriesFragment extends Fragment {
 
     }
 
-    public void setData(Date date) {
+    private void setData(Date date) {
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
         int caloriesTarget = sharedPreferences.getInt(CALORIES_REQUIREMENT, 2000);
@@ -87,29 +87,34 @@ public class EatenCaloriesFragment extends Fragment {
 
         caloriesEatenSurfaceView.setMaxValue(caloriesTarget);
 
-        ServingsRepository repo = new ServingsRepository(CaloriesDatabase.getDatabase(getContext()));
-        CompletableFuture<List<ServingWithMeal>> food = repo.getByDate(date);
-        food.thenAccept( servingWithMeals -> {
+        CaloriesDatabase db = CaloriesDatabase.getDatabase(getContext());
+        List<ServingWithMeal> servingWithMeals = db.servingDao().getServingsByDate(date);
 
-            float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
-            for (ServingWithMeal s: servingWithMeals) {
-                calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
-                proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
-                carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
-                fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
-            }
+        float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
+        for (ServingWithMeal s: servingWithMeals) {
+            calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
+            proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
+            carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
+            fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
+        }
 
-            caloriesEatenSurfaceView.setProgress((int)calories);
-            caloriesProgressTextView.setText(getResources().getString(R.string.caloriesProgress, (int)calories, caloriesTarget));
-            caloriesTextView.setText(getResources().getString(R.string.eatenCalories, calories));
-            proteinsTextView.setText(getResources().getString(R.string.eatenProteins, proteins));
-            carbohydratesTextView.setText(getResources().getString(R.string.eatenCarbohydrates, carbohydrates));
-            fatsTextView.setText(getResources().getString(R.string.eatenFats, fats));
-        });
-
+        caloriesEatenSurfaceView.setProgress((int)calories);
+        caloriesProgressTextView.setText(getResources().getString(R.string.caloriesProgress, (int)calories, caloriesTarget));
+        caloriesTextView.setText(getResources().getString(R.string.eatenCalories, calories));
+        proteinsTextView.setText(getResources().getString(R.string.eatenProteins, proteins));
+        carbohydratesTextView.setText(getResources().getString(R.string.eatenCarbohydrates, carbohydrates));
+        fatsTextView.setText(getResources().getString(R.string.eatenFats, fats));
     }
 
     public void refresh(Date date) {
         setData(date);
+    }
+
+    public void hideButton() {
+        registerCalories.setVisibility(View.INVISIBLE);
+    }
+
+    public void showButton() {
+        registerCalories.setVisibility(View.VISIBLE);
     }
 }

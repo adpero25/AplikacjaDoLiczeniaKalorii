@@ -3,12 +3,9 @@ package com.example.application.Activities;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.app.ActivityManager;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -34,23 +31,18 @@ import android.widget.TextView;
 
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.Fragments.EatenCaloriesFragment;
-import com.example.application.Fragments.StepsDetailsFragment;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.dao.DayDao;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
-import com.example.application.database.models.junctions.ServingWithMeal;
 import com.example.application.database.repositories.DaysRepository;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends DrawerActivity {
     private static final int ACTIVITY_PERMISSION = 100;
@@ -78,10 +70,10 @@ public class MainActivity extends DrawerActivity {
     Button setStepTarget;
     Button previousDate;
     Button nextDate;
-    public int dailyGlassesOfWater = 0;
+    public int dailyGlassesOfWater = 10;
     public static final int waterNotification = 10;
     EatenCaloriesFragment caloriesFragment;
-    DayWithServings currentDay;
+    public static DayWithServings currentDay;
 
     public DayWithServings getCurrentDay(){
         return currentDay;
@@ -177,12 +169,12 @@ public class MainActivity extends DrawerActivity {
                     int value = Integer.parseInt(enteredValue.getText().toString());
                     DaysRepository repo = new DaysRepository(getApplication());
 
-                    repo.getOrCreateToday().thenAccept((day) -> {
-                        day.day.glassesOfWater += value;
-                        repo.update(day.day);
+                    repo.getDayByDate(currentDay.day.dayId).thenAccept( dayWithServings ->  {
+                        dayWithServings.day.glassesOfWater += value;
+                        repo.update(dayWithServings.day);
                     });
                     popupWindow.dismiss();
-                    updateWaterLabel();
+                    setWaterLabel(currentDay.day);
                 });
 
 
@@ -245,11 +237,14 @@ public class MainActivity extends DrawerActivity {
             @Override
             public void onClick(View v) {
                 CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplicationContext());
-                DayWithServings day =  db.dayDao().getByDate(getDayBefore(currentDay.day.dayId));
+                DayWithServings day =  db.dayDao().getDayByDate(getDayBefore(currentDay.day.dayId));
                 currentDay = day == null ? currentDay : day;
                 setCurrentDate(currentDay.day.dayId);
 
-
+                caloriesFragment.refresh(currentDay.day.dayId);
+                setStepsCounter(currentDay.day);
+                setWaterLabel(currentDay.day);
+                //displayButtons();
 
             }
         });
@@ -260,21 +255,19 @@ public class MainActivity extends DrawerActivity {
             @Override
             public void onClick(View v) {
                 CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplicationContext());
-                DayWithServings day = db.dayDao().getByDate(getDayAfter(currentDay.day.dayId));
+                DayWithServings day = db.dayDao().getDayByDate(getDayAfter(currentDay.day.dayId));
                 currentDay = day == null ? currentDay : day;
                 setCurrentDate(currentDay.day.dayId);
 
-
-
+                caloriesFragment.refresh(currentDay.day.dayId);
+                setStepsCounter(currentDay.day);
+                setWaterLabel(currentDay.day);
+                //displayButtons();
             }
         });
 
     }
 
-    private void setCurrentDate(Date currentDay) {
-
-        currentDateTextView.setText(getResources().getString(R.string.currentDate, currentDay.getDate(), currentDay.getMonth(), currentDay.getYear()+1900));
-    }
 
     @Override
     protected void onStart() {
@@ -304,12 +297,17 @@ public class MainActivity extends DrawerActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
 
-        dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, 0);
+        dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, dailyGlassesOfWater);
 
-        stepCounterServiceBound = true;
+        if(IsCurrentDayCurrentDay())
+            stepCounterServiceBound = true;
 
         // Reload fragment
-        caloriesFragment.refresh(currentDay.day.dayId);
+        if(currentDay != null)
+            caloriesFragment.refresh(currentDay.day.dayId);
+        else
+            caloriesFragment.refresh(new Date());
+
     }
 
 
@@ -339,7 +337,7 @@ public class MainActivity extends DrawerActivity {
     private void dismissNotification(){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-// notificationID allows you to update the notification later on.
+        // notificationID allows you to update the notification later on.
         mNotificationManager.cancel(waterNotification);
     }
 
@@ -377,7 +375,7 @@ public class MainActivity extends DrawerActivity {
     private void startStepCounterService() {
         Intent intent = new Intent(this, StepCounterService.class);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ) {
             startService(intent);
         }
     }
@@ -441,6 +439,46 @@ public class MainActivity extends DrawerActivity {
     }
 
 
+    private void displayButtons() {
+
+        if(IsCurrentDayCurrentDay()) {
+           // registerWaterButton.setVisibility(View.VISIBLE);
+            caloriesFragment.showButton();
+        }
+        else {
+           // registerWaterButton.setVisibility(View.INVISIBLE);
+            caloriesFragment.hideButton();
+        }
+    }
+
+    private void setStepsCounter(Day day) {
+
+        Date today = getCurrentDate();
+        STEPS_TARGET = walk.stepsTarget;
+        scService.saveData();
+        if(!(day.dayId.getYear() == today.getYear() && day.dayId.getMonth() == today.getMonth() && day.dayId.getDate() == today.getDate()) ){
+            stepCounterServiceBound = false;
+            stepProgress.setProgress((int) day.stepsCount);
+            totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int) day.stepsCount, STEPS_TARGET));
+            totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, day.totalDistance));
+            totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, day.burnedCalories));
+        }
+        else {
+            startStepCounterService();
+            stepCounterServiceBound = true;
+        }
+    }
+
+    private void setWaterLabel(Day day){
+        waterLabel.setText(getString(R.string.glassesOfWater, day.glassesOfWater));
+        waterProgressBar.setMax(dailyGlassesOfWater);
+        waterProgressBar.setProgress(day.glassesOfWater);
+    }
+
+    private void setCurrentDate(Date currentDay) {
+        currentDateTextView.setText(getResources().getString(R.string.currentDate, currentDay.getDate(), currentDay.getMonth(), currentDay.getYear()+1900));
+    }
+
     private Date getDayBefore(Date date) {
         Date dayBefore;
 
@@ -478,5 +516,26 @@ public class MainActivity extends DrawerActivity {
             return dayAfter;
         else
             return date;
+    }
+
+    private Date getCurrentDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.MONTH, new Date().getMonth() + 1);
+
+        return calendar.getTime();
+    }
+
+    private boolean IsCurrentDayCurrentDay() {
+
+        if(currentDay == null)
+            return true;
+
+        Date realCurrentDay = getCurrentDate();
+        if(realCurrentDay.getYear() == currentDay.day.dayId.getYear() &&
+                realCurrentDay.getMonth() == currentDay.day.dayId.getMonth() &&
+                realCurrentDay.getDate() == currentDay.day.dayId.getDate())
+            return true;
+        return false;
     }
 }

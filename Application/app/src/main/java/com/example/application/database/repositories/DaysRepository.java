@@ -69,4 +69,9 @@ public class DaysRepository extends Repository {
     public CompletableFuture<DayWithServings> getByDate(Date date){
         return CompletableFuture.supplyAsync(() -> dayDao.get(date), queryExecutor);
     }
+
+    public CompletableFuture<DayWithServings> getDayByDate(Date date){
+        return CompletableFuture.supplyAsync(() -> dayDao.getDayByDate(date), queryExecutor);
+    }
+
 }

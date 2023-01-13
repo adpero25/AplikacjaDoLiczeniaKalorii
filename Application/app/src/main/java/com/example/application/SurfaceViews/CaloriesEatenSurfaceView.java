@@ -70,5 +70,6 @@ public class CaloriesEatenSurfaceView extends SurfaceView {
         Paint small_paint = new Paint(Color.BLACK);
         canvas.drawCircle(cx, cy, small_radius - strokeWidth/2, small_paint);
 
+        invalidate();
     }
 }

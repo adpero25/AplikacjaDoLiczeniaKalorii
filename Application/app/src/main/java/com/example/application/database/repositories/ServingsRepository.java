@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.converters.DateConverters;
+import com.example.application.database.converters.NormalDateConverter;
 import com.example.application.database.dao.ServingDao;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.Meal;
@@ -37,7 +38,7 @@ public class ServingsRepository extends Repository {
 
     public void insert(Day day, Meal meal, double protionSize) {
         insert(new Serving(){{
-            dayId = DateConverters.dateToTimestamp(day.dayId);
+            dayId = NormalDateConverter.dateToTimestamp(day.dayId);
             mealId = meal.mealId;
             servingSize = protionSize;
         }});

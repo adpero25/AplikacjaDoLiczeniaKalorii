@@ -14,10 +14,11 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.application.database.converters.DateConverters;
+import com.example.application.database.converters.NormalDateConverter;
 
 import java.util.Date;
 
-@TypeConverters({DateConverters.class})
+@TypeConverters({NormalDateConverter.class})
 @Entity(tableName="day",
         foreignKeys = {
                 @ForeignKey(
