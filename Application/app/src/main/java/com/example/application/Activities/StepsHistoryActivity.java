@@ -32,7 +32,6 @@ public class StepsHistoryActivity extends DrawerActivity {
     private List<Day> days;
     private StepsAdapter adapter;
     private RecyclerView recyclerView;
-    private int MaxVal = 5000;
     private double totalDistance = 0;
     private int totalSteps = 0;
     private StepsDetailsFragment stepsDetailsFragment;
@@ -93,28 +92,16 @@ public class StepsHistoryActivity extends DrawerActivity {
             StepsTextView = itemView.findViewById(R.id.stepsValue);
             DateTextView = itemView.findViewById(R.id.dateValue);
             ProgressBar = itemView.findViewById(R.id.progressValue);
-            ProgressBar.setMax(MaxVal);
+            ProgressBar.setMax(MainActivity.STEPS_TARGET);
             ProgressBar.setOnClickListener(this);
         }
 
         public void bind(Day _day){
             this.currentDay = _day;
 
-            try {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd", new Locale("PL"));
-                    java.util.Date date = currentDay.dayId;
-                    String s = dateFormatter.format(date);
-
-                    StepsTextView.setText(currentDay.stepsCount.toString());
-                    DateTextView.setText(currentDay.dayId.getMonth() + "-" + currentDay.dayId.getDate());
-                    ProgressBar.setProgress(currentDay.stepsCount);
-                }
-            }
-            catch (Exception ignored) {
-                Toast.makeText(getApplicationContext(), R.string.unableToLoadStepsHistory, Toast.LENGTH_SHORT).show();
-                return;
-            }
+            StepsTextView.setText(currentDay.stepsCount.toString());
+            DateTextView.setText(currentDay.dayId.getMonth() + "-" + currentDay.dayId.getDate());
+            ProgressBar.setProgress(currentDay.stepsCount);
         }
 
         @Override
