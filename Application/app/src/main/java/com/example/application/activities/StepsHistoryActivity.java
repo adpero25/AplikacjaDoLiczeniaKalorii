@@ -91,7 +91,7 @@ public class StepsHistoryActivity extends DrawerActivity {
             StepsTextView = itemView.findViewById(R.id.stepsValue);
             DateTextView = itemView.findViewById(R.id.dateValue);
             ProgressBar = itemView.findViewById(R.id.progressValue);
-            ProgressBar.setMax(MaxVal);
+            ProgressBar.setMax(MainActivity.STEPS_TARGET);
             ProgressBar.setOnClickListener(this);
         }
 
@@ -108,6 +108,7 @@ public class StepsHistoryActivity extends DrawerActivity {
             catch (Exception ignored) {
                 Toast.makeText(getApplicationContext(), R.string.unableToLoadStepsHistory, Toast.LENGTH_SHORT).show();
             }
+
         }
 
         @Override

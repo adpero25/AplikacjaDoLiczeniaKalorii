@@ -428,6 +428,11 @@ public class MainActivity extends DrawerActivity {
         public void run() {
             if(stepCounterServiceBound) {
                 walk = scService.GetWalk();
+                if(STEPS_TARGET != walk.stepsTarget) {
+                    STEPS_TARGET = walk.stepsTarget;
+                    stepProgress.setMax(STEPS_TARGET);
+                }
+
                 MainActivity.this.runOnUiThread((Runnable) () -> {
                     Log.d("GET_WALK", "GET WALK Running");
                     stepProgress.setProgress((int) walk.stepsMade);
