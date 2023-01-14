@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 6,
-    "identityHash": "9a9ef0b295080a068938ee84bb7e9bd9",
+    "identityHash": "683e1b662dc15835e09d749b9ab3a015",
     "entities": [
       {
         "tableName": "day",
@@ -243,7 +243,7 @@
       },
       {
         "tableName": "meal",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`meal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_id` INTEGER, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `picture_path` TEXT, `calories` REAL NOT NULL, `carbohydrates` REAL NOT NULL, `fats` REAL NOT NULL, `proteins` REAL NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `category`(`category_id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`meal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `category_id` INTEGER, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `calories` REAL NOT NULL, `carbohydrates` REAL NOT NULL, `fats` REAL NOT NULL, `proteins` REAL NOT NULL, FOREIGN KEY(`category_id`) REFERENCES `category`(`category_id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
         "fields": [
           {
             "fieldPath": "mealId",
@@ -268,12 +268,6 @@
             "columnName": "description",
             "affinity": "TEXT",
             "notNull": true
-          },
-          {
-            "fieldPath": "picturePath",
-            "columnName": "picture_path",
-            "affinity": "TEXT",
-            "notNull": false
           },
           {
             "fieldPath": "nutritionalValues.calories",
@@ -457,7 +451,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9a9ef0b295080a068938ee84bb7e9bd9')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '683e1b662dc15835e09d749b9ab3a015')"
     ]
   }
 }

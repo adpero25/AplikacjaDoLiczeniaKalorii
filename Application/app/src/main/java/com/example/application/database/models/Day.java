@@ -1,24 +1,20 @@
 package com.example.application.database.models;
 
-import static androidx.room.ForeignKey.CASCADE;
 import static androidx.room.ForeignKey.SET_NULL;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.application.database.converters.DateConverters;
-import com.example.application.database.converters.NormalDateConverter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@TypeConverters({NormalDateConverter.class})
+@TypeConverters({DateConverters.class})
 @Entity(tableName="day",
         foreignKeys = {
                 @ForeignKey(
@@ -37,15 +33,15 @@ import java.util.Date;
 public class Day {
     @PrimaryKey()
     @ColumnInfo(name = "day_id")
-    public Date dayId;
+    public LocalDate dayId;
 
     @ColumnInfo(name = "glasses_of_water")
     @NonNull
-    public Integer glassesOfWater = new Integer(0);
+    public Integer glassesOfWater = 0;
 
     @ColumnInfo(name = "steps_count")
     @NonNull
-    public Integer stepsCount = new Integer(0);
+    public Integer stepsCount = 0;
 
     @ColumnInfo(name = "total_distance", defaultValue = "0.0")
     @NonNull
@@ -57,7 +53,7 @@ public class Day {
 
     @NonNull
     @ColumnInfo(name = "has_practiced")
-    public Boolean hasPracticed = new Boolean(false);
+    public Boolean hasPracticed = false;
 
     @ColumnInfo(name = "daily_requirements_id")
     public Long dailyRequirementsId;

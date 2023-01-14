@@ -196,4 +196,7 @@
     <string name="eatenCarbohydrates">Węglowodany: %.2f g</string>
     <string name="eatenFats">Tłuszcze: %.2f g</string>
     <string name="caloriesProgress">%d / %d kcal</string>
+    <string name="no_category">Bez kategorii</string>
+    <string name="no_data">Brak danych!</string>
+    <string name="name_of_category">Nazwa kategorii</string>
 </resources>

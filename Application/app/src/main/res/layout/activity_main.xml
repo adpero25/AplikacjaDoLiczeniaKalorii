@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity">
+    tools:context=".activities.MainActivity">
 
 
     <ScrollView
@@ -265,7 +265,7 @@
                 android:id="@+id/fragment_container_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:name="com.example.application.Fragments.MealSuggestionsFragment"
+                android:name="com.example.application.fragments.MealSuggestionsFragment"
                 tools:layout="@layout/fragment_meal_sugesstions"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCategories"

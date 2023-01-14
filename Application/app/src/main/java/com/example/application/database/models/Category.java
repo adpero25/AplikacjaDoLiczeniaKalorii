@@ -20,5 +20,5 @@ public class Category {
     public Long categoryId;
     
     @NonNull
-    public String name;
+    public String name = "";
 }

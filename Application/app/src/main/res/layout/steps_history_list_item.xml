@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="100dp"
     android:layout_height="150dp"
     style="@style/inner_container">
 
-    <com.example.application.SurfaceViews.StepProgressSurfaceView
+    <com.example.application.surfaceViews.StepProgressSurfaceView
         android:id="@+id/progressValue"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,7 +13,7 @@
         android:layout_marginBottom="25dp"
         android:rotation="180">
 
-    </com.example.application.SurfaceViews.StepProgressSurfaceView>
+    </com.example.application.surfaceViews.StepProgressSurfaceView>
 
     <TextView
         android:id="@+id/stepsValue"

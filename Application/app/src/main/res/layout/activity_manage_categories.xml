@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/listMargin"
     android:orientation="vertical"
-    tools:context=".Activities.AddingServingActivity">
+    tools:context=".activities.AddingServingActivity">
 
 
     <LinearLayout
@@ -56,7 +56,7 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <AbsoluteLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foreground="@drawable/rounded_edge_inset_shadow">
@@ -73,9 +73,9 @@
                     android:layout_margin="@dimen/listElementMarginTopBottom"
                     android:orientation="vertical"
                     android:padding="10dp"
-                    app:strokeColor="@color/white"></LinearLayout>
+                    app:strokeColor="@color/white" />
             </ScrollView>
-        </AbsoluteLayout>
+        </FrameLayout>
 
 
     </LinearLayout>

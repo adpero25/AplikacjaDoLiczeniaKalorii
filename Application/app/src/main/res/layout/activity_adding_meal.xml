@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/listMargin"
     android:orientation="vertical"
-    tools:context=".Activities.AddingServingActivity">
+    tools:context=".activities.AddingServingActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:context=".Activities.AddingServingActivity">
+                tools:context=".activities.AddingServingActivity">
 
                 <LinearLayout
 
@@ -80,7 +80,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    tools:context=".Activities.AddingServingActivity">
+                    tools:context=".activities.AddingServingActivity">
 
                     <TextView
                         style="@style/labels"

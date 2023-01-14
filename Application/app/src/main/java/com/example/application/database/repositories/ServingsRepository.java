@@ -3,8 +3,6 @@ package com.example.application.database.repositories;
 import android.app.Application;
 
 import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.converters.DateConverters;
-import com.example.application.database.converters.NormalDateConverter;
 import com.example.application.database.dao.ServingDao;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.Meal;
@@ -12,7 +10,7 @@ import com.example.application.database.models.Serving;
 import com.example.application.database.models.junctions.ServingWithMeal;
 import com.example.application.database.repositories.base.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -37,8 +35,8 @@ public class ServingsRepository extends Repository {
     }
 
     public void insert(Day day, Meal meal, double protionSize) {
-        insert(new Serving(){{
-            dayId = NormalDateConverter.dateToTimestamp(day.dayId);
+        insert( new Serving() {{
+            dayId = day.dayId;
             mealId = meal.mealId;
             servingSize = protionSize;
         }});
@@ -52,7 +50,7 @@ public class ServingsRepository extends Repository {
         queryExecutor.execute(() -> servingDao.delete(serving));
     }
 
-    public CompletableFuture<List<ServingWithMeal>> getByDate(Date date){
+    public CompletableFuture<List<ServingWithMeal>> getByDate(LocalDate date){
         return CompletableFuture.supplyAsync(() -> servingDao.get(date), queryExecutor);
     }
 }

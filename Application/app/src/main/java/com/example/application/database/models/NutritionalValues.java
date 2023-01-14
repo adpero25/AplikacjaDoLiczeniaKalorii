@@ -7,14 +7,14 @@ import java.io.Serializable;
 
 public class NutritionalValues implements Serializable {
     @NonNull
-    public Double calories = new Double(0);
+    public Double calories = 0D;
 
     @NonNull
-    public Double carbohydrates = new Double(0);
+    public Double carbohydrates = 0D;
 
     @NonNull
-    public Double fats = new Double(0);
+    public Double fats = 0D;
 
     @NonNull
-    public Double proteins = new Double(0);
+    public Double proteins = 0D;
 }

@@ -1,6 +1,6 @@
 package com.example.application.broadcastReceivers;
 
-import static com.example.application.Activities.MainActivity.waterNotification;
+import static com.example.application.activities.MainActivity.waterNotification;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;

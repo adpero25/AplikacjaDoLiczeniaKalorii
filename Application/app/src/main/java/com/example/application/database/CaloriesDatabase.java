@@ -20,6 +20,7 @@ import com.example.application.database.dao.MealDao;
 import com.example.application.database.dao.OpenFoodFactDao;
 import com.example.application.database.dao.ServingDao;
 import com.example.application.database.migrations.Migrationfrom2to3;
+import com.example.application.database.migrations.Migrationfrom5to6;
 import com.example.application.database.models.Category;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.Day;
@@ -32,8 +33,8 @@ import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-@TypeConverters({ActivityIndicatorConverter.class, MassTargetConverter.class, MealTypeConverter.class})
 
+@TypeConverters({ActivityIndicatorConverter.class, MassTargetConverter.class, MealTypeConverter.class, DateConverters.class})
 @androidx.room.Database(
         version = 6,
         exportSchema = true,
@@ -58,7 +59,8 @@ import java.util.concurrent.Executors;
                 ),
                 @AutoMigration(
                         from = 5,
-                        to = 6
+                        to = 6,
+                        spec = Migrationfrom5to6.class
                 )
         }
 )

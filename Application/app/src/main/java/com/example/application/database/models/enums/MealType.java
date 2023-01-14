@@ -7,7 +7,7 @@ public enum MealType {
     Dinner(2),
     Supper(3);
 
-    private int id;
+    private final int id;
 
     MealType(int id){
         this.id = id;

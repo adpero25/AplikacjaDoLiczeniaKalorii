@@ -8,10 +8,13 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import com.example.application.database.converters.DateConverters;
 import com.example.application.database.converters.MealTypeConverter;
 import com.example.application.database.models.enums.MealType;
 
+import java.time.LocalDate;
 import java.util.Enumeration;
 
 @Entity(tableName="serving",
@@ -38,6 +41,7 @@ import java.util.Enumeration;
             )
         }
 )
+@TypeConverters({DateConverters.class})
 public class Serving {
     @ColumnInfo(name = "serving_id")
     @PrimaryKey
@@ -49,7 +53,7 @@ public class Serving {
 
     @ColumnInfo(name = "day_id")
     @NonNull
-    public Long dayId = (long) -1;
+    public LocalDate dayId = LocalDate.now();
 
     @ColumnInfo(name = "serving_size")
     @NonNull

@@ -14,6 +14,7 @@ import com.example.application.database.models.junctions.DayWithDailyRequirement
 import com.example.application.database.models.junctions.DayWithServings;
 
 import java.util.List;
+
 @Dao
 public interface DailyRequirementsDao {
     @Insert

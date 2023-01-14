@@ -9,16 +9,12 @@ import androidx.room.TypeConverters;
 import androidx.room.Update;
 
 import com.example.application.database.converters.DateConverters;
-import com.example.application.database.converters.NormalDateConverter;
-import com.example.application.database.models.Day;
 import com.example.application.database.models.Serving;
-import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.models.junctions.ServingWithMeal;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-@TypeConverters({DateConverters.class})
 @Dao
 public interface ServingDao {
     @Insert
@@ -32,10 +28,9 @@ public interface ServingDao {
 
     @Transaction
     @Query("SELECT * FROM serving WHERE day_id = :date")
-    List<ServingWithMeal> get(Date date);
+    List<ServingWithMeal> get(LocalDate date);
 
     @Transaction
-    @TypeConverters({NormalDateConverter.class})
     @Query("SELECT * FROM serving WHERE day_id = :date")
-    List<ServingWithMeal> getServingsByDate(Date date);
+    List<ServingWithMeal> getServingsByDate(LocalDate date);
 }

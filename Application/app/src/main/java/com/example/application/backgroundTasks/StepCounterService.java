@@ -1,13 +1,10 @@
 package com.example.application.backgroundTasks;
 
-import static com.example.application.Activities.MainActivity.COUNTER_RESET;
-import static com.example.application.Activities.MainActivity.STEP_COUNTER_KEY;
+import static com.example.application.activities.MainActivity.COUNTER_RESET;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -23,9 +20,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.example.application.Activities.CalculateCaloriesRequirement;
-import com.example.application.Activities.MainActivity;
-import com.example.application.Activities.ManuallyAddDailyRequirements;
+import com.example.application.activities.MainActivity;
+import com.example.application.activities.ManuallyAddDailyRequirements;
 import com.example.application.CaloriesCalculatorContext;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
@@ -61,17 +57,14 @@ public class StepCounterService extends Service {
         Log.d("SERVICE_STARTED", "SERVICE STARTED");
 
         try {   // setting timer to reset counter
+            DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            LocalDate now = LocalDate.now();
+            Date date = dateFormatter.parse(now + " 23:50:00");
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                LocalDate now = LocalDate.now();
-                Date date = dateFormatter.parse(now + " 23:50:00");
+            int period = 24*60*60*1000; // period 24h
+            Timer timer = new Timer(COUNTER_RESET);
 
-                int period = 24*60*60*1000; // period 24h
-                Timer timer = new Timer(COUNTER_RESET);
-
-                timer.schedule(new ResetService(), date, period);
-            }
+            timer.schedule(new ResetService(), date, period);
         }
         catch (Exception ignored) { }
 
@@ -83,20 +76,19 @@ public class StepCounterService extends Service {
         super.onCreate();
         loadData();
 
-        if (Build.VERSION.SDK_INT >= 26) {
-            String CHANNEL_ID = "STEP_COUNTER_CHANNEL";
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    "STEP COUNTER CHANNEL",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+        String CHANNEL_ID = "STEP_COUNTER_CHANNEL";
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                "STEP COUNTER CHANNEL",
+                NotificationManager.IMPORTANCE_DEFAULT);
 
-            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
-            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                    .setContentTitle("CCApplication")
-                    .setContentText("CCApplication is now being used").build();
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("CCApplication")
+                .setContentText("CCApplication is now being used").build();
 
-            startForeground(11, notification);
-        }
+        startForeground(11, notification);
+
     }
 
     @Override
@@ -191,7 +183,7 @@ public class StepCounterService extends Service {
 
     private void SaveDataAndResetWalk() {
 
-        DaysRepository repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
+        DaysRepository repo = new DaysRepository(getApplication());
         int steps = (int) walk.stepsMade;
         double distance =  walk.calculateDistance();
         double calories =  walk.calculateBurnedCalories();
@@ -229,7 +221,7 @@ public class StepCounterService extends Service {
         }
     }
 
-    public class Walk {
+    public static class Walk {
         public boolean sensorSet = false;
         public float stepsMade = 0f;
         public float startingStepsCounter;
@@ -252,7 +244,7 @@ public class StepCounterService extends Service {
             return (stepsMade * this.stepLength) / 100;
         }
 
-        // Liczba kroków x długość kroku (km)) x 0,5 x waga osoby (kg)
+        // Liczba kroków x długość kroku (km) x 0,5 x waga osoby (kg)
         public double calculateBurnedCalories() { return stepsMade * stepLength / 100000 * 0.5 * weight; }
     }
 

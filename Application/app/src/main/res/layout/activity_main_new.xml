@@ -73,7 +73,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/calories_fragment_container"
-            android:name="com.example.application.Fragments.EatenCaloriesFragment"
+            android:name="com.example.application.fragments.EatenCaloriesFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/inner_container"
@@ -215,7 +215,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_container_view"
-                android:name="com.example.application.Fragments.MealSuggestionsFragment"
+                android:name="com.example.application.fragments.MealSuggestionsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/inner_container"
@@ -225,7 +225,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_container_view24"
-                android:name="com.example.application.Fragments.ServingsFragment"
+                android:name="com.example.application.fragments.ServingsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/inner_container"

@@ -15,6 +15,7 @@ import com.example.application.database.converters.DateConverters;
 import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(tableName = "daily_requirements")
@@ -50,5 +51,5 @@ public class DailyRequirements {
     public MassTarget massTarget = MassTarget.Maintenance;
 
     @ColumnInfo(name = "entry_date")
-    public Date entryDate;
+    public LocalDate entryDate;
 }

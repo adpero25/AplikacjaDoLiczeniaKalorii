@@ -8,7 +8,9 @@ import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.base.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public class DaysRepository extends Repository {
@@ -40,10 +42,10 @@ public class DaysRepository extends Repository {
     }
 
     public CompletableFuture<DayWithServings> getOrCreateToday(){
-        return getOrCreateByDate(new Date());
+        return getOrCreateByDate(LocalDate.now());
     }
 
-    public CompletableFuture<DayWithServings> getOrCreateByDate(Date date){
+    public CompletableFuture<DayWithServings> getOrCreateByDate(LocalDate date){
         return CompletableFuture.supplyAsync(() -> {
             DayWithServings day;
             try {
@@ -66,12 +68,16 @@ public class DaysRepository extends Repository {
         }, queryExecutor);
     }
 
-    public CompletableFuture<DayWithServings> getByDate(Date date){
+    public CompletableFuture<DayWithServings> getByDate(LocalDate date){
         return CompletableFuture.supplyAsync(() -> dayDao.get(date), queryExecutor);
     }
 
-    public CompletableFuture<DayWithServings> getDayByDate(Date date){
+    public CompletableFuture<DayWithServings> getDayByDate(LocalDate date){
         return CompletableFuture.supplyAsync(() -> dayDao.getDayByDate(date), queryExecutor);
+    }
+
+    public CompletableFuture<List<Day>> getAllDays(){
+        return CompletableFuture.supplyAsync(dayDao::getAll, queryExecutor);
     }
 
 }

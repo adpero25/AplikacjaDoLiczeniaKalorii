@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.BarcodeScanningActivity"
+    tools:context=".activities.BarcodeScanningActivity"
     android:background="#000000"
     android:id="@+id/scanner_view" >
 
-    <com.example.application.SurfaceViews.BarcodeScanningSurfaceView
+    <com.example.application.surfaceViews.BarcodeScanningSurfaceView
         android:id="@+id/surface_view"
         android:layout_width="match_parent"
         android:layout_height="500dp"

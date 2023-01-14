@@ -5,7 +5,7 @@ public enum MassTarget {
     Gain(2),
     Maintenance(3);
 
-    private int id;
+    private final int id;
 
     MassTarget(int id){
         this.id = id;

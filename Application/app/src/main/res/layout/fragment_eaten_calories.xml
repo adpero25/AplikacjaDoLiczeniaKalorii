@@ -6,7 +6,7 @@
     style="@style/inner_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".Fragments.EatenCaloriesFragment">
+    tools:context=".fragments.EatenCaloriesFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                 android:layout_marginTop="32dp"
                 android:text="@string/eatenProteins"
                 android:textAlignment="center"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/carbohydratesTextView"
@@ -69,7 +69,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/eatenCarbohydrates"
                 android:textAlignment="center"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/fatsTextView"
@@ -79,7 +79,7 @@
                 android:layout_marginTop="16dp"
                 android:text="@string/eatenFats"
                 android:textAlignment="center"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
         </LinearLayout>
 
@@ -90,7 +90,7 @@
             android:layout_marginTop="64dp"
             android:layout_weight="0.5">
 
-            <com.example.application.SurfaceViews.CaloriesEatenSurfaceView
+            <com.example.application.surfaceViews.CaloriesEatenSurfaceView
                 android:id="@+id/caloriesEatenSurfaceView"
                 style="@style/inner_container"
                 android:layout_width="225dp"

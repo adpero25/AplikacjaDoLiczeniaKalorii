@@ -2,8 +2,8 @@ package com.example.application.backgroundTasks;
 
 import static androidx.core.app.NotificationCompat.EXTRA_NOTIFICATION_ID;
 
-import static com.example.application.Activities.MainActivity.CHANNEL_ID;
-import static com.example.application.Activities.MainActivity.waterNotification;
+import static com.example.application.activities.MainActivity.CHANNEL_ID;
+import static com.example.application.activities.MainActivity.waterNotification;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -11,7 +11,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -22,9 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.TaskStackBuilder;
 
-import com.example.application.Activities.CalculateCaloriesRequirement;
-import com.example.application.Activities.MainActivity;
-import com.example.application.CaloriesCalculatorContext;
+import com.example.application.activities.CalculateCaloriesRequirement;
+import com.example.application.activities.MainActivity;
 import com.example.application.R;
 import com.example.application.broadcastReceivers.WaterBroadcastReceiver;
 import com.example.application.database.CaloriesDatabase;
@@ -36,8 +34,7 @@ public class NotifyAboutWater extends Service {
     private DaysRepository repo;
     private int prevWaterGlasses;
     private int currentWaterGlasses;
-    private int startId;
-    private int delayTime = 7200000; //2 hours
+    private int delayTimeInMilis = (2*60*60*1000); //2 hours
 
 
     private static final String name = NotifyAboutWater.class.getSimpleName();
@@ -54,7 +51,7 @@ public class NotifyAboutWater extends Service {
             });
 
             try {
-                Thread.sleep(delayTime);
+                Thread.sleep(delayTimeInMilis);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -90,9 +87,8 @@ public class NotifyAboutWater extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        repo = new DaysRepository(CaloriesDatabase.getDatabase(CaloriesCalculatorContext.getAppContext()));
+        repo = new DaysRepository(CaloriesDatabase.getDatabase(getApplicationContext()));
         Message msg = serviceHandler.obtainMessage();
-        this.startId = startId;
         msg.arg1 = startId;
         serviceHandler.sendMessage(msg);
 
@@ -111,19 +107,17 @@ public class NotifyAboutWater extends Service {
     }
 
     private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private void addNotification(){
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(CaloriesCalculatorContext.getAppContext(), CHANNEL_ID)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground_cc)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(getString(R.string.waterNotificationText))
@@ -131,18 +125,18 @@ public class NotifyAboutWater extends Service {
                         .bigText(getString(R.string.waterNotificationBigText)))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-        Intent resultIntent = new Intent(CaloriesCalculatorContext.getAppContext(), MainActivity.class);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(CaloriesCalculatorContext.getAppContext());
+        Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
         stackBuilder.addParentStack(CalculateCaloriesRequirement.class);
 
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(resultPendingIntent);
 
-        Intent registerGlassIntent = new Intent(CaloriesCalculatorContext.getAppContext(), WaterBroadcastReceiver.class);
+        Intent registerGlassIntent = new Intent(getApplicationContext(), WaterBroadcastReceiver.class);
         registerGlassIntent.putExtra(EXTRA_NOTIFICATION_ID, 0);
-        PendingIntent registerGlassPendingIntent = PendingIntent.getBroadcast(CaloriesCalculatorContext.getAppContext(), 0,
-                registerGlassIntent, 0);
+        PendingIntent registerGlassPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0,
+                registerGlassIntent, PendingIntent.FLAG_IMMUTABLE);
 
         builder.addAction(R.drawable.ic_register_water,
                 getString(R.string.registerOneGlass), registerGlassPendingIntent);
