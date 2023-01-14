@@ -12,10 +12,9 @@ import com.example.application.database.converters.DateConverters;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-@TypeConverters({DateConverters.class})
 @Dao
 public interface DayDao {
     @Insert
@@ -29,7 +28,11 @@ public interface DayDao {
 
     @Transaction
     @Query("SELECT * FROM day WHERE day_id = :date")
-    DayWithServings get(Date date);
+    DayWithServings get(LocalDate date);
+
+    @Transaction
+    @Query("SELECT * FROM day WHERE day_id = :date")
+    DayWithServings getDayByDate(LocalDate date);
 
     @Transaction
     @Query("SELECT * FROM day")

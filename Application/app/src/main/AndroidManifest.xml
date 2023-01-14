@@ -25,7 +25,7 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="31">
         <activity
-            android:name=".Activities.StepsHistoryActivity"
+            android:name=".activities.StepsHistoryActivity"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -33,7 +33,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.UserParametersList"
+            android:name=".activities.UserParametersList"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -41,14 +41,14 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.ManageMealsActivity"
+            android:name=".activities.ManageMealsActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.ManageCategoriesActivity"
+            android:name=".activities.ManageCategoriesActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -56,14 +56,14 @@
         </activity>
 
         <activity
-            android:name=".Activities.SuggestedMealActivity"
+            android:name=".activities.SuggestedMealActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.ManuallyAddDailyRequirements"
+            android:name=".activities.ManuallyAddDailyRequirements"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -71,7 +71,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.AddingServingActivity"
+            android:name=".activities.AddingServingActivity"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -79,7 +79,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.AddingMealActivity"
+            android:name=".activities.AddingMealActivity"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -87,7 +87,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.CalculateCaloriesRequirement"
+            android:name=".activities.CalculateCaloriesRequirement"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -95,7 +95,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.ScannedProductDetailsActivity"
+            android:name=".activities.ScannedProductDetailsActivity"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -108,7 +108,7 @@
             android:value="barcode" />
 
         <activity
-            android:name=".Activities.BarcodeScanningActivity"
+            android:name=".activities.BarcodeScanningActivity"
             android:screenOrientation="portrait"
             android:exported="false">
             <meta-data
@@ -116,7 +116,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">
 
@@ -133,7 +133,8 @@
 
         <receiver
             android:name=".broadcastReceivers.WaterBroadcastReceiver"
-            android:exported="false"/>
+            android:exported="false" />
+
 
         <service
             android:name=".backgroundTasks.NotifyAboutWater"

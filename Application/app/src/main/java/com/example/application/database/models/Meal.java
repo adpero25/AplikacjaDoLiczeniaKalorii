@@ -37,13 +37,10 @@ public class Meal implements Serializable {
     public Long categoryId;
 
     @NonNull
-    public String name;
+    public String name = "";
 
     @NonNull
     public String description = "";
-
-    @ColumnInfo(name = "picture_path")
-    public String picturePath;
 
     @NonNull
     @Embedded

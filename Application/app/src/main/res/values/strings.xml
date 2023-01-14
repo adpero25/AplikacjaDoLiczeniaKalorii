@@ -179,4 +179,24 @@
     <string name="mealDetails">Meal details:</string>
     <string name="openBrowser">Open browser</string>
     <string name="servings">Servings</string>
+    <string name="newMealNavigation">Add New Meal</string>
+    <string name="stepsHistoryNavigation">Steps History</string>
+    <string name="scanProductNavigation">Scan Product Code</string>
+    <string name="addServingNavigation">Add Serving</string>
+    <string name="dailyRequirementsNavigation">Daily Requirements</string>
+    <string name="userParametersNavigation">User Parameters</string>
+    <string name="calculateCaloriesNavigation">Calculate Calories</string>
+    <string name="mealCategoriesNavigation">Meal Categories</string>
+    <string name="manageMealsNavigation">Manage Meals</string>
+    <string name="suggestedMealsNavigation">Suggested Meals</string>
+    <string name="caloriesRequired">Calories required: %d kcal</string>
+    <string name="eatenCalories">Calories: %.2f kcal</string>
+    <string name="eatenProteins">Proteins: %.2f g</string>
+    <string name="eatenCarbohydrates">Carbohydrates: %.2f g</string>
+    <string name="eatenFats">Fats: %.2f g</string>
+    <string name="caloriesProgress">%d / %d kcal</string>
+    <string name="currentDate" translatable="false">%02d.%02d.%4d</string>
+    <string name="no_category">No category</string>
+    <string name="no_data">No data!</string>
+    <string name="name_of_category">Name of a category</string>
 </resources>

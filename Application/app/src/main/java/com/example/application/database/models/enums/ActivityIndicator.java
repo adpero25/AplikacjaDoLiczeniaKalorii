@@ -10,16 +10,15 @@ public enum ActivityIndicator {
     Active(4, 1.725, R.string.Active),
     VeryActive(5, 1.9, R.string.VeryActive);
 
-    public int id;
-    private double value;
-    private int resourceId;
+    public final int id;
+    private final double value;
+    private final int resourceId;
+
     ActivityIndicator(int id, double val, int resourceId){
         this.id = id;
         this.value = val;
         this.resourceId = resourceId;
     }
-
-
 
     public static ActivityIndicator getActivity(int id){
         switch(id){

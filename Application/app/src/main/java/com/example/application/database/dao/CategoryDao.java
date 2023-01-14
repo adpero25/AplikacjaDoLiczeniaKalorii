@@ -17,7 +17,6 @@ import com.example.application.database.models.junctions.ServingWithMeal;
 import java.util.Date;
 import java.util.List;
 
-@TypeConverters({DateConverters.class})
 @Dao
 public interface CategoryDao {
     @Insert
