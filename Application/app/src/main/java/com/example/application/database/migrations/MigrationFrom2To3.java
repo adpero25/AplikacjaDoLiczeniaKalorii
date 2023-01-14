@@ -9,6 +9,6 @@ import androidx.room.migration.AutoMigrationSpec;
         toColumnName = "has_practiced"
 )
 
-public class Migrationfrom2to3 implements AutoMigrationSpec {
+public class MigrationFrom2To3 implements AutoMigrationSpec {
 
 }

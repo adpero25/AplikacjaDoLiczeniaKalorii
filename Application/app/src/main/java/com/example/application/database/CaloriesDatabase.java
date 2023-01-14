@@ -19,24 +19,18 @@ import com.example.application.database.dao.DayDao;
 import com.example.application.database.dao.MealDao;
 import com.example.application.database.dao.OpenFoodFactDao;
 import com.example.application.database.dao.ServingDao;
-import com.example.application.database.migrations.Migrationfrom2to3;
-import com.example.application.database.migrations.Migrationfrom5to6;
+import com.example.application.database.migrations.MigrationFrom2To3;
+import com.example.application.database.migrations.MigrationFrom6To7;
 import com.example.application.database.models.Category;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.Meal;
 import com.example.application.database.models.OpenFoodFact;
 import com.example.application.database.models.Serving;
-import com.example.application.database.models.enums.ActivityIndicator;
-import com.example.application.database.models.junctions.MealWithOpenFoodFact;
-
-import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @TypeConverters({ActivityIndicatorConverter.class, MassTargetConverter.class, MealTypeConverter.class, DateConverters.class})
 @androidx.room.Database(
-        version = 6,
+        version = 7,
         exportSchema = true,
         entities = {Day.class, Serving.class, OpenFoodFact.class, Meal.class, Category.class, DailyRequirements.class},
         autoMigrations = {
@@ -47,7 +41,7 @@ import java.util.concurrent.Executors;
                 @AutoMigration(
                       from = 2,
                       to = 3,
-                      spec = Migrationfrom2to3.class
+                      spec = MigrationFrom2To3.class
                 ),
                 @AutoMigration(
                         from = 3,
@@ -59,8 +53,12 @@ import java.util.concurrent.Executors;
                 ),
                 @AutoMigration(
                         from = 5,
-                        to = 6,
-                        spec = Migrationfrom5to6.class
+                        to = 6
+                ),
+                @AutoMigration(
+                        from = 6,
+                        to = 7,
+                        spec = MigrationFrom6To7.class
                 )
         }
 )
