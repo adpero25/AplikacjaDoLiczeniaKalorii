@@ -1,12 +1,15 @@
 package com.example.application.activities;
 
 import static com.example.application.activities.MainActivity.SHARED_PREFERENCES_FILE_NAME;
+import static com.example.application.fragments.ServingsFragment.MEAL_TYPE;
+import static com.example.application.activities.ServingsActivity.SERVING_DATE;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.application.database.models.Category;
+import com.example.application.database.models.enums.MealType;
 import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 import com.example.application.database.repositories.CategoriesRepository;
@@ -29,17 +32,27 @@ import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.MealsRepository;
 import com.example.application.database.repositories.ServingsRepository;
 
+import java.time.LocalDate;
+
 
 public class AddingServingActivity extends DrawerActivity {
 
     public static final String CALORIES_REQUIREMENT = "CALORIES_REQUIREMENT";
     ViewGroup listRoot;
     TextView caloriesRequirementTextView;
+
+    LocalDate day;
+    MealType type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_adding_serving);
+
+        Intent intent = getIntent();
+        day = (LocalDate) intent.getSerializableExtra(SERVING_DATE);
+        type = (MealType) intent.getSerializableExtra(MEAL_TYPE);
 
         caloriesRequirementTextView = findViewById(R.id.caloriesRequirementTextView);
         setCaloriesTextView();
@@ -117,7 +130,7 @@ public class AddingServingActivity extends DrawerActivity {
     void loadMealList(){
         CategoriesRepository repo = new CategoriesRepository(getApplication());
         listRoot.removeAllViews();
-        LayoutInflater inflater=getLayoutInflater();
+        LayoutInflater inflater = getLayoutInflater();
         repo.getAll().thenAccept((list)->{
             for(CategoryWithMeals elem : list){
 
@@ -139,7 +152,7 @@ public class AddingServingActivity extends DrawerActivity {
         });
     }
 
-    void addListElements(CategoryWithMeals elem,LayoutInflater inflater){
+    void addListElements(CategoryWithMeals elem, LayoutInflater inflater){
         if(elem.meals != null && elem.meals.size()!=0) {
 
             listRoot.post(() -> {
@@ -147,13 +160,11 @@ public class AddingServingActivity extends DrawerActivity {
                 categoryListItem.setText(elem.category.name);
                 listRoot.addView(categoryListItem);
                 for (MealWithOpenFoodFact meal : elem.meals) {
-                    View mealListItem = inflater.inflate(R.layout.one_button_list_item, null);
+                    View mealListItem = inflater.inflate(R.layout.one_button_list_item, listRoot, false);
                     ((TextView) mealListItem.findViewById(R.id.name)).setText(meal.meal.name);
                     listRoot.addView(mealListItem);
 
-
-//TODO: extract the createing of popup to separate method
-
+                    //TODO: extract the createing of popup to separate method
                     ((Button) mealListItem.findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -181,11 +192,11 @@ public class AddingServingActivity extends DrawerActivity {
 
                                 DaysRepository repo = new DaysRepository(getApplication());
 
-                                repo.getDayByDate(MainActivity.currentDay.day.dayId).thenAccept((day)-> {
+                                repo.getDayByDate(day).thenAccept((day)-> {
 
                                     ServingsRepository sr = new ServingsRepository(getApplication());
 
-                                    sr.insert(day.day, meal.meal, Double.parseDouble(enteredValue.getText().toString()));
+                                    sr.insert(day.day, meal.meal, Double.parseDouble(enteredValue.getText().toString()),type);
                                 });
 
                                 popupWindow.dismiss();

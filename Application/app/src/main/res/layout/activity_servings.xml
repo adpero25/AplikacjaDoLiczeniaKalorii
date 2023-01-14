@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".activities.ServingsActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/servings_fragment_container_1"
+        android:name="com.example.application.fragments.ServingsFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_margin="6dp"
+        style="@style/inner_container"
+        tools:layout="@layout/fragment_servings_list" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/servings_fragment_container_2"
+        android:name="com.example.application.fragments.ServingsFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_margin="6dp"
+        style="@style/inner_container"
+        tools:layout="@layout/fragment_servings_list" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/servings_fragment_container_3"
+        android:name="com.example.application.fragments.ServingsFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_margin="6dp"
+        style="@style/inner_container"
+        tools:layout="@layout/fragment_servings_list" />
+
+</LinearLayout>

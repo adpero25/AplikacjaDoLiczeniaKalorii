@@ -76,21 +76,12 @@
                 android:foreground="@drawable/rounded_edge_inset_shadow"
                 android:minHeight="200dp">
 
-                <androidx.core.widget.NestedScrollView
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_root"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:minHeight="200dp"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:id="@+id/list_root"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/listElementMarginTopBottom"
-                        android:orientation="vertical"
-                        android:padding="10dp"
-                        app:strokeColor="@color/white" />
-                </androidx.core.widget.NestedScrollView>
+                    android:orientation="vertical"
+                    app:strokeColor="@color/white" />
             </FrameLayout>
 
 

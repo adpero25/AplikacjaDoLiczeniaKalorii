@@ -199,4 +199,12 @@
     <string name="no_category">No category</string>
     <string name="no_data">No data!</string>
     <string name="name_of_category">Name of a category</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="dinner">Dinner</string>
+    <string name="supper">Supper</string>
+    <string name="open">Open</string>
+    <string name="fetching_failed">Fetching data from extenral service failed!</string>
+    <string name="no_meals_returned">No meals matching the criteria found!</string>
+    <string name="name_of_meal">name...</string>
+    <string name="steps">steps...</string>
 </resources>

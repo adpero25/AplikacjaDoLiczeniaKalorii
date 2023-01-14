@@ -51,24 +51,32 @@
             android:layout_marginStart="24dp"
             android:layout_marginEnd="8dp"
             android:padding="5dp"
-            android:text="@string/productName"
+            android:text="@string/name_of_meal"
             app:layout_constraintEnd_toStartOf="@+id/productImageView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
 
-    <TextView
-        android:id="@+id/summaryTextView"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="24dp"
-        android:padding="5dp"
-        android:text="@string/categories"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/openBrowser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productImageView" />
+        app:layout_constraintTop_toBottomOf="@+id/productImageView">
+
+        <TextView
+            android:id="@+id/summaryTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="24dp"
+            android:padding="5dp"
+            android:text="@string/steps" />
+    </ScrollView>
 
     <Button
         android:id="@+id/saveProductButton"

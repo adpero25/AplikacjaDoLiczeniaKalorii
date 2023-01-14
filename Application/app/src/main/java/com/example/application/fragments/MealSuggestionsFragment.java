@@ -11,7 +11,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.application.adapters.OneButtonListItemAdapter;
+import com.example.application.adapters.SingleMessageAdapter;
+import com.example.application.adapters.SingleSpinnerAdapter;
+import com.example.application.database.models.junctions.ServingWithMeal;
+import com.example.application.database.repositories.ServingsRepository;
 import com.example.application.webservices.spoonacular.model.MealSearchResult;
 import com.example.application.webservices.spoonacular.MealSuggestionService;
 import com.example.application.webservices.RetrofitInstance;
@@ -32,7 +39,7 @@ public class MealSuggestionsFragment extends Fragment {
     View view;
 
     LayoutInflater inflater;
-    ViewGroup listRoot;
+    RecyclerView listRoot;
     Day day;
 
     @Override
@@ -47,13 +54,17 @@ public class MealSuggestionsFragment extends Fragment {
 
 
         ((Button)view.findViewById(R.id.refresh)).setOnClickListener((v)->{
-            loadMealsForDay(day);
+            loadMealsForDay();
         });
 
         listRoot = view.findViewById(R.id.list_root);
-        inflater.inflate(R.layout.loading_list_item,listRoot);
 
-        loadMealsForDay(new Day());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+
+        listRoot.setLayoutManager(layoutManager);
+
+
+        loadMealsForDay();
         return view;
     }
 
@@ -62,44 +73,51 @@ public class MealSuggestionsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    public void loadMealsForDay(Day newDay){
-        listRoot.removeAllViews();
-        inflater.inflate(R.layout.loading_list_item,listRoot);
+    public void loadMealsForDay(){
+        listRoot.post(() -> {
+            listRoot.setAdapter(new SingleSpinnerAdapter());
+            listRoot.smoothScrollToPosition(0);
+        });
 
         MealSuggestionService mealSuggestionService = RetrofitInstance.getSpoonacularClientInstance().create(MealSuggestionService.class);
         try {
 
-            //TODO calculate reqs
+            //TODO użycie odpowiednich wartości w searchu (na postawie daily reqs)
             Call<List<MealSearchResult>> productsApiCall = mealSuggestionService.search(100L,100L,100L,100L,8L);
 
             productsApiCall.enqueue(new Callback<java.util.List<MealSearchResult>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<MealSearchResult>> call, @NonNull Response<List<MealSearchResult>> response) {
-                    listRoot.removeAllViews();
-                    if (response.body() != null) {
-                        List<MealSearchResult> responseBody = response.body();
-                        for(MealSearchResult result : responseBody){
-                            listRoot.post(() -> {
-                                ViewGroup listItem = (ViewGroup) inflater.inflate(R.layout.one_button_list_item, listRoot);
-                                ((TextView) listItem.findViewById(R.id.name)).setText(result.getTitle());
+                    listRoot.post(()-> {
+                        if (response.body().size() != 0) {
 
 
-                                ((Button) listItem.findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent intent = new Intent(getActivity(), SuggestedMealActivity.class);
-                                        intent.putExtra(MEAL_ID, result.getId());
-                                        startActivity(intent);
-                                    }
-                                });
-                            });
+                            OneButtonListItemAdapter<MealSearchResult> adapter = new OneButtonListItemAdapter<MealSearchResult>(response.body(),
+                                    (result) -> result.getTitle(),
+                                    () -> getString(R.string.open),
+                                    (context) ->
+                                            (View.OnClickListener) v -> {
+                                                Intent intent = new Intent(getActivity(), SuggestedMealActivity.class);
+                                                intent.putExtra(MEAL_ID, context.object.getId());
+                                                startActivity(intent);
+                                            }
+                            );
+                            listRoot.setAdapter(adapter);
+                            listRoot.smoothScrollToPosition(0);
+
+
+                        } else {
+                            listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
                         }
-                    }
+                    });
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<List<MealSearchResult>> call, @NonNull Throwable t) {
-                    listRoot.removeAllViews();
+                    listRoot.post(() -> {
+                        listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
+                        listRoot.smoothScrollToPosition(0);
+                    });
                 }
             });
         }

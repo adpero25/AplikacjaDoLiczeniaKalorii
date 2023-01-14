@@ -2,9 +2,8 @@
 
 <ProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/loading_indicator"
-    android:layout_width="40dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:maxWidth="40dp"
-    android:minHeight="40dp"
+    android:padding="110dp"
     android:layout_gravity="center"
     android:visibility="visible" />
