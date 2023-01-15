@@ -109,7 +109,7 @@ public class EatenCaloriesFragment extends Fragment {
                                     fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
                                 }
 
-                                //TODO: wyświetlanie tagetu dla wszystkich nutriments (na podstawie daily reqs) np:  230 / 3000 kcal
+                                //TODO: wyświetlanie targetu dla wszystkich nutriments (na podstawie daily reqs) np:  230 / 3000 kcal
                                 //      i są problemy z wyświetlaniem długich stringów (chyba xD)
                                 caloriesEatenSurfaceView.setProgress((int)calories);
                                 caloriesProgressTextView.setText(getResources().getString(R.string.caloriesProgress, (int)calories, caloriesTarget));

@@ -32,4 +32,6 @@ public interface DailyRequirementsDao {
     @Transaction
     @Query("SELECT * FROM day")
     List<DayWithDailyRequirementsAndServings> getDayWithServingsWithDailyRequirements();
+    @Query("SELECT * FROM daily_requirements WHERE daily_requirements_id = :id")
+    DailyRequirements getById(Long id);
 }

@@ -170,7 +170,7 @@ public class MainActivity extends DrawerActivity {
                     int value = Integer.parseInt(enteredValue.getText().toString());
                     DaysRepository repo = new DaysRepository(getApplication());
 
-                    repo.getDayByDate(currentDay.day.dayId).thenAccept( dayWithServings ->  {
+                    repo.getByDate(currentDay.day.dayId).thenAccept( dayWithServings ->  {
                         dayWithServings.day.glassesOfWater += value;
                         repo.update(dayWithServings.day);
                     });

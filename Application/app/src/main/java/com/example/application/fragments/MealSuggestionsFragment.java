@@ -17,7 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.application.adapters.OneButtonListItemAdapter;
 import com.example.application.adapters.SingleMessageAdapter;
 import com.example.application.adapters.SingleSpinnerAdapter;
+import com.example.application.database.CaloriesDatabase;
+import com.example.application.database.models.DailyRequirements;
+import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
 import com.example.application.database.models.junctions.ServingWithMeal;
+import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.ServingsRepository;
 import com.example.application.webservices.spoonacular.model.MealSearchResult;
 import com.example.application.webservices.spoonacular.MealSuggestionService;
@@ -26,6 +30,7 @@ import com.example.application.activities.SuggestedMealActivity;
 import com.example.application.R;
 import com.example.application.database.models.Day;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import retrofit2.Call;
@@ -83,43 +88,75 @@ public class MealSuggestionsFragment extends Fragment {
         try {
 
             //TODO użycie odpowiednich wartości w searchu (na postawie daily reqs)
-            Call<List<MealSearchResult>> productsApiCall = mealSuggestionService.search(100L,100L,100L,100L,8L);
+            DaysRepository dayRepo = new DaysRepository(requireActivity().getApplication());
+            Runnable runnable = ()->{
 
-            productsApiCall.enqueue(new Callback<java.util.List<MealSearchResult>>() {
-                @Override
-                public void onResponse(@NonNull Call<List<MealSearchResult>> call, @NonNull Response<List<MealSearchResult>> response) {
-                    listRoot.post(()-> {
-                        if (response.body().size() != 0) {
+                    dayRepo.getByDate(LocalDate.now()).thenAccept(
+                            day -> {
+                                view.post(() -> {
+                                    float  calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
+                                    for (ServingWithMeal s: day.servings) {
+
+                                        calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
+                                        proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
+                                        carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
+                                        fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
+                                    }
+                                    final float caloriesF = calories, proteinsF = proteins, carbohydratesF = carbohydrates, fatsF = fats;
+                                    dayRepo.getDayDailyRequirements(LocalDate.now()).thenAccept(requirements -> {
+                                        Long caloriesLeft = Double.valueOf(requirements.nutritionalValuesTarget.calories - caloriesF).longValue(),
+                                                proteinsLeft = Double.valueOf(requirements.nutritionalValuesTarget.proteins - proteinsF).longValue(),
+                                                carbohydratesLeft = Double.valueOf(requirements.nutritionalValuesTarget.carbohydrates - carbohydratesF).longValue(),
+                                                fatsLeft = Double.valueOf(requirements.nutritionalValuesTarget.fats - fatsF).longValue();
+
+                                        Call<List<MealSearchResult>> productsApiCall = mealSuggestionService.search(caloriesLeft,fatsLeft,proteinsLeft,carbohydratesLeft,8L);
+
+                                        productsApiCall.enqueue(new Callback<List<MealSearchResult>>() {
+                                            @Override
+                                            public void onResponse(@NonNull Call<List<MealSearchResult>> call, @NonNull Response<List<MealSearchResult>> response) {
+                                                listRoot.post(()-> {
+                                                    if (response.body() != null && response.body().size() != 0) {
+
+                                                        OneButtonListItemAdapter<MealSearchResult> adapter = new OneButtonListItemAdapter<MealSearchResult>(response.body(),
+                                                                (result) -> result.getTitle(),
+                                                                () -> getString(R.string.open),
+                                                                (context) ->
+                                                                        (View.OnClickListener) v -> {
+                                                                            Intent intent = new Intent(getActivity(), SuggestedMealActivity.class);
+                                                                            intent.putExtra(MEAL_ID, context.object.getId());
+                                                                            startActivity(intent);
+                                                                        }
+                                                        );
+                                                        listRoot.setAdapter(adapter);
+                                                        listRoot.smoothScrollToPosition(0);
 
 
-                            OneButtonListItemAdapter<MealSearchResult> adapter = new OneButtonListItemAdapter<MealSearchResult>(response.body(),
-                                    (result) -> result.getTitle(),
-                                    () -> getString(R.string.open),
-                                    (context) ->
-                                            (View.OnClickListener) v -> {
-                                                Intent intent = new Intent(getActivity(), SuggestedMealActivity.class);
-                                                intent.putExtra(MEAL_ID, context.object.getId());
-                                                startActivity(intent);
+                                                    } else {
+                                                        listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
+                                                    }
+                                                });
                                             }
-                            );
-                            listRoot.setAdapter(adapter);
-                            listRoot.smoothScrollToPosition(0);
+
+                                            @Override
+                                            public void onFailure(@NonNull Call<List<MealSearchResult>> call, @NonNull Throwable t) {
+                                                listRoot.post(() -> {
+                                                    listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
+                                                    listRoot.smoothScrollToPosition(0);
+                                                });
+                                            }
+                                        });
+                                    });
 
 
-                        } else {
-                            listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
-                        }
-                    });
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<List<MealSearchResult>> call, @NonNull Throwable t) {
-                    listRoot.post(() -> {
-                        listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
-                        listRoot.smoothScrollToPosition(0);
-                    });
-                }
-            });
+                                });
+                            }
+                    );
+
+
+            };
+            runnable.run();
+
         }
         catch (Exception ignored) {}
     }
