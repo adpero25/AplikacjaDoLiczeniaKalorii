@@ -22,14 +22,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:tag="0"
-        android:text="@string/add"
-        android:textAppearance="@style/ButtonText"
-        android:theme="@style/AccentButton"
-        app:cornerRadius="25dp" />
 </LinearLayout>

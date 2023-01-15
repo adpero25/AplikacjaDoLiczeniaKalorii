@@ -199,4 +199,12 @@
     <string name="no_category">Bez kategorii</string>
     <string name="no_data">Brak danych!</string>
     <string name="name_of_category">Nazwa kategorii</string>
+    <string name="breakfast">Śniadanie</string>
+    <string name="dinner">Obiad</string>
+    <string name="supper">Kolacja</string>
+    <string name="open">Zobacz</string>
+    <string name="fetching_failed">Komunikajca z zwenętrzym serwisem się nie powiodła!</string>
+    <string name="no_meals_returned">Żadne dania nie pasowały do założonych kryteriów wyszukiwania!</string>
+    <string name="name_of_meal">nazwa...</string>
+    <string name="steps">kroki...</string>
 </resources>

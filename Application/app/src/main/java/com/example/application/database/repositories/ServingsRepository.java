@@ -7,6 +7,7 @@ import com.example.application.database.dao.ServingDao;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.Meal;
 import com.example.application.database.models.Serving;
+import com.example.application.database.models.enums.MealType;
 import com.example.application.database.models.junctions.ServingWithMeal;
 import com.example.application.database.repositories.base.Repository;
 
@@ -34,11 +35,12 @@ public class ServingsRepository extends Repository {
         queryExecutor.execute(() -> servingDao.insert(serving));
     }
 
-    public void insert(Day day, Meal meal, double protionSize) {
+    public void insert(Day day, Meal meal, double protionSize, MealType type) {
         insert( new Serving() {{
             dayId = day.dayId;
             mealId = meal.mealId;
             servingSize = protionSize;
+            mealType = type;
         }});
     }
 

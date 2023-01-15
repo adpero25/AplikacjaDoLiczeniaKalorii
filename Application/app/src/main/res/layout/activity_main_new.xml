@@ -222,17 +222,5 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCategories"
                 tools:layout="@layout/fragment_meal_sugesstions" />
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_container_view24"
-                android:name="com.example.application.fragments.ServingsFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                style="@style/inner_container"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/manageCategories"
-                tools:layout="@layout/fragment_servings_list" />
-
-
         </LinearLayout>
     </ScrollView>

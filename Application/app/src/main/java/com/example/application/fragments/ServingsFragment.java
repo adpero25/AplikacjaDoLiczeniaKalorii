@@ -1,5 +1,7 @@
 package com.example.application.fragments;
 
+import static com.example.application.activities.ServingsActivity.SERVING_DATE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,47 +13,48 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.activities.AddingServingActivity;
-import com.example.application.activities.MainActivity;
 import com.example.application.R;
+import com.example.application.adapters.OneButtonListItemAdapter;
+import com.example.application.database.models.enums.MealType;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.models.junctions.ServingWithMeal;
+import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.ServingsRepository;
 
-import java.util.Objects;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServingsFragment extends Fragment {
 
-    public static final String MEAL_ID = "MEAL_ID";
+    public static final String MEAL_TYPE = "MEAL_TYPE";
 
     View view;
 
-    LayoutInflater inflater;
-    ViewGroup listRoot;
-    DayWithServings day;
+    TextView titleView;
+    RecyclerView listRoot;
+
+    LocalDate day;
+    MealType type;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        MainActivity activity = (MainActivity) requireActivity();
-        day = activity.getCurrentDay();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.inflater=inflater;
         view = inflater.inflate(R.layout.fragment_servings_list, container, false);
 
+        listRoot = (RecyclerView) view.findViewById(R.id.list_root);
+        titleView = (TextView) view.findViewById(R.id.title);
 
-        ((Button)view.findViewById(R.id.add)).setOnClickListener((v)->{
-            Intent intent = new Intent(getActivity(), AddingServingActivity.class);
-            startActivity(intent);
-        });
 
-        listRoot = view.findViewById(R.id.list_root);
-        loadServingsForDay();
+        tryToReload();
         return view;
     }
 
@@ -60,26 +63,66 @@ public class ServingsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    public void loadServingsForDay(){
-        listRoot.removeAllViews();
+    public void setDayAndMealType(LocalDate day, MealType type){
+        this.day = day;
+        this.type = type;
+
+
+        tryToReload();
+    }
+
+    public void tryToReload(){
+        if(day==null || type==null || titleView==null ||  listRoot==null ){
+            return;
+        }
+
+        DaysRepository repo = new DaysRepository(requireActivity().getApplication());
+        repo.getOrCreateByDate(day).thenAccept(this::loadServingsForDay);
+
+        switch (type){
+            case Breakfast:
+                titleView.setText(getString(R.string.breakfast));
+                break;
+            case Dinner:
+                titleView.setText(getString(R.string.dinner));
+                break;
+            case Supper:
+                titleView.setText(getString(R.string.supper));
+                break;
+            default:
+                titleView.setText("");
+                break;
+        }
+
+        ((Button)view.findViewById(R.id.add)).setOnClickListener((v)->{
+            Intent intent = new Intent(getActivity(), AddingServingActivity.class);
+            intent.putExtra(MEAL_TYPE,type);
+            intent.putExtra(SERVING_DATE,day);
+            startActivity(intent);
+        });
+    }
+
+    public void loadServingsForDay(DayWithServings day){
+
+        List<ServingWithMeal> servings = day.servings.stream().filter(s->s.serving.mealType==type).collect(Collectors.toList());
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
+
+        listRoot.setLayoutManager(layoutManager);
 
         ServingsRepository servingsRepo = new ServingsRepository(requireActivity().getApplication());
-        if(day!=null && day.servings!=null){
-            for(ServingWithMeal serving : day.servings){
-                listRoot.post(() -> {
-                    ViewGroup listItem = (ViewGroup) inflater.inflate(R.layout.one_button_list_item, listRoot);
-                    ((TextView) listItem.findViewById(R.id.name)).setText(serving.meals.meal.name);
 
-
-                    ((Button) listItem.findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            servingsRepo.delete(serving.serving);
-                            listRoot.removeView(listItem);
+        OneButtonListItemAdapter<ServingWithMeal> adapter = new OneButtonListItemAdapter<ServingWithMeal>(servings,
+                (serving)-> serving.meals.meal.name,
+                () -> getString(R.string.delete),
+                (context)->
+                        (View.OnClickListener) v -> {
+                            servingsRepo.delete(context.object.serving);
+                            context.thisAdapter.getData().remove(context.position);
+                            context.thisAdapter.notifyItemRemoved(context.position);
+                            context.thisAdapter.notifyItemRangeChanged(context.position, context.thisAdapter.getItemCount());
                         }
-                    });
-                });
-            }
-        }
+        );
+        listRoot.setAdapter(adapter);
     }
 }

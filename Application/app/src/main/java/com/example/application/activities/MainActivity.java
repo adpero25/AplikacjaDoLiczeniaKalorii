@@ -29,15 +29,14 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.application.CaloriesCalculatorContext;
 import com.example.application.fragments.EatenCaloriesFragment;
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
-import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
+import com.example.application.fragments.ServingsFragment;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -241,14 +240,7 @@ public class MainActivity extends DrawerActivity {
             public void onClick(View v) {
                 DaysRepository repo = new DaysRepository(getApplication());
                 repo.getOrCreateByDate(currentDay.day.dayId.minusDays(1)).thenAccept(
-                        day -> {
-                            currentDay = day;
-                            setCurrentDate(currentDay.day.dayId);
-
-                            caloriesFragment.refresh(currentDay.day.dayId);
-                            setStepsCounter(currentDay.day);
-                            setWaterLabel(currentDay.day);
-                        }
+                        day -> updateSelectedDay(day)
                 );
             }
         });
@@ -260,18 +252,20 @@ public class MainActivity extends DrawerActivity {
             public void onClick(View v) {
                 DaysRepository repo = new DaysRepository(getApplication());
                 repo.getOrCreateByDate(currentDay.day.dayId.plusDays(1)).thenAccept(
-                        day -> {
-                            currentDay = day;
-                            setCurrentDate(currentDay.day.dayId);
-
-                            caloriesFragment.refresh(currentDay.day.dayId);
-                            setStepsCounter(currentDay.day);
-                            setWaterLabel(currentDay.day);
-                        }
+                        day -> updateSelectedDay(day)
                 );
             }
         });
 
+    }
+
+    private void updateSelectedDay(DayWithServings day){
+        currentDay = day;
+        setCurrentDate(currentDay.day.dayId);
+
+        caloriesFragment.refresh(currentDay.day.dayId);
+        setStepsCounter(currentDay.day);
+        setWaterLabel(currentDay.day);
     }
 
 
@@ -313,7 +307,10 @@ public class MainActivity extends DrawerActivity {
             stepCounterServiceBound = true;
         }
 
-        caloriesFragment.refresh(currentDay.day.dayId);
+        DaysRepository repo = new DaysRepository(getApplication());
+        repo.getOrCreateByDate(currentDay.day.dayId).thenAccept(
+                day -> updateSelectedDay(day)
+        );
     }
 
 
@@ -347,19 +344,15 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.channel_name);
-            String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
     }
 
     private boolean isServiceRunning(Class<?> serviceClass) {
