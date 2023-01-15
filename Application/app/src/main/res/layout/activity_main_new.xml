@@ -239,8 +239,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="32dp"
+
+        app:backgroundTint="?attr/colorAccent"
+        app:tint="?attr/colorPrimary"
         app:srcCompat="@drawable/ic_baseline_water_drop_48" />
 </FrameLayout>
