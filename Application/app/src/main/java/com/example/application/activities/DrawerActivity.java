@@ -44,15 +44,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
         Intent newIntent = null;
 
         switch(item.getItemId()) {
-            case R.id.navItemAddMeal:
-                newIntent = new Intent( this, AddingMealActivity.class);
-                break;
-            case R.id.navItemAddServing:
-                newIntent = new Intent( this, AddingServingActivity.class);
-                break;
-            case R.id.navItemScanProduct:
-                newIntent = new Intent( this, BarcodeScanningActivity.class);
-                break;
             case R.id.navItemCalculateCalories:
                 newIntent = new Intent( this, CalculateCaloriesRequirement.class);
                 break;
@@ -64,9 +55,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
                 break;
             case R.id.navItemDailyRequirements:
                 newIntent = new Intent( this, ManuallyAddDailyRequirements.class);
-                break;
-            case R.id.navItemStepsHistory:
-                newIntent = new Intent( this, StepsHistoryActivity.class);
                 break;
             case R.id.navItemUserParameters:
                 newIntent = new Intent( this, UserParametersList.class);
