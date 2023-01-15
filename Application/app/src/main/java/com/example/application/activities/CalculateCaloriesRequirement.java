@@ -1,7 +1,7 @@
 package com.example.application.activities;
 
 import static com.example.application.activities.ManuallyAddDailyRequirements.USER_DATA_KEY;
-import static com.example.application.activities.ManuallyAddDailyRequirements.USER_DATA_SHARED_PREFERENCES_FILE_NAME;
+
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -52,11 +52,19 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
 
         ConfirmButton.setOnClickListener(v -> {
 
-            if (!StringHelper.checkNullOrEmpty(AgeBox.getText().toString()) || !StringHelper.checkNullOrEmpty(WeightBox.getText().toString()) || !StringHelper.checkNullOrEmpty(HeightBox.getText().toString())) {
+            if (!StringHelper.checkNullOrEmpty(AgeBox.getText().toString()) || !StringHelper.checkNullOrEmpty(WeightBox.getText().toString())
+                    || !StringHelper.checkNullOrEmpty(HeightBox.getText().toString())
+                    || (!MaleButton.isChecked() && !FemaleButton.isChecked())) {
                 Snackbar.make(v, getString(R.string.MissingRequiredData), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return;
             }
+            if(!StringHelper.checkPositiveNumber(AgeBox.getText().toString()) || !StringHelper.checkPositiveNumber(WeightBox.getText().toString()) || !StringHelper.checkPositiveNumber(HeightBox.getText().toString())){
+                Snackbar.make(v, getString(R.string.non_negative), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                return;
+            }
+
             double result = MaleButton.isChecked() ? CalculateMaleResult() : CalculateFemaleResult();
             double fat, carb, protein;
 
@@ -97,15 +105,6 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
             requirements.nutritionalValuesTarget.carbohydrates = carb;
 
             requirements.entryDate = LocalDate.now();
-
-            if (requirements.height != 0 && requirements.weight != 0) {
-                SharedPreferences userDataSharedPreferences = getSharedPreferences(USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = userDataSharedPreferences.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(requirements);
-                editor.putString(USER_DATA_KEY, json);
-                editor.apply();
-            }
 
             DailyRequirementsRepository repo = new DailyRequirementsRepository(getApplication());
             repo.insertOrUpdate(requirements);

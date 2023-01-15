@@ -22,6 +22,7 @@ import androidx.core.app.NotificationCompat;
 import com.example.application.activities.MainActivity;
 import com.example.application.activities.ManuallyAddDailyRequirements;
 import com.example.application.database.models.DailyRequirements;
+import com.example.application.database.repositories.DailyRequirementsRepository;
 import com.example.application.database.repositories.DaysRepository;
 import com.google.gson.Gson;
 
@@ -153,13 +154,9 @@ public class StepCounterService extends Service {
 
     protected DailyRequirements GetUserData() {
 
-        SharedPreferences userDataSharedPreferences = getSharedPreferences(ManuallyAddDailyRequirements.USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-        String savedData = userDataSharedPreferences.getString(ManuallyAddDailyRequirements.USER_DATA_KEY, null);
+        DailyRequirementsRepository repo = new DailyRequirementsRepository(getApplication());
+        return repo.getLastRequirement(LocalDate.now()).join();
 
-        if (savedData != null) {
-            return new Gson().fromJson(savedData, DailyRequirements.class);
-        }
-        return null;
     }
 
     public synchronized Walk GetWalk() {

@@ -49,6 +49,12 @@ public class ManuallyAddDailyRequirements extends DrawerActivity {
                         .setAction("Action", null).show();
                 return;
             }
+            if(!StringHelper.checkPositiveNumber(caloriesInput.getText().toString()) || !StringHelper.checkPositiveNumber(proteinsInput.getText().toString())
+                    || !StringHelper.checkPositiveNumber(carbohydratesInput.getText().toString()) || !StringHelper.checkPositiveNumber(fatInput.getText().toString())){
+                Snackbar.make(v, getString(R.string.non_negative), Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                return;
+            }
 
             DailyRequirements dailyRequirements = new DailyRequirements();
             dailyRequirements.nutritionalValuesTarget.calories = Double.parseDouble(caloriesInput.getText().toString());
@@ -58,24 +64,30 @@ public class ManuallyAddDailyRequirements extends DrawerActivity {
             dailyRequirements.entryDate = LocalDate.now();
 
             if (StringHelper.checkNullOrEmpty(ageInput.getText().toString())) {
+                if(!StringHelper.checkPositiveNumber(ageInput.getText().toString())){
+                    Snackbar.make(v, getString(R.string.non_negative), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return;
+                }
                 dailyRequirements.age = Integer.parseInt(ageInput.getText().toString());
             }
 
             if (StringHelper.checkNullOrEmpty(heightInput.getText().toString())) {
+                if(!StringHelper.checkPositiveNumber(heightInput.getText().toString())){
+                    Snackbar.make(v, getString(R.string.non_negative), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return;
+                }
                 dailyRequirements.height = Double.parseDouble(heightInput.getText().toString());
             }
 
             if (StringHelper.checkNullOrEmpty(weightInput.getText().toString())) {
+                if(!StringHelper.checkPositiveNumber(weightInput.getText().toString())){
+                    Snackbar.make(v, getString(R.string.non_negative), Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                    return;
+                }
                 dailyRequirements.weight = Double.parseDouble(weightInput.getText().toString());
-            }
-
-            if (dailyRequirements.height != 0 && dailyRequirements.weight != 0) {
-                SharedPreferences userDataSharedPreferences = getSharedPreferences(USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = userDataSharedPreferences.edit();
-                Gson gson = new Gson();
-                String json = gson.toJson(dailyRequirements);
-                editor.putString(USER_DATA_KEY, json);
-                editor.apply();
             }
 
             DailyRequirementsRepository repo = new DailyRequirementsRepository(getApplication());

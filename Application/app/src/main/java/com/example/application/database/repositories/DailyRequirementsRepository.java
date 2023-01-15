@@ -9,6 +9,7 @@ import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.base.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -64,5 +65,9 @@ public class DailyRequirementsRepository extends Repository {
 
     public CompletableFuture<List<DailyRequirements>> getAll() {
         return CompletableFuture.supplyAsync(dailyRequirementsDao::listDailyRequirements, queryExecutor);
+    }
+
+    public CompletableFuture<DailyRequirements> getLastRequirement(LocalDate date){
+        return CompletableFuture.supplyAsync(() -> dailyRequirementsDao.getLastRequirement(date), queryExecutor);
     }
 }
