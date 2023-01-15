@@ -21,6 +21,7 @@ import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
+import com.example.application.database.repositories.DailyRequirementsRepository;
 import com.example.application.helpers.StringHelper;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -109,8 +110,8 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
                 editor.apply();
             }
 
-            CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
-            db.dailyRequirementsDao().insert(requirements);
+            DailyRequirementsRepository repo = new DailyRequirementsRepository(getApplication());
+            repo.insertOrUpdate(requirements);
             finish();
         });
         CancelButton.setOnClickListener(v -> {

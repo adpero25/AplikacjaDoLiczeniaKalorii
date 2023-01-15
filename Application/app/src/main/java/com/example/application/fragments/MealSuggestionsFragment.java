@@ -54,11 +54,11 @@ public class MealSuggestionsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.inflater=inflater;
+        this.inflater = inflater;
         view = inflater.inflate(R.layout.fragment_meal_sugesstions, container, false);
 
 
-        ((Button)view.findViewById(R.id.refresh)).setOnClickListener((v)->{
+        ((Button) view.findViewById(R.id.refresh)).setOnClickListener((v) -> {
             loadMealsForDay();
         });
 
@@ -78,7 +78,7 @@ public class MealSuggestionsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    public void loadMealsForDay(){
+    public void loadMealsForDay() {
         listRoot.post(() -> {
             listRoot.setAdapter(new SingleSpinnerAdapter());
             listRoot.smoothScrollToPosition(0);
@@ -86,78 +86,72 @@ public class MealSuggestionsFragment extends Fragment {
 
         MealSuggestionService mealSuggestionService = RetrofitInstance.getSpoonacularClientInstance().create(MealSuggestionService.class);
         try {
-
-            //TODO użycie odpowiednich wartości w searchu (na postawie daily reqs)
             DaysRepository dayRepo = new DaysRepository(requireActivity().getApplication());
-            Runnable runnable = ()->{
-
-                    dayRepo.getByDate(LocalDate.now()).thenAccept(
-                            day -> {
-                                view.post(() -> {
-                                    float  calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
-                                    for (ServingWithMeal s: day.servings) {
-
-                                        calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
-                                        proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
-                                        carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
-                                        fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
-                                    }
-                                    final float caloriesF = calories, proteinsF = proteins, carbohydratesF = carbohydrates, fatsF = fats;
-                                    dayRepo.getDayDailyRequirements(LocalDate.now()).thenAccept(requirements -> {
-                                        Long caloriesLeft = Double.valueOf(requirements.nutritionalValuesTarget.calories - caloriesF).longValue(),
-                                                proteinsLeft = Double.valueOf(requirements.nutritionalValuesTarget.proteins - proteinsF).longValue(),
-                                                carbohydratesLeft = Double.valueOf(requirements.nutritionalValuesTarget.carbohydrates - carbohydratesF).longValue(),
-                                                fatsLeft = Double.valueOf(requirements.nutritionalValuesTarget.fats - fatsF).longValue();
-
-                                        Call<List<MealSearchResult>> productsApiCall = mealSuggestionService.search(caloriesLeft,fatsLeft,proteinsLeft,carbohydratesLeft,8L);
-
-                                        productsApiCall.enqueue(new Callback<List<MealSearchResult>>() {
-                                            @Override
-                                            public void onResponse(@NonNull Call<List<MealSearchResult>> call, @NonNull Response<List<MealSearchResult>> response) {
-                                                listRoot.post(()-> {
-                                                    if (response.body() != null && response.body().size() != 0) {
-
-                                                        OneButtonListItemAdapter<MealSearchResult> adapter = new OneButtonListItemAdapter<MealSearchResult>(response.body(),
-                                                                (result) -> result.getTitle(),
-                                                                () -> getString(R.string.open),
-                                                                (context) ->
-                                                                        (View.OnClickListener) v -> {
-                                                                            Intent intent = new Intent(getActivity(), SuggestedMealActivity.class);
-                                                                            intent.putExtra(MEAL_ID, context.object.getId());
-                                                                            startActivity(intent);
-                                                                        }
-                                                        );
-                                                        listRoot.setAdapter(adapter);
-                                                        listRoot.smoothScrollToPosition(0);
 
 
-                                                    } else {
-                                                        listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
-                                                    }
-                                                });
-                                            }
+            dayRepo.getOrCreateByDate(LocalDate.now()).thenAccept(
+                    day -> {
+                        view.post(() -> {
+                            float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
 
-                                            @Override
-                                            public void onFailure(@NonNull Call<List<MealSearchResult>> call, @NonNull Throwable t) {
-                                                listRoot.post(() -> {
-                                                    listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
-                                                    listRoot.smoothScrollToPosition(0);
-                                                });
+
+                                for (ServingWithMeal s : day.servings) {
+
+                                    calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
+                                    proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
+                                    carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
+                                    fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
+                                }
+
+                            final float caloriesF = calories, proteinsF = proteins, carbohydratesF = carbohydrates, fatsF = fats;
+                            dayRepo.getDayDailyRequirements(LocalDate.now()).thenAccept(requirements -> {
+                                Long caloriesLeft = requirements.nutritionalValuesTarget.calories - caloriesF >= 0d ? Double.valueOf(requirements.nutritionalValuesTarget.calories - caloriesF).longValue() : 0,
+                                        proteinsLeft = requirements.nutritionalValuesTarget.proteins - proteinsF >= 0d ? Double.valueOf(requirements.nutritionalValuesTarget.proteins - proteinsF).longValue() : 0,
+                                        carbohydratesLeft = requirements.nutritionalValuesTarget.carbohydrates - carbohydratesF >= 0d ? Double.valueOf(requirements.nutritionalValuesTarget.carbohydrates - carbohydratesF).longValue() : 0,
+                                        fatsLeft = requirements.nutritionalValuesTarget.fats - fatsF >= 0d ? Double.valueOf(requirements.nutritionalValuesTarget.fats - fatsF).longValue() : 0;
+
+                                Call<List<MealSearchResult>> productsApiCall = mealSuggestionService.search(caloriesLeft, fatsLeft, proteinsLeft, carbohydratesLeft, 8L);
+
+                                productsApiCall.enqueue(new Callback<List<MealSearchResult>>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<List<MealSearchResult>> call, @NonNull Response<List<MealSearchResult>> response) {
+                                        listRoot.post(() -> {
+                                            if (response.body() != null && response.body().size() != 0) {
+
+                                                OneButtonListItemAdapter<MealSearchResult> adapter = new OneButtonListItemAdapter<MealSearchResult>(response.body(),
+                                                        (result) -> result.getTitle(),
+                                                        () -> getString(R.string.open),
+                                                        (context) ->
+                                                                (View.OnClickListener) v -> {
+                                                                    Intent intent = new Intent(getActivity(), SuggestedMealActivity.class);
+                                                                    intent.putExtra(MEAL_ID, context.object.getId());
+                                                                    startActivity(intent);
+                                                                }
+                                                );
+                                                listRoot.setAdapter(adapter);
+                                                listRoot.smoothScrollToPosition(0);
+                                            } else {
+                                                listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
                                             }
                                         });
-                                    });
+                                    }
 
-
-
+                                    @Override
+                                    public void onFailure(@NonNull Call<List<MealSearchResult>> call, @NonNull Throwable t) {
+                                        listRoot.post(() -> {
+                                            listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
+                                            listRoot.smoothScrollToPosition(0);
+                                        });
+                                    }
                                 });
-                            }
-                    );
+                            });
 
 
-            };
-            runnable.run();
+                        });
+                    }
+            );
 
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) {}
     }
 }

@@ -19,6 +19,7 @@ public class DaysRepository extends Repository {
 
     private final DayDao dayDao;
     private final DailyRequirementsDao dailyRequirementsDao;
+
     public DaysRepository(Application application) {
         super(application);
 
@@ -46,11 +47,11 @@ public class DaysRepository extends Repository {
         queryExecutor.execute(() -> dayDao.delete(day));
     }
 
-    public CompletableFuture<DayWithServings> getOrCreateToday(){
+    public CompletableFuture<DayWithServings> getOrCreateToday() {
         return getOrCreateByDate(LocalDate.now());
     }
 
-    public CompletableFuture<DayWithServings> getOrCreateByDate(LocalDate date){
+    public CompletableFuture<DayWithServings> getOrCreateByDate(LocalDate date) {
         return CompletableFuture.supplyAsync(() -> {
             DayWithServings day;
             try {
@@ -59,15 +60,20 @@ public class DaysRepository extends Repository {
                 day = null;
             }
 
-            if(day == null){
-                List<DailyRequirements> dailyRequirements = dailyRequirementsDao.listDailyRequirements();
-                try{
+            if (day == null) {
+                DailyRequirements requirements = dailyRequirementsDao.getLastRequirement(date);
+                try {
+                    if(requirements != null) {
                     dayDao.insert(new Day() {{
                         dayId = date;
-                        dailyRequirementsId = dailyRequirements.get(dailyRequirements.size() - 1).requirementId;
+                        dailyRequirementsId = requirements.requirementId;
                     }});
-                }
-                catch (Exception e){
+                    }else{
+                        dayDao.insert(new Day() {{
+                            dayId = date;
+                        }});
+                    }
+                } catch (Exception e) {
                     dayDao.insert(new Day() {{
                         dayId = date;
                     }});
@@ -82,55 +88,44 @@ public class DaysRepository extends Repository {
         }, queryExecutor);
     }
 
-    public CompletableFuture<DayWithServings> getByDate(LocalDate date){
+    public CompletableFuture<DayWithServings> getByDate(LocalDate date) {
         return CompletableFuture.supplyAsync(() -> dayDao.get(date), queryExecutor);
     }
 
-    public CompletableFuture<List<Day>> getAllDays(){
+    public CompletableFuture<List<Day>> getAllDays() {
         return CompletableFuture.supplyAsync(dayDao::getAll, queryExecutor);
     }
 
-    public CompletableFuture<DailyRequirements> getDayDailyRequirements(LocalDate date){
-        return CompletableFuture.supplyAsync( () -> {
-                    DailyRequirements requirement = null;
+    public CompletableFuture<DailyRequirements> getDayDailyRequirements(LocalDate date) {
+        return CompletableFuture.supplyAsync(() -> {
                     DayWithServings day;
                     try {
-                        day = getByDate(date).get();
+                        day = getOrCreateByDate(date).get();
                     } catch (Exception e) {
-                        day = null;
+                        return null;
                     }
 
-                    if(day == null){
-                        List<DailyRequirements> dailyRequirements = dailyRequirementsDao.listDailyRequirements();
-                        try{
-                           requirement = dailyRequirements.get(dailyRequirements.size() - 1);
-                            dayDao.insert(new Day() {{
-                                dayId = date;
-                                dailyRequirementsId = dailyRequirements.get(dailyRequirements.size() - 1).requirementId;
-                            }});
-                        }
-                        catch (Exception e){
-                            dayDao.insert(new Day() {{
-                                dayId = date;
-                            }});
-                        }
+                    try {
+                        DailyRequirements requirements =  dailyRequirementsDao.getById(day.day.dailyRequirementsId);
+                        if(requirements == null){
+                            return new DailyRequirements() {{
 
-                    }
-
-                    if(requirement == null){
-                        try{
-                           return dailyRequirementsDao.getById(day.day.dailyRequirementsId);
-                        }catch (Exception e){
-                            return new DailyRequirements(){{
-                                nutritionalValuesTarget.fats = 0d;
-                                nutritionalValuesTarget.carbohydrates = 0d;
-                                nutritionalValuesTarget.proteins = 0d;
-                                nutritionalValuesTarget.calories = 0d;
+                                nutritionalValuesTarget.fats = 48d;
+                                nutritionalValuesTarget.carbohydrates = 100d;
+                                nutritionalValuesTarget.proteins = 70d;
+                                nutritionalValuesTarget.calories = 2400d;
                             }};
                         }
-                    }
+                        return requirements;
+                    } catch (Exception e) {
+                        return new DailyRequirements() {{
 
-                    return  requirement;
+                            nutritionalValuesTarget.fats = 48d;
+                            nutritionalValuesTarget.carbohydrates = 100d;
+                            nutritionalValuesTarget.proteins = 70d;
+                            nutritionalValuesTarget.calories = 2400d;
+                        }};
+                    }
 
                 }
         );

@@ -46,7 +46,7 @@ public class RetrofitInstance {
                         @Override
                         public Response intercept(Chain chain) throws IOException {
                             Request.Builder requestBuilder = chain.request().newBuilder();
-                            requestBuilder.header("x-api-key", "15aed0f6db3a40428381a26fca5b029b");
+                            requestBuilder.header("x-api-key", "84be50ac6c794871b214b6c6231d7627");
                             return chain.proceed(requestBuilder.build());
                         }
                     })

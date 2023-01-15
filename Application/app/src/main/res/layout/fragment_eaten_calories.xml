@@ -20,7 +20,8 @@
             android:text="@string/eatenCalories"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAlignment="textStart"/>
 
         <Button
             android:id="@+id/registerCaloriesBTN"
@@ -58,7 +59,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="32dp"
                 android:text="@string/eatenProteins"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textSize="11sp" />
 
             <TextView
@@ -68,7 +69,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/eatenCarbohydrates"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textSize="11sp" />
 
             <TextView
@@ -78,7 +79,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/eatenFats"
-                android:textAlignment="center"
+                android:textAlignment="textStart"
                 android:textSize="11sp" />
 
         </LinearLayout>
