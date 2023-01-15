@@ -184,7 +184,7 @@ public class AddingServingActivity extends DrawerActivity {
 
                                             DaysRepository repo = new DaysRepository(getApplication());
 
-                                            repo.getDayByDate(day).thenAccept((day)-> {
+                                            repo.getByDate(day).thenAccept((day)-> {
 
                                                 ServingsRepository sr = new ServingsRepository(getApplication());
 

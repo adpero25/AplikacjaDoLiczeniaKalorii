@@ -2,11 +2,14 @@
 
 
 
-
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -189,7 +192,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
-                    android:text="@string/registerWaterText"
+                    android:text="@string/setDailyStepTarget"
                     android:textAppearance="@style/ButtonText"
                     android:theme="@style/AccentButton"
                     app:cornerRadius="25dp"
@@ -211,6 +214,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/registerWater" />
 
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.fragment.app.FragmentContainerView
@@ -222,5 +227,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCategories"
                 tools:layout="@layout/fragment_meal_sugesstions" />
+
+
+
         </LinearLayout>
+
+
     </ScrollView>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/water_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="32dp"
+        app:srcCompat="@drawable/ic_baseline_water_drop_48" />
+</FrameLayout>

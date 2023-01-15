@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.example.application.activities.AddingServingActivity;
 import com.example.application.R;
 import com.example.application.activities.ServingsActivity;
+import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.ServingsRepository;
 import com.example.application.surfaceViews.CaloriesEatenSurfaceView;
 import com.example.application.database.CaloriesDatabase;
@@ -79,54 +80,55 @@ public class EatenCaloriesFragment extends Fragment {
 
     private void setData(LocalDate date) {
 
-        SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
-        int caloriesTarget = sharedPreferences.getInt(CALORIES_REQUIREMENT, 2000);
+        //SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFERENCES_FILE_NAME, MODE_PRIVATE);
+        //int caloriesTarget = sharedPreferences.getInt(CALORIES_REQUIREMENT, 2000);
+        DaysRepository daysRepository = new DaysRepository(requireActivity().getApplication());
+        daysRepository.getDayDailyRequirements(date).thenAccept(requirements -> {
 
-        registerCalories.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ServingsActivity.class);
-                intent.putExtra(ServingsActivity.SERVING_DATE, date);
-                startActivity(intent);
+            registerCalories.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ServingsActivity.class);
+                    intent.putExtra(ServingsActivity.SERVING_DATE, date);
+                    startActivity(intent);
+                }
+            });
+
+            caloriesEatenSurfaceView.setTarget(requirements.nutritionalValuesTarget.calories.intValue());
+
+            ServingsRepository repo = new ServingsRepository(requireActivity().getApplication());
+
+            Runnable runnable = ()->{
+                repo.getByDate(date).thenAccept(
+                    servingWithMeals -> {
+
+                        view.post(
+                                ()->{
+                                    float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
+                                    for (ServingWithMeal s: servingWithMeals) {
+                                        calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
+                                        proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
+                                        carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
+                                        fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
+                                    }
+
+                                    caloriesEatenSurfaceView.setProgress((int)calories);
+                                    caloriesProgressTextView.setText(getResources().getString(R.string.caloriesProgress, (int)calories, requirements.nutritionalValuesTarget.calories.intValue()));
+                                    caloriesTextView.setText(getResources().getString(R.string.eatenCalories, calories, requirements.nutritionalValuesTarget.calories));
+                                    proteinsTextView.setText(getResources().getString(R.string.eatenProteins, proteins, requirements.nutritionalValuesTarget.proteins));
+                                    carbohydratesTextView.setText(getResources().getString(R.string.eatenCarbohydrates, carbohydrates, requirements.nutritionalValuesTarget.carbohydrates));
+                                    fatsTextView.setText(getResources().getString(R.string.eatenFats, fats, requirements.nutritionalValuesTarget.fats));
+                                }
+                        );
+                    });
+            };
+
+            if(future!=null){
+                future = future.thenRunAsync(runnable);
+            }else {
+                future = CompletableFuture.runAsync(runnable);
             }
         });
-
-        caloriesEatenSurfaceView.setTarget(caloriesTarget);
-        
-        ServingsRepository repo = new ServingsRepository(requireActivity().getApplication());
-
-        Runnable runnable = ()->{
-            repo.getByDate(date).thenAccept(
-                servingWithMeals -> {
-
-                    view.post(
-                            ()->{
-                                float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
-                                for (ServingWithMeal s: servingWithMeals) {
-                                    calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
-                                    proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
-                                    carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
-                                    fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
-                                }
-
-                                //TODO: wyświetlanie tagetu dla wszystkich nutriments (na podstawie daily reqs) np:  230 / 3000 kcal
-                                //      i są problemy z wyświetlaniem długich stringów (chyba xD)
-                                caloriesEatenSurfaceView.setProgress((int)calories);
-                                caloriesProgressTextView.setText(getResources().getString(R.string.caloriesProgress, (int)calories, caloriesTarget));
-                                caloriesTextView.setText(getResources().getString(R.string.eatenCalories, calories));
-                                proteinsTextView.setText(getResources().getString(R.string.eatenProteins, proteins));
-                                carbohydratesTextView.setText(getResources().getString(R.string.eatenCarbohydrates, carbohydrates));
-                                fatsTextView.setText(getResources().getString(R.string.eatenFats, fats));
-                            }
-                    );
-                });
-        };
-
-        if(future!=null){
-            future = future.thenRunAsync(runnable);
-        }else {
-            future = CompletableFuture.runAsync(runnable);
-        }
     }
 
     public void refresh(LocalDate date) {
