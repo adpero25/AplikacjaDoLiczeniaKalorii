@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.application.adapters.TwoButtonListItemAdapter;
 import com.example.application.database.models.Category;
 import com.example.application.database.models.enums.MealType;
 import com.example.application.database.models.junctions.CategoryWithMeals;
@@ -27,18 +28,24 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.application.R;
 import com.example.application.database.repositories.DaysRepository;
 import com.example.application.database.repositories.MealsRepository;
 import com.example.application.database.repositories.ServingsRepository;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class AddingServingActivity extends DrawerActivity {
 
     public static final String CALORIES_REQUIREMENT = "CALORIES_REQUIREMENT";
-    ViewGroup listRoot;
+    RecyclerView listRoot;
     TextView caloriesRequirementTextView;
 
     LocalDate day;
@@ -109,6 +116,12 @@ public class AddingServingActivity extends DrawerActivity {
         });
 
         listRoot = findViewById(R.id.meal_list);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+
+        listRoot.setLayoutManager(layoutManager);
+        listRoot.setItemAnimator(null);
+
         loadMealList();
     }
 
@@ -129,14 +142,7 @@ public class AddingServingActivity extends DrawerActivity {
 
     void loadMealList(){
         CategoriesRepository repo = new CategoriesRepository(getApplication());
-        listRoot.removeAllViews();
-        LayoutInflater inflater = getLayoutInflater();
         repo.getAll().thenAccept((list)->{
-            for(CategoryWithMeals elem : list){
-
-                    addListElements(elem,inflater);
-            }
-
             new MealsRepository(getApplication()).getAllWithoutCategory().thenAccept((list2)->{
 
                 CategoryWithMeals elem = new CategoryWithMeals();
@@ -145,72 +151,57 @@ public class AddingServingActivity extends DrawerActivity {
                 elem.category.name = "No category";
 
                 elem.meals = list2;
+                list.add(elem);
+                Map<String, List<MealWithOpenFoodFact>> map = list.stream().collect(Collectors.toMap((categoryWithMeals) -> categoryWithMeals.category.name, (categoryWithMeals)-> categoryWithMeals.meals));
 
-                addListElements(elem,inflater);
+                TwoButtonListItemAdapter<MealWithOpenFoodFact> adapter = new TwoButtonListItemAdapter<MealWithOpenFoodFact>(map,
+                        (result) -> result.meal.name,
+                        () -> getString(R.string.add),
+                        (context) ->
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+                                        View popupView = inflater.inflate(R.layout.popup_window, null);
+                                        TextView text = popupView.findViewById(R.id.popupText);
+                                        EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
+                                        Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
 
+                                        text.setText(R.string.amount);
+                                        enteredValue.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+                                        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                                        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                                        boolean focusable = true;
+                                        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+                                        popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
+
+                                        submitButton.setOnClickListener(view ->{
+                                            if(TextUtils.isEmpty(enteredValue.getText().toString())){
+                                                return;
+                                            }
+
+                                            DaysRepository repo = new DaysRepository(getApplication());
+
+                                            repo.getDayByDate(day).thenAccept((day)-> {
+
+                                                ServingsRepository sr = new ServingsRepository(getApplication());
+
+                                                sr.insert(day.day, context.object.meal, Double.parseDouble(enteredValue.getText().toString()),type);
+                                            });
+
+                                            popupWindow.dismiss();
+                                            finish();
+                                        });
+                                    }
+                                },
+                        () -> "",
+                        (context) -> null
+                );
+                listRoot.setAdapter(adapter);
+                listRoot.smoothScrollToPosition(0);
             });
         });
-    }
-
-    void addListElements(CategoryWithMeals elem, LayoutInflater inflater){
-        if(elem.meals != null && elem.meals.size()!=0) {
-
-            listRoot.post(() -> {
-                TextView categoryListItem = (TextView) inflater.inflate(R.layout.category_list_item, null);
-                categoryListItem.setText(elem.category.name);
-                listRoot.addView(categoryListItem);
-                for (MealWithOpenFoodFact meal : elem.meals) {
-                    View mealListItem = inflater.inflate(R.layout.one_button_list_item, listRoot, false);
-                    ((TextView) mealListItem.findViewById(R.id.name)).setText(meal.meal.name);
-                    listRoot.addView(mealListItem);
-
-                    //TODO: extract the createing of popup to separate method
-                    ((Button) mealListItem.findViewById(R.id.button)).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-                            View popupView = inflater.inflate(R.layout.popup_window, null);
-                            TextView text = popupView.findViewById(R.id.popupText);
-                            EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
-                            Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
-
-                            text.setText(R.string.amount);
-                            enteredValue.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-                            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-                            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                            boolean focusable = true;
-                            final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-                            popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
-
-                            submitButton.setOnClickListener(view ->{
-                                if(TextUtils.isEmpty(enteredValue.getText().toString())){
-                                    return;
-                                }
-
-                                DaysRepository repo = new DaysRepository(getApplication());
-
-                                repo.getDayByDate(day).thenAccept((day)-> {
-
-                                    ServingsRepository sr = new ServingsRepository(getApplication());
-
-                                    sr.insert(day.day, meal.meal, Double.parseDouble(enteredValue.getText().toString()),type);
-                                });
-
-                                popupWindow.dismiss();
-                                finish();
-                            });
-                        }
-                    });
-
-
-
-
-
-                }
-            });
-        }
     }
 }

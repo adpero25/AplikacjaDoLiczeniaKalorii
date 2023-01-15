@@ -51,10 +51,11 @@ public class OneButtonListItemAdapter<T> extends RecyclerView.Adapter<OneButtonL
         return data.size();
     }
 
-    public List<T> getData(){
-        return data;
+    public void removeAt(int index){
+        data.remove(index);
+        notifyItemRemoved(index);
+        notifyItemRangeChanged(index, getItemCount());
     }
-
 
     public static class OneButtonListItemHolder extends RecyclerView.ViewHolder {
         private final TextView nameTextView;

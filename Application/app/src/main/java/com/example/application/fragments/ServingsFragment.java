@@ -109,6 +109,7 @@ public class ServingsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
         listRoot.setLayoutManager(layoutManager);
+        listRoot.setItemAnimator(null);
 
         ServingsRepository servingsRepo = new ServingsRepository(requireActivity().getApplication());
 
@@ -118,9 +119,7 @@ public class ServingsFragment extends Fragment {
                 (context)->
                         (View.OnClickListener) v -> {
                             servingsRepo.delete(context.object.serving);
-                            context.thisAdapter.getData().remove(context.position);
-                            context.thisAdapter.notifyItemRemoved(context.position);
-                            context.thisAdapter.notifyItemRangeChanged(context.position, context.thisAdapter.getItemCount());
+                            context.thisAdapter.removeAt(context.position);
                         }
         );
         listRoot.setAdapter(adapter);

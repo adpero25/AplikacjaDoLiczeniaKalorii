@@ -62,7 +62,7 @@ public class MealSuggestionsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
         listRoot.setLayoutManager(layoutManager);
-
+        listRoot.setItemAnimator(null);
 
         loadMealsForDay();
         return view;
@@ -89,7 +89,7 @@ public class MealSuggestionsFragment extends Fragment {
                 @Override
                 public void onResponse(@NonNull Call<List<MealSearchResult>> call, @NonNull Response<List<MealSearchResult>> response) {
                     listRoot.post(()-> {
-                        if (response.body().size() != 0) {
+                        if (response.body()!=null && response.body().size() != 0) {
 
 
                             OneButtonListItemAdapter<MealSearchResult> adapter = new OneButtonListItemAdapter<MealSearchResult>(response.body(),
@@ -103,12 +103,15 @@ public class MealSuggestionsFragment extends Fragment {
                                             }
                             );
                             listRoot.setAdapter(adapter);
-                            listRoot.smoothScrollToPosition(0);
-
-
-                        } else {
+                        } else if (response.body() != null) {
                             listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
+                        } else {
+                            listRoot.post(() -> {
+                                listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
+                                listRoot.smoothScrollToPosition(0);
+                            });
                         }
+                        listRoot.smoothScrollToPosition(0);
                     });
                 }
 

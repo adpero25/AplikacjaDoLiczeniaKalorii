@@ -23,7 +23,7 @@ public interface CategoryDao {
     long insert(Category category);
 
     @Update
-    void update(Category... categories);
+    int update(Category categories);
 
     @Delete
     void delete(Category... categories);
