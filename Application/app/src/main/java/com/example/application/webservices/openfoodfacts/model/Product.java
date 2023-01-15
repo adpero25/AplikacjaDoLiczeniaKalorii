@@ -16,7 +16,7 @@ public class Product implements Serializable {
     @SerializedName("nutriments")
     private Nutriments nutriments;
     @SerializedName("selected_images")
-    private Images images ;
+    private Images images;
     @SerializedName("expiration_date")
     private String expiration_date;
     @SerializedName("ingredients_text_pl")

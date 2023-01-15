@@ -12,9 +12,6 @@ public class CaloriesEatenSurfaceView extends SurfaceView {
 
     private int caloriesTarget = 2000;
     private int currentCalories = 0;
-    private void init() {
-        setWillNotDraw(false);
-    }
 
     public CaloriesEatenSurfaceView(Context context) {
         super(context);
@@ -36,11 +33,15 @@ public class CaloriesEatenSurfaceView extends SurfaceView {
         init();
     }
 
-    public void setTarget (int target) {
+    private void init() {
+        setWillNotDraw(false);
+    }
+
+    public void setTarget(int target) {
         this.caloriesTarget = target;
     }
 
-    public void setProgress (int caloriesEaten) {
+    public void setProgress(int caloriesEaten) {
         this.currentCalories = caloriesEaten;
     }
 
@@ -63,10 +64,10 @@ public class CaloriesEatenSurfaceView extends SurfaceView {
 
         RectF oval = new RectF(cx - big_radius, cy - big_radius, cx + big_radius, cy + big_radius);
         mPaint.setARGB(255, 0, 240, 255);
-        canvas.drawArc(oval, -90, (int)(360 * currentCalories / caloriesTarget), false, mPaint);
+        canvas.drawArc(oval, -90, (int) (360 * currentCalories / caloriesTarget), false, mPaint);
 
         Paint small_paint = new Paint(Color.BLACK);
-        canvas.drawCircle(cx, cy, small_radius - strokeWidth/2f, small_paint);
+        canvas.drawCircle(cx, cy, small_radius - strokeWidth / 2f, small_paint);
 
         invalidate();
     }

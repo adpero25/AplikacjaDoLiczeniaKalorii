@@ -11,7 +11,8 @@ import com.example.application.R;
 
 public class SingleSpinnerAdapter<T> extends RecyclerView.Adapter<SingleSpinnerAdapter.SingleSpinnerHolder> {
 
-    public SingleSpinnerAdapter() {}
+    public SingleSpinnerAdapter() {
+    }
 
     @NonNull
     @Override
@@ -23,7 +24,8 @@ public class SingleSpinnerAdapter<T> extends RecyclerView.Adapter<SingleSpinnerA
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SingleSpinnerHolder holder, int position) {}
+    public void onBindViewHolder(@NonNull SingleSpinnerHolder holder, int position) {
+    }
 
     @Override
     public int getItemCount() {

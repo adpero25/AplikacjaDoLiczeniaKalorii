@@ -1,13 +1,9 @@
 package com.example.application.database.models;
 
-import static androidx.room.ForeignKey.CASCADE;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -16,7 +12,6 @@ import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(tableName = "daily_requirements")
 @TypeConverters({DateConverters.class})

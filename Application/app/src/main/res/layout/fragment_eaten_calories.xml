@@ -18,10 +18,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="@string/eatenCalories"
+            android:textAlignment="textStart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:textAlignment="textStart"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/registerCaloriesBTN"

@@ -1,7 +1,6 @@
 package com.example.application.database.models;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 
 import java.io.Serializable;
 

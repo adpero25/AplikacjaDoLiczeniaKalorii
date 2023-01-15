@@ -1,9 +1,5 @@
 package com.example.application.activities;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.app.ActivityManager;
 import android.app.NotificationChannel;
@@ -29,14 +25,17 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.application.fragments.EatenCaloriesFragment;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.example.application.R;
 import com.example.application.backgroundTasks.NotifyAboutWater;
 import com.example.application.backgroundTasks.StepCounterService;
 import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
-import com.example.application.fragments.ServingsFragment;
+import com.example.application.fragments.EatenCaloriesFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
@@ -48,15 +47,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends DrawerActivity {
-    private static final int ACTIVITY_PERMISSION = 100;
-    public static int STEPS_TARGET = 5000;
-    private boolean stepCounterServiceBound = false;
     public static final String SHARED_PREFERENCES_FILE_NAME = "CaloriesCalculatorPreferences";
     public static final String WATER_GLASSES_KEY = "water_glasses";
     public static final String STEP_COUNTER_KEY = "service_started";
     public static final String CHANNEL_ID = "WATER_CHANNEL_ID";
     public static final String COUNTER_RESET = "COUNTER_RESET";
-
+    public static final int waterNotification = 10;
+    private static final int ACTIVITY_PERMISSION = 100;
+    public static int STEPS_TARGET = 5000;
+    public static DayWithServings currentDay;
+    public int dailyGlassesOfWater = 10;
     TextView waterLabel;
     TextView totalStepsTextView;
     TextView totalDistanceTextView;
@@ -70,12 +70,33 @@ public class MainActivity extends DrawerActivity {
     Button setStepTarget;
     Button previousDate;
     Button nextDate;
-    public int dailyGlassesOfWater = 10;
-    public static final int waterNotification = 10;
     EatenCaloriesFragment caloriesFragment;
-    public static DayWithServings currentDay;
+    private boolean stepCounterServiceBound = false;
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private final ServiceConnection connection = new ServiceConnection() {
 
-    public DayWithServings getCurrentDay(){
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            StepCounterService.LocalBinder binder = (StepCounterService.LocalBinder) service;
+            scService = binder.getService();
+            stepCounterServiceBound = true;
+
+            int period = 500;
+            LocalDate date = LocalDate.now();
+            Timer timer = new Timer();
+            timer.schedule(new MainActivity.GetWalk(), Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), period); // downloads walk object every 500ms when MainActivity is running on the foreground
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            stepCounterServiceBound = false;
+        }
+
+    };
+
+    public DayWithServings getCurrentDay() {
         return currentDay;
     }
 
@@ -86,13 +107,13 @@ public class MainActivity extends DrawerActivity {
         setContentView(R.layout.activity_main_new);
 
         dismissNotification();
-        if(!isServiceRunning(NotifyAboutWater.class)){
+        if (!isServiceRunning(NotifyAboutWater.class)) {
             startWaterNotificationService();
         }
 
-        if(currentDay == null){
+        if (currentDay == null) {
             DaysRepository repo = new DaysRepository(getApplication());
-            repo.getOrCreateToday().thenAccept((newDay)->{
+            repo.getOrCreateToday().thenAccept((newDay) -> {
                 currentDay = newDay;
                 setCurrentDate(currentDay.day.dayId);
                 recreate();
@@ -126,7 +147,6 @@ public class MainActivity extends DrawerActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION},
                         ACTIVITY_PERMISSION);
             }
-            //serviceStopped();
             startStepCounterService();
 
             stepCounterContainer.setOnClickListener(new View.OnClickListener() {
@@ -136,20 +156,16 @@ public class MainActivity extends DrawerActivity {
                     startActivity(intent);
                 }
             });
-        }
-        else {
+        } else {
             stepCounterContainer.setMaxHeight(0);
         }
-
-
-
 
 
         setWaterTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.popup_window, null);
                 TextView text = popupView.findViewById(R.id.popupText);
                 EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
@@ -163,23 +179,13 @@ public class MainActivity extends DrawerActivity {
 
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
-                submitButton.setOnClickListener(view ->{
-                    if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
+                submitButton.setOnClickListener(view -> {
+                    if (enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())) {
                         popupWindow.dismiss();
                         return;
                     }
                     dailyGlassesOfWater = Integer.parseInt(enteredValue.getText().toString());
                     updateWaterLabel();
-                    /*DaysRepository repo = new DaysRepository(getApplication());
-
-                    repo.getByDate(currentDay.day.dayId).thenAccept( dayWithServings ->  {
-                        dayWithServings.day.glassesOfWater += value;
-                        repo.update(dayWithServings.day);
-                    });
-                    popupWindow.dismiss();
-                    currentDay.day.glassesOfWater += value;
-                    setWaterLabel(currentDay.day);
-                    */
                     popupWindow.dismiss();
                 });
 
@@ -205,7 +211,7 @@ public class MainActivity extends DrawerActivity {
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
                 submitButton.setOnClickListener(view -> {
-                    if(enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())){
+                    if (enteredValue == null || TextUtils.isEmpty(enteredValue.getText().toString())) {
                         popupWindow.dismiss();
                         return;
                     }
@@ -228,7 +234,7 @@ public class MainActivity extends DrawerActivity {
                 repo.getOrCreateToday().thenAccept((day) -> {
                     day.day.stepsCount += stepsMade;
                     repo.update(day.day);
-                } );
+                });
 
                 return true;
             }
@@ -277,7 +283,7 @@ public class MainActivity extends DrawerActivity {
         updateWaterLabel();
     }
 
-    private void updateSelectedDay(DayWithServings day){
+    private void updateSelectedDay(DayWithServings day) {
         currentDay = day;
         setCurrentDate(currentDay.day.dayId);
 
@@ -286,14 +292,11 @@ public class MainActivity extends DrawerActivity {
         setWaterLabel(currentDay.day);
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Bind to StepCounterService
-            Intent intent = new Intent(this, StepCounterService.class);
-            bindService(intent, connection, Context.BIND_AUTO_CREATE);
-        }
+        Intent intent = new Intent(this, StepCounterService.class);
+        bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -317,11 +320,11 @@ public class MainActivity extends DrawerActivity {
 
         dailyGlassesOfWater = sharedPreferences.getInt(WATER_GLASSES_KEY, dailyGlassesOfWater);
 
-        if(currentDay==null || currentDay.day == null){
+        if (currentDay == null || currentDay.day == null) {
             return;
         }
 
-        if(LocalDate.now().equals(currentDay.day.dayId)) {
+        if (LocalDate.now().equals(currentDay.day.dayId)) {
             stepCounterServiceBound = true;
         }
 
@@ -331,22 +334,20 @@ public class MainActivity extends DrawerActivity {
         );
     }
 
-
-
     @Override
     protected void onStop() {
         super.onStop();
         stepCounterServiceBound = false;
     }
 
-    private void updateWaterLabel(){
+    private void updateWaterLabel() {
         DaysRepository repo = new DaysRepository(getApplication());
 
         repo.getOrCreateToday().thenAccept((day) -> {
 
             waterLabel.setText(getString(R.string.glassesOfWater, day.day.glassesOfWater));
 
-            if(dailyGlassesOfWater > 0){
+            if (dailyGlassesOfWater > 0) {
                 waterProgressBar.setMax(dailyGlassesOfWater);
                 waterProgressBar.setProgress(day.day.glassesOfWater);
             }
@@ -354,7 +355,7 @@ public class MainActivity extends DrawerActivity {
         });
     }
 
-    private void dismissNotification(){
+    private void dismissNotification() {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // notificationID allows you to update the notification later on.
@@ -383,7 +384,7 @@ public class MainActivity extends DrawerActivity {
         return false;
     }
 
-    private void startWaterNotificationService(){
+    private void startWaterNotificationService() {
         Intent intent = new Intent(this, NotifyAboutWater.class);
         startService(intent);
     }
@@ -412,68 +413,24 @@ public class MainActivity extends DrawerActivity {
         return sharedPreferences.getBoolean(STEP_COUNTER_KEY, false);
     }
 
-    /** Defines callbacks for service binding, passed to bindService() */
-    private final ServiceConnection connection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            StepCounterService.LocalBinder binder = (StepCounterService.LocalBinder) service;
-            scService = binder.getService();
-            stepCounterServiceBound = true;
-
-            int period = 500;
-            LocalDate date = LocalDate.now();
-            Timer timer = new Timer();
-            timer.schedule(new MainActivity.GetWalk(), Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()), period); // downloads walk object every 500ms when MainActivity is running on the foreground
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            stepCounterServiceBound = false;
-        }
-
-    };
-
-    public class GetWalk extends TimerTask {
-        @Override
-        public void run() {
-            if(stepCounterServiceBound) {
-                walk = scService.GetWalk();
-                if(STEPS_TARGET != walk.stepsTarget) {
-                    STEPS_TARGET = walk.stepsTarget;
-                    stepProgress.setMax(STEPS_TARGET);
-                }
-
-                MainActivity.this.runOnUiThread((Runnable) () -> {
-                    Log.d("GET_WALK", "GET WALK Running");
-                    stepProgress.setProgress((int) walk.stepsMade);
-                    totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int) walk.stepsMade, walk.stepsTarget));
-                    totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, walk.calculateDistance()));
-                    totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateBurnedCalories()));
-                });
-            }
-        }
-    }
-
     private void setStepsCounter(Day day) {
 
         LocalDate today = LocalDate.now();
         STEPS_TARGET = walk.stepsTarget;
         scService.saveData();
-        if(!day.dayId.equals(today)){
+        if (!day.dayId.equals(today)) {
             stepCounterServiceBound = false;
             stepProgress.setProgress((int) day.stepsCount);
             totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int) day.stepsCount, STEPS_TARGET));
             totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, day.totalDistance));
             totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, day.burnedCalories));
-        }
-        else {
+        } else {
             startStepCounterService();
             stepCounterServiceBound = true;
         }
     }
 
-    private void setWaterLabel(Day day){
+    private void setWaterLabel(Day day) {
         waterLabel.post(() -> {
             waterLabel.setText(getString(R.string.glassesOfWater, day.glassesOfWater));
             waterProgressBar.setProgress(day.glassesOfWater);
@@ -484,5 +441,25 @@ public class MainActivity extends DrawerActivity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy", Locale.ENGLISH);
 
         currentDateTextView.setText(formatter.format(currentDay));
+    }
+
+    public class GetWalk extends TimerTask {
+        @Override
+        public void run() {
+            if (stepCounterServiceBound) {
+                walk = scService.GetWalk();
+                if (STEPS_TARGET != walk.stepsTarget) {
+                    STEPS_TARGET = walk.stepsTarget;
+                    stepProgress.setMax(STEPS_TARGET);
+                }
+
+                MainActivity.this.runOnUiThread((Runnable) () -> {
+                    stepProgress.setProgress((int) walk.stepsMade);
+                    totalStepsTextView.setText(getResources().getString(R.string.stepsMade, (int) walk.stepsMade, walk.stepsTarget));
+                    totalDistanceTextView.setText(getResources().getString(R.string.distanceMade, walk.calculateDistance()));
+                    totalCaloriesBurntTextView.setText(getResources().getString(R.string.caloriesBurnt, walk.calculateBurnedCalories()));
+                });
+            }
+        }
     }
 }

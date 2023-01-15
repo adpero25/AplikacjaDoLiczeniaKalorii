@@ -7,9 +7,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.application.webservices.openfoodfacts.model.Product;
 import com.example.application.R;
 import com.example.application.database.repositories.MealsRepository;
+import com.example.application.webservices.openfoodfacts.model.Product;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -28,7 +28,6 @@ public class ScannedProductDetailsActivity extends DrawerActivity {
     ImageView productImage;
     String noData;
     Button saveProductBTN;
-
 
 
     @Override
@@ -51,71 +50,70 @@ public class ScannedProductDetailsActivity extends DrawerActivity {
         product = (Product) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
         barcode = (String) intent.getSerializableExtra(BarcodeScanningActivity.BARCODE);
 
-        if(product != null) {
+        if (product != null) {
 
-            code_TextView.setText( product.getId()  );
+            code_TextView.setText(product.getId());
 
             if (product.getProduct_name_pl() != null)
-                product_name_TextView.setText(  product.getProduct_name_pl() );
+                product_name_TextView.setText(product.getProduct_name_pl());
             else if (product.getProduct_name_en() != null)
-                product_name_TextView.setText(  product.getProduct_name_en() );
+                product_name_TextView.setText(product.getProduct_name_en());
             else
-                product_name_TextView.setText(  noData );
+                product_name_TextView.setText(noData);
 
-            if(product.getCategories() != null)
-                categories_TextView.setText(   product.getCategories() );
+            if (product.getCategories() != null)
+                categories_TextView.setText(product.getCategories());
             else
-                categories_TextView.setText( noData  );
+                categories_TextView.setText(noData);
 
-            if(product.getIngredients_text_pl() != null)
-                ingredients_text_TextView.setText( product.getIngredients_text_pl().toUpperCase(Locale.ROOT)  );
+            if (product.getIngredients_text_pl() != null)
+                ingredients_text_TextView.setText(product.getIngredients_text_pl().toUpperCase(Locale.ROOT));
             else if (product.getIngredients_text_en() != null)
-                ingredients_text_TextView.setText( product.getIngredients_text_en().toUpperCase(Locale.ROOT)  );
+                ingredients_text_TextView.setText(product.getIngredients_text_en().toUpperCase(Locale.ROOT));
             else
-                ingredients_text_TextView.setText( noData.toUpperCase(Locale.ROOT) );
+                ingredients_text_TextView.setText(noData.toUpperCase(Locale.ROOT));
 
-            if(product.getAllergens() != null)
-                allergens_TextView.setText( product.getAllergens().replace(',', '\n') );
+            if (product.getAllergens() != null)
+                allergens_TextView.setText(product.getAllergens().replace(',', '\n'));
             else
-                allergens_TextView.setText( noData );
+                allergens_TextView.setText(noData);
 
-            if(product.getQuantity() != null)
-                quantity_TextView.setText( product.getQuantity() );
+            if (product.getQuantity() != null)
+                quantity_TextView.setText(product.getQuantity());
             else
-                quantity_TextView.setText( noData );
+                quantity_TextView.setText(noData);
 
-            if(product.getNutriments().toStringPl() != null)
-                nutriments_TextView.setText( product.getNutriments().toStringPl() );
-            else if(product.getNutriments().toStringEn() != null)
-                nutriments_TextView.setText(  product.getNutriments().toStringEn() );
+            if (product.getNutriments().toStringPl() != null)
+                nutriments_TextView.setText(product.getNutriments().toStringPl());
+            else if (product.getNutriments().toStringEn() != null)
+                nutriments_TextView.setText(product.getNutriments().toStringEn());
             else
-                nutriments_TextView.setText( noData );
+                nutriments_TextView.setText(noData);
 
-            if(product.getImages() != null) {
+            if (product.getImages() != null) {
                 String url = product.getImages().getFront().getDisplay().getPlURL();
-                if(url == null)
+                if (url == null)
                     url = product.getImages().getFront().getDisplay().getEnURL();
                 Picasso.with(this)
                         .load(url)
                         .placeholder(R.drawable.ic_baseline_product).into(productImage);
-            }
-            else {
+            } else {
                 productImage.setImageResource(R.drawable.ic_baseline_product);
             }
         }
 
         saveProductBTN = findViewById(R.id.saveProductButton);
 
-        MealsRepository repo = new MealsRepository( getApplication());
+        MealsRepository repo = new MealsRepository(getApplication());
 
-        repo.getByBarcode(barcode).thenAccept((meal)->{
-            if(meal!=null && meal.meal != null ){
-                runOnUiThread(()-> {
+        repo.getByBarcode(barcode).thenAccept((meal) -> {
+            if (meal != null && meal.meal != null) {
+                runOnUiThread(() -> {
                     ((ViewGroup) saveProductBTN.getParent()).removeView(saveProductBTN);
                 });
-            }else{
+            } else {
                 saveProductBTN.setOnClickListener((view) -> {
-                    runOnUiThread(()-> {
+                    runOnUiThread(() -> {
                         Intent newIntent = new Intent(ScannedProductDetailsActivity.this, AddingMealActivity.class);
                         newIntent.putExtra(BarcodeScanningActivity.PRODUCT_DETAILS, product);
                         newIntent.putExtra(BarcodeScanningActivity.BARCODE, barcode);

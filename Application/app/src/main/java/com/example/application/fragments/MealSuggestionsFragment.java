@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,21 +13,17 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.application.R;
+import com.example.application.activities.SuggestedMealActivity;
 import com.example.application.adapters.OneButtonListItemAdapter;
 import com.example.application.adapters.SingleMessageAdapter;
 import com.example.application.adapters.SingleSpinnerAdapter;
-import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.models.DailyRequirements;
-import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
+import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.ServingWithMeal;
 import com.example.application.database.repositories.DaysRepository;
-import com.example.application.database.repositories.ServingsRepository;
-import com.example.application.webservices.spoonacular.model.MealSearchResult;
-import com.example.application.webservices.spoonacular.MealSuggestionService;
 import com.example.application.webservices.RetrofitInstance;
-import com.example.application.activities.SuggestedMealActivity;
-import com.example.application.R;
-import com.example.application.database.models.Day;
+import com.example.application.webservices.spoonacular.MealSuggestionService;
+import com.example.application.webservices.spoonacular.model.MealSearchResult;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -94,13 +89,13 @@ public class MealSuggestionsFragment extends Fragment {
                             float calories = 0, proteins = 0, carbohydrates = 0, fats = 0;
 
 
-                                for (ServingWithMeal s : day.servings) {
+                            for (ServingWithMeal s : day.servings) {
 
-                                    calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
-                                    proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
-                                    carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
-                                    fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
-                                }
+                                calories += s.meals.meal.nutritionalValues.calories * s.serving.servingSize;
+                                proteins += s.meals.meal.nutritionalValues.proteins * s.serving.servingSize;
+                                carbohydrates += s.meals.meal.nutritionalValues.carbohydrates * s.serving.servingSize;
+                                fats += s.meals.meal.nutritionalValues.fats * s.serving.servingSize;
+                            }
 
                             final float caloriesF = calories, proteinsF = proteins, carbohydratesF = carbohydrates, fatsF = fats;
                             dayRepo.getDayDailyRequirements(LocalDate.now()).thenAccept(requirements -> {

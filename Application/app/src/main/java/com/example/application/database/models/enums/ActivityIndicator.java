@@ -14,18 +14,18 @@ public enum ActivityIndicator {
     private final double value;
     private final int resourceId;
 
-    ActivityIndicator(int id, double val, int resourceId){
+    ActivityIndicator(int id, double val, int resourceId) {
         this.id = id;
         this.value = val;
         this.resourceId = resourceId;
     }
 
-    public static ActivityIndicator getActivity(int id){
-        switch(id){
+    public static ActivityIndicator getActivity(int id) {
+        switch (id) {
             case 1:
                 return ActivityIndicator.LittleOrNoActivity;
             case 2:
-                return  ActivityIndicator.LightlyActivity;
+                return ActivityIndicator.LightlyActivity;
             case 3:
                 return ActivityIndicator.ModeratelyActivity;
             case 4:
@@ -37,15 +37,15 @@ public enum ActivityIndicator {
         }
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
-    public double getIndicator(){
+    public double getIndicator() {
         return value;
     }
 
-    public String toString(){
+    public String toString() {
         return CaloriesCalculatorContext.getAppContext().getString(resourceId);
     }
 }

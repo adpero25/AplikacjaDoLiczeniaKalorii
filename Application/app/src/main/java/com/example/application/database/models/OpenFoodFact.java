@@ -9,24 +9,24 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName="open_food_fact",
-    foreignKeys = {
-        @ForeignKey(
-                onDelete = CASCADE,
-                entity = Meal.class,
-                parentColumns = "meal_id",
-                childColumns = "meal_id"
-        )
-    },
-    indices = {
-        @Index(
-                value = "code",
-                unique = true
-        ),
-        @Index(
-                value = "meal_id"
-        )
-    }
+@Entity(tableName = "open_food_fact",
+        foreignKeys = {
+                @ForeignKey(
+                        onDelete = CASCADE,
+                        entity = Meal.class,
+                        parentColumns = "meal_id",
+                        childColumns = "meal_id"
+                )
+        },
+        indices = {
+                @Index(
+                        value = "code",
+                        unique = true
+                ),
+                @Index(
+                        value = "meal_id"
+                )
+        }
 )
 public class OpenFoodFact {
     @PrimaryKey
@@ -40,7 +40,7 @@ public class OpenFoodFact {
     @NonNull
     public String code = "";
 
-    @ColumnInfo(name = "json_object",defaultValue = "")
+    @ColumnInfo(name = "json_object", defaultValue = "")
     @NonNull
     public String openFoodFactJsonObject = "";
 }

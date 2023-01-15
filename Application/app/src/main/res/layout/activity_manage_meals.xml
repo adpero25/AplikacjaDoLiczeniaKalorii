@@ -60,6 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foreground="@drawable/rounded_edge_inset_shadow">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/meal_list"
                 android:layout_width="match_parent"

@@ -36,7 +36,7 @@ public class ServingsRepository extends Repository {
     }
 
     public void insert(Day day, Meal meal, double protionSize, MealType type) {
-        insert( new Serving() {{
+        insert(new Serving() {{
             dayId = day.dayId;
             mealId = meal.mealId;
             servingSize = protionSize;
@@ -52,7 +52,7 @@ public class ServingsRepository extends Repository {
         queryExecutor.execute(() -> servingDao.delete(serving));
     }
 
-    public CompletableFuture<List<ServingWithMeal>> getByDate(LocalDate date){
+    public CompletableFuture<List<ServingWithMeal>> getByDate(LocalDate date) {
         return CompletableFuture.supplyAsync(() -> servingDao.get(date), queryExecutor);
     }
 }

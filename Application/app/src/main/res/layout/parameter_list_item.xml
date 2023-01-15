@@ -1,64 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/inner_container">
+    style="@style/inner_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
 
     <ImageView
         android:id="@+id/weightImage"
+        style="@style/parameter_list_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_baseline_scale_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        style="@style/parameter_list_image"
-        />
+        app:srcCompat="@drawable/ic_baseline_scale_24" />
 
     <TextView
         android:id="@+id/weightValue"
+        style="@style/parameter_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/weightImage"
-        app:layout_constraintTop_toTopOf="@id/weightImage"
-        style="@style/parameter_list_text"
-        />
+        app:layout_constraintTop_toTopOf="@id/weightImage" />
 
     <ImageView
         android:id="@+id/heightImage"
+        style="@style/parameter_list_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_baseline_height_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/weightImage"
-        style="@style/parameter_list_image"
-        />
+        app:srcCompat="@drawable/ic_baseline_height_24" />
 
     <TextView
         android:id="@+id/heightValue"
+        style="@style/parameter_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/heightImage"
-        app:layout_constraintTop_toTopOf="@id/heightImage"
-        style="@style/parameter_list_text"
-        />
+        app:layout_constraintTop_toTopOf="@id/heightImage" />
 
     <TextView
         android:id="@+id/ageValue"
+        style="@style/parameter_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/weightImage"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/parameter_list_text"
-        />
+        app:layout_constraintTop_toTopOf="@id/weightImage" />
 
     <TextView
         android:id="@+id/entryDateValue"
+        style="@style/parameter_list_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/heightImage"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/parameter_list_text"
-        />
+        app:layout_constraintTop_toTopOf="@id/heightImage" />
 </androidx.constraintlayout.widget.ConstraintLayout>

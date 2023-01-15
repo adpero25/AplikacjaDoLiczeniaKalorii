@@ -1,7 +1,5 @@
 package com.example.application.database.models.enums;
 
-import com.example.application.database.models.Meal;
-
 public enum MealType {
     Breakfast(1),
     Dinner(2),
@@ -9,12 +7,12 @@ public enum MealType {
 
     private final int id;
 
-    MealType(int id){
+    MealType(int id) {
         this.id = id;
     }
 
-    public static MealType getMeal(int id){
-        switch(id){
+    public static MealType getMeal(int id) {
+        switch (id) {
             case 1:
                 return MealType.Breakfast;
             case 2:
@@ -26,7 +24,7 @@ public enum MealType {
         }
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 }

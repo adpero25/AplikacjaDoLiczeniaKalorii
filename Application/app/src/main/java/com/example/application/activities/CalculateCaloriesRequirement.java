@@ -6,7 +6,6 @@ import static com.example.application.activities.ManuallyAddDailyRequirements.US
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.example.application.R;
-import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.models.enums.ActivityIndicator;
 import com.example.application.database.models.enums.MassTarget;
@@ -54,7 +52,7 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
 
         ConfirmButton.setOnClickListener(v -> {
 
-            if(!StringHelper.checkNullOrEmpty(AgeBox.getText().toString()) || !StringHelper.checkNullOrEmpty(WeightBox.getText().toString()) || !StringHelper.checkNullOrEmpty(HeightBox.getText().toString())){
+            if (!StringHelper.checkNullOrEmpty(AgeBox.getText().toString()) || !StringHelper.checkNullOrEmpty(WeightBox.getText().toString()) || !StringHelper.checkNullOrEmpty(HeightBox.getText().toString())) {
                 Snackbar.make(v, getString(R.string.MissingRequiredData), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return;
@@ -69,20 +67,19 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
                 utrzymanie = białko 1.6 - 1.8 g/kg mc; fat 20 - 25% rawResult; węgle dopełnienie
              */
             DailyRequirements requirements = new DailyRequirements();
-            if(ReduceButton.isChecked()){
+            if (ReduceButton.isChecked()) {
                 result -= 200;
                 fat = (result * 0.2) / 9;
                 protein = (1.8 * Double.parseDouble(WeightBox.getText().toString()));
                 carb = ((result - (fat * 9 + protein * 4)) / 4);
                 requirements.massTarget = MassTarget.Reduce;
-            }
-            else if(GainButton.isChecked()){
+            } else if (GainButton.isChecked()) {
                 result = result * 1.15;
-                fat = (int)(result * 0.24) / 9f;
+                fat = (int) (result * 0.24) / 9f;
                 protein = (1.6 * Double.parseDouble(WeightBox.getText().toString()));
                 carb = ((result - (fat * 9 + protein * 4)) / 4);
                 requirements.massTarget = MassTarget.Gain;
-            } else{
+            } else {
                 fat = ((result * 0.22) / 9);
                 protein = (1.6 * Double.parseDouble(WeightBox.getText().toString()));
                 carb = ((result - (fat * 9 + protein * 4)) / 4);
@@ -101,7 +98,7 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
 
             requirements.entryDate = LocalDate.now();
 
-            if(requirements.height != 0 && requirements.weight != 0) {
+            if (requirements.height != 0 && requirements.weight != 0) {
                 SharedPreferences userDataSharedPreferences = getSharedPreferences(USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = userDataSharedPreferences.edit();
                 Gson gson = new Gson();
@@ -119,7 +116,7 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
         });
     }
 
-    private void assignItems(){
+    private void assignItems() {
         AgeBox = findViewById(R.id.AgeInput);
         WeightBox = findViewById(R.id.WeightInput);
         HeightBox = findViewById(R.id.HeightInput);
@@ -148,8 +145,8 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
         activitySpinner.setSelection(activityIndicator.ordinal());
     }
 
-    private double CalculateMaleResult(){
-        double hbPPM =  66.5 + (13.75 * Double.parseDouble(WeightBox.getText().toString()))
+    private double CalculateMaleResult() {
+        double hbPPM = 66.5 + (13.75 * Double.parseDouble(WeightBox.getText().toString()))
                 + (5 * Double.parseDouble(HeightBox.getText().toString()))
                 - (6.775 * Integer.parseInt(AgeBox.getText().toString()));
         double mjPPM = (10 * Double.parseDouble(WeightBox.getText().toString()))
@@ -158,8 +155,9 @@ public class CalculateCaloriesRequirement extends DrawerActivity {
 
         return ((hbPPM + mjPPM) / 2) * activityIndicator.getIndicator();
     }
-    private double CalculateFemaleResult(){
-        double hbPPM =  655.1 + (9.563 * Double.parseDouble(WeightBox.getText().toString()))
+
+    private double CalculateFemaleResult() {
+        double hbPPM = 655.1 + (9.563 * Double.parseDouble(WeightBox.getText().toString()))
                 + (1.85 * Double.parseDouble(HeightBox.getText().toString()))
                 - (4.676 * Integer.parseInt(AgeBox.getText().toString()));
         double mjPPM = (10 * Double.parseDouble(WeightBox.getText().toString()))

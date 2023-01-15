@@ -3,7 +3,6 @@ package com.example.application.webservices.spoonacular.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 
 public class MealInfo implements Serializable {
@@ -52,22 +51,22 @@ public class MealInfo implements Serializable {
         return title;
     }
 
-    public Double getCalories(){
+    public Double getCalories() {
         Optional<Nutrients> nutrients = nutrition.nutrients.stream().filter(n -> n.name.equals("Calories")).findFirst();
         return (nutrients.orElseGet(Nutrients::new)).amount;
     }
 
-    public Double getFat(){// xD
+    public Double getFat() {// xD
         Optional<Nutrients> nutrients = nutrition.nutrients.stream().filter(n -> n.name.equals("Fat")).findFirst();
         return (nutrients.orElseGet(Nutrients::new)).amount;
     }
 
-    public Double getCarbohydrates(){
+    public Double getCarbohydrates() {
         Optional<Nutrients> nutrients = nutrition.nutrients.stream().filter(n -> n.name.equals("Carbohydrates")).findFirst();
         return (nutrients.orElseGet(Nutrients::new)).amount;
     }
 
-    public Double getProtein(){
+    public Double getProtein() {
         Optional<Nutrients> nutrients = nutrition.nutrients.stream().filter(n -> n.name.equals("Protein")).findFirst();
         return (nutrients.orElseGet(Nutrients::new)).amount;
     }

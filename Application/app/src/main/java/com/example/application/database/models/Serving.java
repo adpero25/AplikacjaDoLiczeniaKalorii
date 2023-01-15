@@ -11,34 +11,32 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.example.application.database.converters.DateConverters;
-import com.example.application.database.converters.MealTypeConverter;
 import com.example.application.database.models.enums.MealType;
 
 import java.time.LocalDate;
-import java.util.Enumeration;
 
-@Entity(tableName="serving",
-        foreignKeys ={
-            @ForeignKey(
-                    onDelete = CASCADE,
-                    entity = Meal.class,
-                    parentColumns = "meal_id",
-                    childColumns = "meal_id"
-            ),
-            @ForeignKey(
-                    onDelete = CASCADE,
-                    entity = Day.class,
-                    parentColumns = "day_id",
-                    childColumns = "day_id"
-            )
+@Entity(tableName = "serving",
+        foreignKeys = {
+                @ForeignKey(
+                        onDelete = CASCADE,
+                        entity = Meal.class,
+                        parentColumns = "meal_id",
+                        childColumns = "meal_id"
+                ),
+                @ForeignKey(
+                        onDelete = CASCADE,
+                        entity = Day.class,
+                        parentColumns = "day_id",
+                        childColumns = "day_id"
+                )
         },
         indices = {
-            @Index(
-                    value = "meal_id"
-            ),
-            @Index(
-                    value = "day_id"
-            )
+                @Index(
+                        value = "meal_id"
+                ),
+                @Index(
+                        value = "day_id"
+                )
         }
 )
 @TypeConverters({DateConverters.class})

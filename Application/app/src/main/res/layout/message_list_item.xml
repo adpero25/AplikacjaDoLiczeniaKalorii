@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_margin="6dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
     android:background="@drawable/rounded_edge"
     android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
     app:strokeColor="@color/white">
 
     <TextView

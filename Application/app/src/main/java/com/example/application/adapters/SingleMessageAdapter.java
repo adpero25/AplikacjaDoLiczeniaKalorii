@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.R;
 
-import java.util.List;
-
 public class SingleMessageAdapter<T> extends RecyclerView.Adapter<SingleMessageAdapter.SingleMessageHolder> {
 
     private final String message;

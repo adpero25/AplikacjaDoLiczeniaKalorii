@@ -41,9 +41,9 @@ public class MealsRepository extends Repository {
         queryExecutor.execute(
                 () -> {
                     long newMealId = mealDao.insert(meal);
-                    openFoodFactDao.insert(new OpenFoodFact(){{
-                        code=barcode;
-                        mealId=newMealId;
+                    openFoodFactDao.insert(new OpenFoodFact() {{
+                        code = barcode;
+                        mealId = newMealId;
                     }});
                 }
         );
@@ -57,15 +57,15 @@ public class MealsRepository extends Repository {
         queryExecutor.execute(() -> mealDao.delete(meal));
     }
 
-    public CompletableFuture<OpenFoodFactWithMeal> getByBarcode(String barcode){
+    public CompletableFuture<OpenFoodFactWithMeal> getByBarcode(String barcode) {
         return CompletableFuture.supplyAsync(() -> openFoodFactDao.get(barcode), queryExecutor);
     }
 
-    public CompletableFuture<List<MealWithOpenFoodFact>> getAll(){
+    public CompletableFuture<List<MealWithOpenFoodFact>> getAll() {
         return CompletableFuture.supplyAsync(mealDao::getAll, queryExecutor);
     }
 
-    public CompletableFuture<List<MealWithOpenFoodFact>> getAllWithoutCategory(){
+    public CompletableFuture<List<MealWithOpenFoodFact>> getAllWithoutCategory() {
         return CompletableFuture.supplyAsync(mealDao::getAllWithoutCategory, queryExecutor);
     }
 }

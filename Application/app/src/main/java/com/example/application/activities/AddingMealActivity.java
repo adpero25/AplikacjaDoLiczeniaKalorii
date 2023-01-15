@@ -2,7 +2,6 @@ package com.example.application.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -17,14 +16,14 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.application.webservices.spoonacular.model.MealInfo;
-import com.example.application.webservices.openfoodfacts.model.Product;
 import com.example.application.R;
 import com.example.application.database.models.Category;
 import com.example.application.database.models.Meal;
 import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.repositories.CategoriesRepository;
 import com.example.application.database.repositories.MealsRepository;
+import com.example.application.webservices.openfoodfacts.model.Product;
+import com.example.application.webservices.spoonacular.model.MealInfo;
 
 import java.util.Arrays;
 
@@ -63,15 +62,18 @@ public class AddingMealActivity extends DrawerActivity {
         try {
             product = (Product) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
             barcode = (String) intent.getSerializableExtra(BarcodeScanningActivity.BARCODE);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             mealInfo = (MealInfo) intent.getSerializableExtra(SuggestedMealActivity.MEAL_INFO);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         try {
             editMeal = (Meal) intent.getSerializableExtra(BarcodeScanningActivity.PRODUCT_DETAILS);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
 
         NameField = findViewById(R.id.nameField);
         DescField = findViewById(R.id.descField);
@@ -88,11 +90,11 @@ public class AddingMealActivity extends DrawerActivity {
 
         updateCategories(0);
 
-        if(product!=null){
+        if (product != null) {
 
-            if(product.getProduct_name_en()!= null && !product.getProduct_name_en().isEmpty()){
+            if (product.getProduct_name_en() != null && !product.getProduct_name_en().isEmpty()) {
                 NameField.setText(product.getProduct_name_en());
-            }else {
+            } else {
                 NameField.setText(product.getProduct_name_pl());
             }
 
@@ -102,7 +104,7 @@ public class AddingMealActivity extends DrawerActivity {
             FatField.setText(product.getNutriments().getFat_100g());
         }
 
-        if(mealInfo!=null){
+        if (mealInfo != null) {
             NameField.setText(mealInfo.getTitle());
 
             CaloriesField.setText(mealInfo.getCalories().toString());
@@ -111,12 +113,11 @@ public class AddingMealActivity extends DrawerActivity {
             FatField.setText(mealInfo.getFat().toString());
         }
 
-        if(editMeal !=null){
+        if (editMeal != null) {
 
 
             NameField.setText(editMeal.name);
             DescField.setText(editMeal.description);
-
 
 
             CaloriesField.setText(editMeal.nutritionalValues.calories.toString());
@@ -125,12 +126,11 @@ public class AddingMealActivity extends DrawerActivity {
             FatField.setText(editMeal.nutritionalValues.fats.toString());
 
 
-            ((TextView)findViewById(R.id.addNewMealBTN)).setText(R.string.edit);
+            ((TextView) findViewById(R.id.addNewMealBTN)).setText(R.string.edit);
         }
 
 
-
-        if(editMeal==null) {
+        if (editMeal == null) {
 
 
             ConfirmButton.setOnClickListener((view) -> {
@@ -157,7 +157,7 @@ public class AddingMealActivity extends DrawerActivity {
                         new MealsRepository(getApplication()).insert(newMeal);
                     }
 
-                    if(product!=null){
+                    if (product != null) {
                         Intent newIntent = new Intent(AddingMealActivity.this, AddingServingActivity.class);
                         newIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(newIntent);
@@ -165,7 +165,7 @@ public class AddingMealActivity extends DrawerActivity {
                     finish();
                 });
             });
-        }else {
+        } else {
             ConfirmButton.setOnClickListener((view) -> {
 
                 editMeal.name = NameField.getText().toString();
@@ -183,7 +183,7 @@ public class AddingMealActivity extends DrawerActivity {
                         editMeal.categoryId = category.categoryId;
                     }
 
-                        new MealsRepository(getApplication()).update(editMeal);
+                    new MealsRepository(getApplication()).update(editMeal);
 
                     finish();
                 });
@@ -193,7 +193,7 @@ public class AddingMealActivity extends DrawerActivity {
             @Override
             public void onClick(View v) {
 
-                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
                 View popupView = inflater.inflate(R.layout.popup_window, null);
                 TextView text = popupView.findViewById(R.id.popupText);
                 EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
@@ -209,16 +209,16 @@ public class AddingMealActivity extends DrawerActivity {
 
                 popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 
-                submitButton.setOnClickListener(view ->{
-                    if(TextUtils.isEmpty(enteredValue.getText().toString())){
+                submitButton.setOnClickListener(view -> {
+                    if (TextUtils.isEmpty(enteredValue.getText().toString())) {
                         return;
                     }
-                    if(Arrays.stream(categories).anyMatch((s)->s.equals(enteredValue.getText().toString()))){
+                    if (Arrays.stream(categories).anyMatch((s) -> s.equals(enteredValue.getText().toString()))) {
                         int index = Arrays.asList(categories).indexOf(enteredValue.getText().toString());
                         CategorySpinner.setSelection(index);
                         selectedCategory = categories[index];
                     } else {
-                       CategoriesRepository repo = new CategoriesRepository(getApplication());
+                        CategoriesRepository repo = new CategoriesRepository(getApplication());
 
                         Category newCategory = new Category();
 
@@ -234,52 +234,53 @@ public class AddingMealActivity extends DrawerActivity {
         });
     }
 
-    public void updateCategories(int newCategory){
+    public void updateCategories(int newCategory) {
         CategoriesRepository repo = new CategoriesRepository(getApplication());
-        repo.getAll().thenAccept((list)->{  runOnUiThread(()-> {
+        repo.getAll().thenAccept((list) -> {
+            runOnUiThread(() -> {
 
-            Category category = new Category();
-            category.name = getString(R.string.nullCategory);
+                Category category = new Category();
+                category.name = getString(R.string.nullCategory);
 
-            CategoryWithMeals categoryWithMeals = new CategoryWithMeals();
-            categoryWithMeals.category=category;
+                CategoryWithMeals categoryWithMeals = new CategoryWithMeals();
+                categoryWithMeals.category = category;
 
-            list.add(0,categoryWithMeals);
+                list.add(0, categoryWithMeals);
 
-            categories =  list.stream().map((elem) -> elem.category.name).toArray(String[]::new);
+                categories = list.stream().map((elem) -> elem.category.name).toArray(String[]::new);
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories);
 
-            CategorySpinner.setAdapter(adapter);
-            CategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                    selectedCategory = categories[position];
-                }
+                CategorySpinner.setAdapter(adapter);
+                CategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                        selectedCategory = categories[position];
+                    }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
-                }
-            });
-
-            if(editMeal !=null && selectedCategory == null){
-
-                repo.getById(editMeal.categoryId).thenAccept((category2)->{
-
-                    for (int i =0; i< categories.length; i++){
-                        if(categories[i].equals(category2.name)){
-                            CategorySpinner.setSelection(i);
-                            selectedCategory = categories[i];
-                        }
                     }
                 });
 
-            }
+                if (editMeal != null && selectedCategory == null) {
 
-            CategorySpinner.setSelection(newCategory);
-            selectedCategory = categories[newCategory];
-        });
+                    repo.getById(editMeal.categoryId).thenAccept((category2) -> {
+
+                        for (int i = 0; i < categories.length; i++) {
+                            if (categories[i].equals(category2.name)) {
+                                CategorySpinner.setSelection(i);
+                                selectedCategory = categories[i];
+                            }
+                        }
+                    });
+
+                }
+
+                CategorySpinner.setSelection(newCategory);
+                selectedCategory = categories[newCategory];
+            });
         });
     }
 }

@@ -1,8 +1,5 @@
 package com.example.application.activities;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,11 +14,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
+import com.example.application.R;
+import com.example.application.webservices.RetrofitInstance;
+import com.example.application.webservices.openfoodfacts.ProductService;
 import com.example.application.webservices.openfoodfacts.model.Product;
 import com.example.application.webservices.openfoodfacts.model.ProductContainer;
-import com.example.application.webservices.openfoodfacts.ProductService;
-import com.example.application.webservices.RetrofitInstance;
-import com.example.application.R;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -40,23 +40,23 @@ public class BarcodeScanningActivity extends DrawerActivity {
     public static final String PRODUCT_DETAILS = "PRODUCT_DETAILS";
     public static final String BARCODE = "BARCODE";
     private static final int REQUEST_CAMERA_PERMISSION = 201;
+    Button searchBtn;
+    int howManySamples = 15;
+    int howManySamplesRead;
+    boolean activityRunning;
     private SurfaceView surfaceView;
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private TextView barcodeText;
     private String barcodeData;
     private ToneGenerator toneGen1;
-    Button searchBtn;
-    int howManySamples = 15;
-    int howManySamplesRead;
-    boolean activityRunning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanning);
 
-        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC,100);
+        toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         surfaceView = findViewById(R.id.surface_view);
         barcodeText = findViewById(R.id.barcode_text);
         searchBtn = findViewById(R.id.searchBTN);
@@ -167,7 +167,7 @@ public class BarcodeScanningActivity extends DrawerActivity {
                 @Override
                 public void onResponse(@NonNull Call<ProductContainer> call, @NonNull Response<ProductContainer> response) {
                     if (response.body() != null) {
-                        setupProductView(response.body().getProduct(),query);
+                        setupProductView(response.body().getProduct(), query);
                     }
                 }
 
@@ -178,17 +178,16 @@ public class BarcodeScanningActivity extends DrawerActivity {
                     timeout(3);
                 }
             });
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Snackbar.make(findViewById(R.id.scanner_view), "No such product in database, sorry!",
                     BaseTransientBottomBar.LENGTH_LONG).show();
             timeout(3);
         }
     }
 
-    private void setupProductView(Product product,String barcode) {
+    private void setupProductView(Product product, String barcode) {
 
-        if(!activityRunning) {
+        if (!activityRunning) {
             if (product != null) {
                 activityRunning = true;
                 Intent intent = new Intent(BarcodeScanningActivity.this, ScannedProductDetailsActivity.class);
@@ -206,10 +205,9 @@ public class BarcodeScanningActivity extends DrawerActivity {
     }
 
     private void timeout(double seconds) {
-        // timeout for seconds seconds
-        // a dlaczego tak?
         long start = System.currentTimeMillis();
         double end = start + seconds * 1000;
-        while (System.currentTimeMillis() < end) {}
+        while (System.currentTimeMillis() < end) {
+        }
     }
 }

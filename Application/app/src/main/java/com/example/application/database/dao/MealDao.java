@@ -7,12 +7,9 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.application.database.models.Day;
 import com.example.application.database.models.Meal;
-import com.example.application.database.models.OpenFoodFact;
 import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 
-import java.util.Date;
 import java.util.List;
 
 @Dao

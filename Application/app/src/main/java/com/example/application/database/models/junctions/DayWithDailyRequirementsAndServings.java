@@ -1,7 +1,6 @@
 package com.example.application.database.models.junctions;
 
 import androidx.room.Embedded;
-import androidx.room.Junction;
 import androidx.room.Relation;
 
 import com.example.application.database.models.DailyRequirements;

@@ -1,10 +1,5 @@
 package com.example.application.activities;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +7,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.application.R;
+import com.example.application.database.models.Day;
 import com.example.application.database.repositories.DaysRepository;
 import com.example.application.fragments.StepsDetailsFragment;
-import com.example.application.R;
 import com.example.application.surfaceViews.StepProgressSurfaceView;
-import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.models.Day;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -25,17 +24,16 @@ import java.util.Locale;
 
 public class StepsHistoryActivity extends DrawerActivity {
 
+    private final int MaxVal = 5000;
+    FragmentManager fragmentManager;
+    TextView totalDistanceTextView;
+    TextView totalStepsTextView;
     private List<Day> days;
     private StepsAdapter adapter;
     private RecyclerView recyclerView;
-    private final int MaxVal = 5000;
     private double totalDistance = 0;
     private int totalSteps = 0;
     private StepsDetailsFragment stepsDetailsFragment;
-    FragmentManager fragmentManager;
-
-    TextView totalDistanceTextView;
-    TextView totalStepsTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +44,7 @@ public class StepsHistoryActivity extends DrawerActivity {
 
         fragmentManager = getSupportFragmentManager();
         stepsDetailsFragment = (StepsDetailsFragment) fragmentManager.findFragmentById(R.id.stepsFragment);
-        if(stepsDetailsFragment == null) {
+        if (stepsDetailsFragment == null) {
             stepsDetailsFragment = new StepsDetailsFragment();
             fragmentManager.beginTransaction()
                     .add(R.id.stepsFragment, stepsDetailsFragment)
@@ -61,20 +59,30 @@ public class StepsHistoryActivity extends DrawerActivity {
 
         DaysRepository repo = new DaysRepository(getApplication());
 
-        repo.getAllDays().thenAccept(days->{
+        repo.getAllDays().thenAccept(days -> {
             this.days = days;
             recyclerView.scrollToPosition(days.size() - 1);
 
-            if(adapter == null) {
+            if (adapter == null) {
                 adapter = new StepsAdapter(days);
                 recyclerView.setAdapter(adapter);
-            }
-            else {
+            } else {
                 adapter.notifyDataSetChanged();
             }
 
             GetTotalStats();
         });
+    }
+
+    private void GetTotalStats() {
+
+        for (Day _day : days) {
+            totalSteps += _day.stepsCount;
+            totalDistance += _day.stepsCount;
+        }
+
+        totalDistanceTextView.setText(getResources().getString(R.string.totalDistanceEverMade, totalDistance / 1000));
+        totalStepsTextView.setText(getResources().getString(R.string.totalStepsEverMade, totalSteps));
     }
 
     private class StepsHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -94,7 +102,7 @@ public class StepsHistoryActivity extends DrawerActivity {
             ProgressBar.setOnClickListener(this);
         }
 
-        public void bind(Day _day){
+        public void bind(Day _day) {
             this.currentDay = _day;
 
             try {
@@ -103,8 +111,7 @@ public class StepsHistoryActivity extends DrawerActivity {
                 StepsTextView.setText(currentDay.stepsCount.toString());
                 DateTextView.setText(dateFormatter.format(currentDay.dayId));
                 ProgressBar.setProgress(currentDay.stepsCount);
-            }
-            catch (Exception ignored) {
+            } catch (Exception ignored) {
                 Toast.makeText(getApplicationContext(), R.string.unableToLoadStepsHistory, Toast.LENGTH_SHORT).show();
             }
 
@@ -112,7 +119,7 @@ public class StepsHistoryActivity extends DrawerActivity {
 
         @Override
         public void onClick(View v) {
-            if(!stepsDetailsFragment.isHidden()) { // hide old day
+            if (!stepsDetailsFragment.isHidden()) { // hide old day
                 FragmentManager fm = getSupportFragmentManager();
                 fm.beginTransaction()
                         .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
@@ -157,16 +164,5 @@ public class StepsHistoryActivity extends DrawerActivity {
         public int getItemCount() {
             return days.size();
         }
-    }
-
-    private void GetTotalStats() {
-
-        for (Day _day: days) {
-            totalSteps += _day.stepsCount;
-            totalDistance += _day.stepsCount;
-        }
-
-        totalDistanceTextView.setText(getResources().getString(R.string.totalDistanceEverMade, totalDistance / 1000));
-        totalStepsTextView.setText(getResources().getString(R.string.totalStepsEverMade, totalSteps));
     }
 }

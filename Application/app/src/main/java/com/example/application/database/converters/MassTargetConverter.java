@@ -7,12 +7,12 @@ import com.example.application.database.models.enums.MassTarget;
 public class MassTargetConverter {
 
     @TypeConverter
-    public static int getValue(MassTarget indicator){
+    public static int getValue(MassTarget indicator) {
         return indicator.getId();
     }
 
     @TypeConverter
-    public static MassTarget getTarget(int id){
+    public static MassTarget getTarget(int id) {
         return MassTarget.getTarget(id);
     }
 }

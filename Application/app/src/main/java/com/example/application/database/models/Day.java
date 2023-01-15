@@ -15,7 +15,7 @@ import com.example.application.database.converters.DateConverters;
 import java.time.LocalDate;
 
 @TypeConverters({DateConverters.class})
-@Entity(tableName="day",
+@Entity(tableName = "day",
         foreignKeys = {
                 @ForeignKey(
                         onDelete = SET_NULL,

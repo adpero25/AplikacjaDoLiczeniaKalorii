@@ -9,23 +9,10 @@ import android.view.SurfaceView;
 
 public class StepProgressSurfaceView extends SurfaceView {
 
-    private int MaxValue = 5000;
-    private float Progress = 0;
-
     Paint paint;
     RectF rectFProgres;
-
-    private void init() {
-        setWillNotDraw(false);
-
-        float height = (getHeight() * Progress) / MaxValue;
-        float width = getWidth();
-
-        paint = new Paint();
-        paint.setARGB(255, 0, 240, 255);
-
-        rectFProgres = new RectF(0, height, width ,0);
-    }
+    private int MaxValue = 5000;
+    private float Progress = 0;
 
     public StepProgressSurfaceView(Context context) {
         super(context);
@@ -47,6 +34,18 @@ public class StepProgressSurfaceView extends SurfaceView {
         init();
     }
 
+    private void init() {
+        setWillNotDraw(false);
+
+        float height = (getHeight() * Progress) / MaxValue;
+        float width = getWidth();
+
+        paint = new Paint();
+        paint.setARGB(255, 0, 240, 255);
+
+        rectFProgres = new RectF(0, height, width, 0);
+    }
+
     public void setMax(int val) {
         this.MaxValue = val;
     }
@@ -59,7 +58,7 @@ public class StepProgressSurfaceView extends SurfaceView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawRGB(0,0,0);
+        canvas.drawRGB(0, 0, 0);
         canvas.drawRoundRect(rectFProgres, 10, 10, paint);
 
         invalidate();

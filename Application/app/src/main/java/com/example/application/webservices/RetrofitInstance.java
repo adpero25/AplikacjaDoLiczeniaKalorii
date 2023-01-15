@@ -12,14 +12,13 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitInstance {
+    public static final String FOOD_API_URL = "https://world.openfoodfacts.org/";
+    public static final String SPOONACULAR_API_URL = "https://api.spoonacular.com/";
     private static Retrofit openFoodFactsClient;
     private static Retrofit spoonacularClient;
 
-    public static final String FOOD_API_URL = "https://world.openfoodfacts.org/";
-    public static final String SPOONACULAR_API_URL = "https://api.spoonacular.com/";
-
     public static Retrofit getOpenFoodFactsClientInstance() {
-        if(openFoodFactsClient == null) {
+        if (openFoodFactsClient == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder()
@@ -37,7 +36,7 @@ public class RetrofitInstance {
     }
 
     public static Retrofit getSpoonacularClientInstance() {
-        if(spoonacularClient == null) {
+        if (spoonacularClient == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             OkHttpClient client = new OkHttpClient.Builder()

@@ -3,18 +3,17 @@ package com.example.application.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 
-import com.example.application.webservices.spoonacular.model.MealInfo;
-import com.example.application.webservices.spoonacular.MealSuggestionService;
-import com.example.application.webservices.RetrofitInstance;
-import com.example.application.fragments.MealSuggestionsFragment;
 import com.example.application.R;
+import com.example.application.fragments.MealSuggestionsFragment;
+import com.example.application.webservices.RetrofitInstance;
+import com.example.application.webservices.spoonacular.MealSuggestionService;
+import com.example.application.webservices.spoonacular.model.MealInfo;
 import com.squareup.picasso.Picasso;
 
 import retrofit2.Call;
@@ -30,7 +29,7 @@ public class SuggestedMealActivity extends DrawerActivity {
     ImageView productImage;
 
     Long id;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,22 +50,21 @@ public class SuggestedMealActivity extends DrawerActivity {
                 @Override
                 public void onResponse(@NonNull Call<MealInfo> call, @NonNull Response<MealInfo> response) {
                     if (response.body() != null) {
-                        name_TextView.setText(  response.body().getTitle() );
-                        summary_TextView.setText(HtmlCompat.fromHtml( response.body().getInstructions(),HtmlCompat.FROM_HTML_MODE_COMPACT) );
-                        name_TextView.setText(  response.body().getTitle() );
+                        name_TextView.setText(response.body().getTitle());
+                        summary_TextView.setText(HtmlCompat.fromHtml(response.body().getInstructions(), HtmlCompat.FROM_HTML_MODE_COMPACT));
+                        name_TextView.setText(response.body().getTitle());
 
-                        if(response.body().getImage() != null) {
+                        if (response.body().getImage() != null) {
                             String url = response.body().getImage();
                             Picasso.with(getApplicationContext())
                                     .load(url)
                                     .placeholder(R.drawable.ic_baseline_product).into(productImage);
-                        }
-                        else {
+                        } else {
                             productImage.setImageResource(R.drawable.ic_baseline_product);
                         }
 
                         findViewById(R.id.saveProductButton).setOnClickListener((view) -> {
-                            runOnUiThread(()-> {
+                            runOnUiThread(() -> {
                                 Intent newIntent = new Intent(SuggestedMealActivity.this, AddingMealActivity.class);
                                 newIntent.putExtra(SuggestedMealActivity.MEAL_INFO, response.body());
 
@@ -87,8 +85,7 @@ public class SuggestedMealActivity extends DrawerActivity {
                     finish();
                 }
             });
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             finish();
         }
     }
