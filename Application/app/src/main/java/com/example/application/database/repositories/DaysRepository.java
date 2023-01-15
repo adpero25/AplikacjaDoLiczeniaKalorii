@@ -107,6 +107,13 @@ public class DaysRepository extends Repository {
                     try {
                         DailyRequirements requirements = dailyRequirementsDao.getById(day.day.dailyRequirementsId);
                         if (requirements == null) {
+                            DailyRequirements newRequirement = dailyRequirementsDao.getLastRequirement(date);
+                            if(newRequirement != null){
+                                day.day.dailyRequirementsId = newRequirement.requirementId;
+                                dayDao.update(day.day);
+                                return newRequirement;
+                            }
+
                             return new DailyRequirements() {{
 
                                 nutritionalValuesTarget.fats = 48d;
