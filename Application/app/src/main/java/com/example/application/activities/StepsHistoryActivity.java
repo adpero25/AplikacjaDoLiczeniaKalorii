@@ -51,7 +51,6 @@ public class StepsHistoryActivity extends DrawerActivity {
             fragmentManager.beginTransaction()
                     .add(R.id.stepsFragment, stepsDetailsFragment)
                     .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                    .addToBackStack(null)
                     .hide(stepsDetailsFragment)
                     .commit();
         }

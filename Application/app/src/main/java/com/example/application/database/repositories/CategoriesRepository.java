@@ -40,8 +40,8 @@ public class CategoriesRepository extends Repository {
         }});
     }
 
-    public void update(Category category) {
-        queryExecutor.execute(() -> categoryDao.update(category));
+    public CompletableFuture<Integer>  update(Category category) {
+        return CompletableFuture.supplyAsync(()->categoryDao.update(category));
     }
 
     public void delete(Category category) {

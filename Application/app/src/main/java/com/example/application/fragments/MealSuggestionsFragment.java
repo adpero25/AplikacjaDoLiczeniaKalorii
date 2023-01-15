@@ -67,7 +67,7 @@ public class MealSuggestionsFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
         listRoot.setLayoutManager(layoutManager);
-
+        listRoot.setItemAnimator(null);
 
         loadMealsForDay();
         return view;
@@ -87,7 +87,6 @@ public class MealSuggestionsFragment extends Fragment {
         MealSuggestionService mealSuggestionService = RetrofitInstance.getSpoonacularClientInstance().create(MealSuggestionService.class);
         try {
             DaysRepository dayRepo = new DaysRepository(requireActivity().getApplication());
-
 
             dayRepo.getOrCreateByDate(LocalDate.now()).thenAccept(
                     day -> {
@@ -132,7 +131,9 @@ public class MealSuggestionsFragment extends Fragment {
                                                 listRoot.smoothScrollToPosition(0);
                                             } else {
                                                 listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
+                                                listRoot.smoothScrollToPosition(0);
                                             }
+
                                         });
                                     }
 
