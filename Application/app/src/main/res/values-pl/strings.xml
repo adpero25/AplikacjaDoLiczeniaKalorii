@@ -191,10 +191,10 @@
     <string name="manageMealsNavigation">Zarządzaj posiłkami</string>
     <string name="suggestedMealsNavigation">Sugerowane dania</string>
     <string name="caloriesRequired">Zapotrzebowanie: %d kcal</string>
-    <string name="eatenCalories">Kalorie: %.2f kcal</string>
-    <string name="eatenProteins">Białko: %.2f g</string>
-    <string name="eatenCarbohydrates">Węglowodany: %.2f g</string>
-    <string name="eatenFats">Tłuszcze: %.2f g</string>
+    <string name="eatenCalories">Kalorie: \n %.2f /%.2f kcal</string>
+    <string name="eatenProteins">Białko: \n %.2f / %.2f g</string>
+    <string name="eatenCarbohydrates">Węglowodany: \n %.2f / %.2f g</string>
+    <string name="eatenFats">Tłuszcze: \n %.2f / %.2f g</string>
     <string name="caloriesProgress">%d / %d kcal</string>
     <string name="no_category">Bez kategorii</string>
     <string name="no_data">Brak danych!</string>

@@ -190,10 +190,10 @@
     <string name="manageMealsNavigation">Manage Meals</string>
     <string name="suggestedMealsNavigation">Suggested Meals</string>
     <string name="caloriesRequired">Calories required: %d kcal</string>
-    <string name="eatenCalories">Calories: %.2f kcal</string>
-    <string name="eatenProteins">Proteins: %.2f g</string>
-    <string name="eatenCarbohydrates">Carbohydrates: %.2f g</string>
-    <string name="eatenFats">Fats: %.2f g</string>
+    <string name="eatenCalories">Calories: \n %.2f / %.2f kcal</string>
+    <string name="eatenProteins">Proteins: \n %.2f / %.2f g</string>
+    <string name="eatenCarbohydrates">Carbohydrates: \n %.2f / %.2f g</string>
+    <string name="eatenFats">Fats: \n %.2f / %.2f g</string>
     <string name="caloriesProgress">%d / %d kcal</string>
     <string name="currentDate" translatable="false">%02d.%02d.%4d</string>
     <string name="no_category">No category</string>

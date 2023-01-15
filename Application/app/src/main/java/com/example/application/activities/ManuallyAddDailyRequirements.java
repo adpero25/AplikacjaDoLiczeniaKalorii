@@ -10,6 +10,7 @@ import android.widget.EditText;
 import com.example.application.R;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
+import com.example.application.database.repositories.DailyRequirementsRepository;
 import com.example.application.helpers.StringHelper;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
@@ -79,8 +80,8 @@ public class ManuallyAddDailyRequirements extends DrawerActivity {
                 editor.apply();
             }
 
-            CaloriesDatabase db = CaloriesDatabase.getDatabase(getApplication());
-            db.dailyRequirementsDao().insert(dailyRequirements);
+            DailyRequirementsRepository repo = new DailyRequirementsRepository(getApplication());
+            repo.insertOrUpdate(dailyRequirements);
             finish();
         });
 
