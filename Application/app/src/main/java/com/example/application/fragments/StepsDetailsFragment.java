@@ -1,20 +1,17 @@
 package com.example.application.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.application.activities.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.application.R;
-import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.converters.DateConverters;
+import com.example.application.activities.MainActivity;
 import com.example.application.database.models.Day;
 import com.google.gson.Gson;
 
@@ -67,10 +64,10 @@ public class StepsDetailsFragment extends Fragment {
         try {
             String dayJson = savedInstanceState.getString("Day");
             day = new Gson().fromJson(dayJson, Day.class);
-            if(day != null)
+            if (day != null)
                 setDate(day);
+        } catch (Exception ignored) {
         }
-        catch  (Exception ignored) {}
     }
 
     public void setDate(Day currentDay) {
@@ -86,7 +83,9 @@ public class StepsDetailsFragment extends Fragment {
     }
 
     private String ConvertToShortDateString(LocalDate dataBaseDay) {
-        if(dataBaseDay == null) { return null; }
+        if (dataBaseDay == null) {
+            return null;
+        }
 
         DateTimeFormatter a = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

@@ -16,8 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.application.activities.AddingServingActivity;
 import com.example.application.R;
+import com.example.application.activities.AddingServingActivity;
 import com.example.application.adapters.OneButtonListItemAdapter;
 import com.example.application.database.models.enums.MealType;
 import com.example.application.database.models.junctions.DayWithServings;
@@ -63,7 +63,7 @@ public class ServingsFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    public void setDayAndMealType(LocalDate day, MealType type){
+    public void setDayAndMealType(LocalDate day, MealType type) {
         this.day = day;
         this.type = type;
 
@@ -71,15 +71,15 @@ public class ServingsFragment extends Fragment {
         tryToReload();
     }
 
-    public void tryToReload(){
-        if(day==null || type==null || titleView==null ||  listRoot==null ){
+    public void tryToReload() {
+        if (day == null || type == null || titleView == null || listRoot == null) {
             return;
         }
 
         DaysRepository repo = new DaysRepository(requireActivity().getApplication());
         repo.getOrCreateByDate(day).thenAccept(this::loadServingsForDay);
 
-        switch (type){
+        switch (type) {
             case Breakfast:
                 titleView.setText(getString(R.string.breakfast));
                 break;
@@ -94,17 +94,17 @@ public class ServingsFragment extends Fragment {
                 break;
         }
 
-        ((Button)view.findViewById(R.id.add)).setOnClickListener((v)->{
+        ((Button) view.findViewById(R.id.add)).setOnClickListener((v) -> {
             Intent intent = new Intent(getActivity(), AddingServingActivity.class);
-            intent.putExtra(MEAL_TYPE,type);
-            intent.putExtra(SERVING_DATE,day);
+            intent.putExtra(MEAL_TYPE, type);
+            intent.putExtra(SERVING_DATE, day);
             startActivity(intent);
         });
     }
 
-    public void loadServingsForDay(DayWithServings day){
+    public void loadServingsForDay(DayWithServings day) {
 
-        List<ServingWithMeal> servings = day.servings.stream().filter(s->s.serving.mealType==type).collect(Collectors.toList());
+        List<ServingWithMeal> servings = day.servings.stream().filter(s -> s.serving.mealType == type).collect(Collectors.toList());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
 
@@ -114,9 +114,9 @@ public class ServingsFragment extends Fragment {
         ServingsRepository servingsRepo = new ServingsRepository(requireActivity().getApplication());
 
         OneButtonListItemAdapter<ServingWithMeal> adapter = new OneButtonListItemAdapter<ServingWithMeal>(servings,
-                (serving)-> serving.meals.meal.name,
+                (serving) -> serving.meals.meal.name,
                 () -> getString(R.string.delete),
-                (context)->
+                (context) ->
                         (View.OnClickListener) v -> {
                             servingsRepo.delete(context.object.serving);
                             context.thisAdapter.removeAt(context.position);

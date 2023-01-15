@@ -10,42 +10,42 @@
 
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/listElementMarginTopBottom"
+
+        >
+
+
+        <LinearLayout
+            android:id="@+id/scanCodeBTN23"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/listElementMarginTopBottom"
+            android:layout_height="80dp"
+            android:background="@drawable/rounded_edge"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:strokeColor="@color/white">
 
-            >
+            <TextView
+                android:id="@+id/caloriesRequirementTextView"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="22"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/caloriesRequired" />
 
-
-            <LinearLayout
-                android:id="@+id/scanCodeBTN23"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:background="@drawable/rounded_edge"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                app:strokeColor="@color/white">
-
-                <TextView
-                    android:id="@+id/caloriesRequirementTextView"
-                    android:layout_width="0dip"
-                    android:layout_height="match_parent"
-                    android:layout_weight="22"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:text="@string/caloriesRequired" />
-
-                <Button
-                    android:id="@+id/changeCaloriesRequirementBTN"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/change"
-                    android:textAppearance="@style/ButtonText"
-                    android:theme="@style/AccentButton"
-                    app:cornerRadius="25dp" />
+            <Button
+                android:id="@+id/changeCaloriesRequirementBTN"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change"
+                android:textAppearance="@style/ButtonText"
+                android:theme="@style/AccentButton"
+                app:cornerRadius="25dp" />
 
 
-            </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/previousDateBTN"
@@ -69,8 +69,8 @@
         android:layout_marginTop="@dimen/listElementMarginTopBottom"
         android:background="@drawable/rounded_edge"
         android:orientation="vertical"
-        android:paddingTop="@dimen/listElementMarginTopBottom"
         android:paddingLeft="10dp"
+        android:paddingTop="@dimen/listElementMarginTopBottom"
         android:paddingRight="10dp"
         android:paddingBottom="10dp"
         app:strokeColor="@color/white">
@@ -78,8 +78,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="@dimen/listElementMarginTopBottom"
-            >
+            android:layout_marginBottom="@dimen/listElementMarginTopBottom">
 
 
             <LinearLayout
@@ -105,14 +104,16 @@
                     android:text="@string/add"
                     android:textAppearance="@style/ButtonText"
                     android:theme="@style/AccentButton"
-                    app:cornerRadius="25dp"/>
+                    app:cornerRadius="25dp" />
 
 
             </LinearLayout>
         </RelativeLayout>
 
-        <FrameLayout  android:layout_width="match_parent"
-            android:layout_height="match_parent" android:foreground="@drawable/rounded_edge_inset_shadow">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/rounded_edge_inset_shadow">
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -120,11 +121,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:strokeColor="@color/white">
-            </androidx.recyclerview.widget.RecyclerView>
+                app:strokeColor="@color/white"/>
         </FrameLayout>
-
-
 
 
     </LinearLayout>

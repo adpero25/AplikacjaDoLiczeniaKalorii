@@ -2,11 +2,7 @@ package com.example.application.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,29 +66,29 @@ public class ManageMealsActivity extends DrawerActivity {
 
                 list.add(elem);
 
-                Map<String, List<MealWithOpenFoodFact>> map = list.stream().collect(Collectors.toMap((categoryWithMeals) -> categoryWithMeals.category.name, (categoryWithMeals)-> categoryWithMeals.meals));
+                Map<String, List<MealWithOpenFoodFact>> map = list.stream().collect(Collectors.toMap((categoryWithMeals) -> categoryWithMeals.category.name, (categoryWithMeals) -> categoryWithMeals.meals));
 
                 TwoButtonListItemAdapter<MealWithOpenFoodFact> adapter = new TwoButtonListItemAdapter<MealWithOpenFoodFact>(map,
                         (result) -> result.meal.name,
                         () -> getString(R.string.edit),
                         (context) ->
-                                        new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                Intent intent = new Intent(ManageMealsActivity.this, AddingMealActivity.class);
-                                                intent.putExtra(BarcodeScanningActivity.PRODUCT_DETAILS, context.object.meal);
-                                                startActivity(intent);
-                                            }
-                                        },
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(ManageMealsActivity.this, AddingMealActivity.class);
+                                        intent.putExtra(BarcodeScanningActivity.PRODUCT_DETAILS, context.object.meal);
+                                        startActivity(intent);
+                                    }
+                                },
                         () -> getString(R.string.delete),
                         (context) ->
-                                        new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                new MealsRepository(getApplication()).delete(context.object.meal);
-                                                context.thisAdapter.removeAt(context.position);
-                                            }
-                                        }
+                                new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        new MealsRepository(getApplication()).delete(context.object.meal);
+                                        context.thisAdapter.removeAt(context.position);
+                                    }
+                                }
 
                 );
                 listRoot.setAdapter(adapter);

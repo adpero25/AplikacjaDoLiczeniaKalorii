@@ -10,10 +10,6 @@ import android.util.AttributeSet;
 import android.view.SurfaceView;
 
 public class BarcodeScanningSurfaceView extends SurfaceView {
-    private void Init() {
-        setWillNotDraw(false);
-    }
-
     public BarcodeScanningSurfaceView(Context context) {
         super(context);
         Init();
@@ -32,6 +28,10 @@ public class BarcodeScanningSurfaceView extends SurfaceView {
     public BarcodeScanningSurfaceView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         Init();
+    }
+
+    private void Init() {
+        setWillNotDraw(false);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class BarcodeScanningSurfaceView extends SurfaceView {
         canvas.drawPath(createCornersPath(topLeftCornerX, topLeftCornerY, topLeftCornerX + rectWidth, topLeftCornerY + rectHeight, 150), paintCorners);
 
         Paint paintBackground = new Paint();
-        paintBackground.setColor(Color.argb(180, 0, 0 ,0));
+        paintBackground.setColor(Color.argb(180, 0, 0, 0));
 
         //transparent black rectangles around scan area
         RectF topRectF = new RectF(0, 0, getWidth(), topLeftCornerY - 40);
@@ -62,12 +62,12 @@ public class BarcodeScanningSurfaceView extends SurfaceView {
         canvas.drawRect(bottomRectF, paintBackground);
         RectF leftRectF = new RectF(0, topLeftCornerY - 40, (getWidth() - rectWidth) / 2f - 40, topLeftCornerY + rectHeight + 40);
         canvas.drawRect(leftRectF, paintBackground);
-        RectF rightRectF = new RectF(topLeftCornerX + rectWidth + 40, topLeftCornerY - 40,  getWidth(), topLeftCornerY + rectHeight + 40);
+        RectF rightRectF = new RectF(topLeftCornerX + rectWidth + 40, topLeftCornerY - 40, getWidth(), topLeftCornerY + rectHeight + 40);
         canvas.drawRect(rightRectF, paintBackground);
     }
 
     // creates a path to draw corners
-    private Path createCornersPath(int left, int top, int right, int bottom, int cornerWidth){
+    private Path createCornersPath(int left, int top, int right, int bottom, int cornerWidth) {
         Path path = new Path();
 
         path.moveTo(left, top + cornerWidth);
@@ -76,7 +76,7 @@ public class BarcodeScanningSurfaceView extends SurfaceView {
 
         path.moveTo(right - cornerWidth, top);
         path.lineTo(right, top);
-        path.lineTo(right , top + cornerWidth);
+        path.lineTo(right, top + cornerWidth);
 
         path.moveTo(left, bottom - cornerWidth);
         path.lineTo(left, bottom);

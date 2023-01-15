@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-<ScrollView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -74,18 +73,17 @@
                     app:iconSize="28dp" />
             </LinearLayout>
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/calories_fragment_container"
-            android:name="com.example.application.fragments.EatenCaloriesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/inner_container"
-            android:layout_marginTop="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout="@layout/fragment_eaten_calories">
-        </androidx.fragment.app.FragmentContainerView>
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/calories_fragment_container"
+                android:name="com.example.application.fragments.EatenCaloriesFragment"
+                style="@style/inner_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout="@layout/fragment_eaten_calories"/>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stepsContainer"
                 style="@style/inner_container"
                 android:layout_width="match_parent"
@@ -215,25 +213,24 @@
                     app:layout_constraintTop_toBottomOf="@id/registerWater" />
 
 
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/fragment_container_view"
                 android:name="com.example.application.fragments.MealSuggestionsFragment"
+                style="@style/inner_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                style="@style/inner_container"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/manageCategories"
                 tools:layout="@layout/fragment_meal_sugesstions" />
-
 
 
         </LinearLayout>
 
 
     </ScrollView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/water_fab"
         android:layout_width="wrap_content"
@@ -243,6 +240,6 @@
         android:layout_marginBottom="32dp"
 
         app:backgroundTint="?attr/colorAccent"
-        app:tint="?attr/colorPrimary"
-        app:srcCompat="@drawable/ic_baseline_water_drop_48" />
+        app:srcCompat="@drawable/ic_baseline_water_drop_48"
+        app:tint="?attr/colorPrimary" />
 </FrameLayout>

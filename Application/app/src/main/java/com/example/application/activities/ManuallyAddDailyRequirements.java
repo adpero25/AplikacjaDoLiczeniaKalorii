@@ -3,12 +3,10 @@ package com.example.application.activities;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.application.R;
-import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.repositories.DailyRequirementsRepository;
 import com.example.application.helpers.StringHelper;
@@ -45,8 +43,8 @@ public class ManuallyAddDailyRequirements extends DrawerActivity {
 
         Button submitButton = findViewById(R.id.daily_confirmDataButton);
         submitButton.setOnClickListener(v -> {
-            if(!StringHelper.checkNullOrEmpty(caloriesInput.getText().toString()) || !StringHelper.checkNullOrEmpty(proteinsInput.getText().toString())
-                    || !StringHelper.checkNullOrEmpty(carbohydratesInput.getText().toString()) || !StringHelper.checkNullOrEmpty(fatInput.getText().toString())){
+            if (!StringHelper.checkNullOrEmpty(caloriesInput.getText().toString()) || !StringHelper.checkNullOrEmpty(proteinsInput.getText().toString())
+                    || !StringHelper.checkNullOrEmpty(carbohydratesInput.getText().toString()) || !StringHelper.checkNullOrEmpty(fatInput.getText().toString())) {
                 Snackbar.make(v, getString(R.string.MissingRequiredData), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 return;
@@ -59,19 +57,19 @@ public class ManuallyAddDailyRequirements extends DrawerActivity {
             dailyRequirements.nutritionalValuesTarget.fats = Double.parseDouble(fatInput.getText().toString());
             dailyRequirements.entryDate = LocalDate.now();
 
-            if(StringHelper.checkNullOrEmpty(ageInput.getText().toString())){
+            if (StringHelper.checkNullOrEmpty(ageInput.getText().toString())) {
                 dailyRequirements.age = Integer.parseInt(ageInput.getText().toString());
             }
 
-            if(StringHelper.checkNullOrEmpty(heightInput.getText().toString())){
+            if (StringHelper.checkNullOrEmpty(heightInput.getText().toString())) {
                 dailyRequirements.height = Double.parseDouble(heightInput.getText().toString());
             }
 
-            if(StringHelper.checkNullOrEmpty(weightInput.getText().toString())){
+            if (StringHelper.checkNullOrEmpty(weightInput.getText().toString())) {
                 dailyRequirements.weight = Double.parseDouble(weightInput.getText().toString());
             }
 
-            if(dailyRequirements.height != 0 && dailyRequirements.weight != 0) {
+            if (dailyRequirements.height != 0 && dailyRequirements.weight != 0) {
                 SharedPreferences userDataSharedPreferences = getSharedPreferences(USER_DATA_SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = userDataSharedPreferences.edit();
                 Gson gson = new Gson();

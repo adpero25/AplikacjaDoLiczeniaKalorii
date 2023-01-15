@@ -1,8 +1,6 @@
 package com.example.application.helpers;
 
 import android.text.InputType;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -12,24 +10,17 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.application.R;
-import com.example.application.database.repositories.DaysRepository;
-import com.example.application.database.repositories.ServingsRepository;
-
-import java.util.function.Consumer;
-
-import kotlin.Function;
-import kotlin.jvm.functions.Function1;
 
 public class PopupWindowHelper {
 
-    public static void createPopup(LayoutInflater inflater, int buttonTextId){
+    public static void createPopup(LayoutInflater inflater, int buttonTextId) {
         View popupView = inflater.inflate(R.layout.popup_window, null);
         TextView text = popupView.findViewById(R.id.popupText);
         EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
         Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
 
         text.setText(buttonTextId);
-        enteredValue.setInputType(InputType.TYPE_CLASS_NUMBER|InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        enteredValue.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         int width = LinearLayout.LayoutParams.WRAP_CONTENT;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;

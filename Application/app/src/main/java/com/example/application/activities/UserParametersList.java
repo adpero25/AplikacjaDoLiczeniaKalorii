@@ -1,14 +1,13 @@
 package com.example.application.activities;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.R;
 import com.example.application.database.CaloriesDatabase;
@@ -34,7 +33,7 @@ public class UserParametersList extends DrawerActivity {
         adapter.setDailyRequirements(dailyRequirementsList);
     }
 
-    private class ParameterHolder extends RecyclerView.ViewHolder{
+    private class ParameterHolder extends RecyclerView.ViewHolder {
         private final TextView weightText;
         private final TextView heightText;
         private final TextView ageText;
@@ -49,20 +48,19 @@ public class UserParametersList extends DrawerActivity {
             dateText = itemView.findViewById(R.id.entryDateValue);
         }
 
-        public void bind(DailyRequirements dailyRequirements){
+        public void bind(DailyRequirements dailyRequirements) {
             weightText.setText(dailyRequirements.weight.toString());
             heightText.setText(dailyRequirements.height.toString());
             ageText.setText(getString(R.string.age, dailyRequirements.age));
-            if(dailyRequirements.entryDate != null){
+            if (dailyRequirements.entryDate != null) {
                 dateText.setText(dailyRequirements.entryDate.toString());
-            }
-            else{
+            } else {
                 dateText.setText(R.string.somethingWrongWithDate);
             }
         }
     }
 
-    private class ParameterAdapter extends RecyclerView.Adapter<ParameterHolder>{
+    private class ParameterAdapter extends RecyclerView.Adapter<ParameterHolder> {
         private List<DailyRequirements> dailyRequirementsList;
 
         @NonNull
@@ -74,7 +72,7 @@ public class UserParametersList extends DrawerActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ParameterHolder holder, int position) {
-            if(dailyRequirementsList != null){
+            if (dailyRequirementsList != null) {
                 DailyRequirements dailyRequirements = dailyRequirementsList.get(position);
                 holder.bind(dailyRequirements);
             }
@@ -82,15 +80,14 @@ public class UserParametersList extends DrawerActivity {
 
         @Override
         public int getItemCount() {
-            if(dailyRequirementsList != null){
+            if (dailyRequirementsList != null) {
                 return dailyRequirementsList.size();
-            }
-            else{
+            } else {
                 return 0;
             }
         }
 
-        void setDailyRequirements(List<DailyRequirements> dailyRequirements){
+        void setDailyRequirements(List<DailyRequirements> dailyRequirements) {
 
             this.dailyRequirementsList = dailyRequirements;
             notifyDataSetChanged();

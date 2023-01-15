@@ -7,11 +7,8 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.example.application.database.models.Category;
 import com.example.application.database.models.DailyRequirements;
-import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.models.junctions.DayWithDailyRequirementsAndServings;
-import com.example.application.database.models.junctions.DayWithServings;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +30,7 @@ public interface DailyRequirementsDao {
     @Transaction
     @Query("SELECT * FROM day")
     List<DayWithDailyRequirementsAndServings> getDayWithServingsWithDailyRequirements();
+
     @Query("SELECT * FROM daily_requirements WHERE daily_requirements_id = :id")
     DailyRequirements getById(Long id);
 

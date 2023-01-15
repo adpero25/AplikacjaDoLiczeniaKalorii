@@ -11,7 +11,6 @@ import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.base.Repository;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -63,12 +62,12 @@ public class DaysRepository extends Repository {
             if (day == null) {
                 DailyRequirements requirements = dailyRequirementsDao.getLastRequirement(date);
                 try {
-                    if(requirements != null) {
-                    dayDao.insert(new Day() {{
-                        dayId = date;
-                        dailyRequirementsId = requirements.requirementId;
-                    }});
-                    }else{
+                    if (requirements != null) {
+                        dayDao.insert(new Day() {{
+                            dayId = date;
+                            dailyRequirementsId = requirements.requirementId;
+                        }});
+                    } else {
                         dayDao.insert(new Day() {{
                             dayId = date;
                         }});
@@ -106,8 +105,8 @@ public class DaysRepository extends Repository {
                     }
 
                     try {
-                        DailyRequirements requirements =  dailyRequirementsDao.getById(day.day.dailyRequirementsId);
-                        if(requirements == null){
+                        DailyRequirements requirements = dailyRequirementsDao.getById(day.day.dailyRequirementsId);
+                        if (requirements == null) {
                             return new DailyRequirements() {{
 
                                 nutritionalValuesTarget.fats = 48d;

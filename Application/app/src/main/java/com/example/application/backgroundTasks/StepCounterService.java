@@ -14,7 +14,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -22,8 +21,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.example.application.activities.MainActivity;
 import com.example.application.activities.ManuallyAddDailyRequirements;
-import com.example.application.CaloriesCalculatorContext;
-import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.models.DailyRequirements;
 import com.example.application.database.repositories.DaysRepository;
 import com.google.gson.Gson;
@@ -43,7 +40,8 @@ public class StepCounterService extends Service {
     Sensor stepCounterSensor;
     private Walk walk;
 
-    public StepCounterService() { }
+    public StepCounterService() {
+    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -54,19 +52,18 @@ public class StepCounterService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         initSensor();
 
-        Log.d("SERVICE_STARTED", "SERVICE STARTED");
 
         try {   // setting timer to reset counter
             DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             LocalDate now = LocalDate.now();
             Date date = dateFormatter.parse(now + " 23:50:00");
 
-            int period = 24*60*60*1000; // period 24h
+            int period = 24 * 60 * 60 * 1000; // period 24h
             Timer timer = new Timer(COUNTER_RESET);
 
             timer.schedule(new ResetService(), date, period);
+        } catch (Exception ignored) {
         }
-        catch (Exception ignored) { }
 
         return START_STICKY;
     }
@@ -122,11 +119,11 @@ public class StepCounterService extends Service {
                 }
 
                 walk.stepsMade = event.values[0] - walk.startingStepsCounter;
-                Log.d("STEPS", "Current Steps: " + (int) walk.stepsMade);
             }
 
             @Override
-            public void onAccuracyChanged(Sensor sensor, int accuracy) { }
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            }
 
         }, stepCounterSensor, SensorManager.SENSOR_DELAY_FASTEST);
     }
@@ -143,11 +140,11 @@ public class StepCounterService extends Service {
     public void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(MainActivity.SHARED_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
         String savedWalk = sharedPreferences.getString(WALK_KEY, null);
-        if(savedWalk != null)
+        if (savedWalk != null)
             walk = new Gson().fromJson(savedWalk, Walk.class);
         else {
             DailyRequirements rq = GetUserData();
-            if(rq != null)
+            if (rq != null)
                 walk = new Walk(rq.weight, rq.height);
             else
                 walk = new Walk();
@@ -166,13 +163,13 @@ public class StepCounterService extends Service {
     }
 
     public synchronized Walk GetWalk() {
-        if(walk == null)
+        if (walk == null)
             loadData();
         return this.walk;
     }
 
     public int GetWalkStepsAndReset() {
-        if(walk == null)
+        if (walk == null)
             loadData();
 
         int stepsMade = (int) walk.stepsMade;
@@ -185,15 +182,15 @@ public class StepCounterService extends Service {
 
         DaysRepository repo = new DaysRepository(getApplication());
         int steps = (int) walk.stepsMade;
-        double distance =  walk.calculateDistance();
-        double calories =  walk.calculateBurnedCalories();
+        double distance = walk.calculateDistance();
+        double calories = walk.calculateBurnedCalories();
 
         repo.getOrCreateToday().thenAccept((day) -> {
             day.day.stepsCount += steps;
             day.day.totalDistance += distance;
             day.day.burnedCalories += calories;
             repo.update(day.day);
-        } );
+        });
 
         resetWalk();
     }
@@ -207,17 +204,9 @@ public class StepCounterService extends Service {
 
     private void setWalkData() {
         DailyRequirements rq = GetUserData();
-        if(rq != null)
-        {
+        if (rq != null) {
             walk.weight = rq.weight;
             walk.stepLength = (rq.height / 4) + 37;
-        }
-    }
-
-    public class LocalBinder extends Binder {
-        // Return this instance of StepCounterService so clients can call public methods to get walk
-        public StepCounterService getService() {
-            return StepCounterService.this;
         }
     }
 
@@ -229,7 +218,9 @@ public class StepCounterService extends Service {
         public double weight = 70;  // weight in kg
         public int stepsTarget = 5000;
 
-        public Walk() { }
+        public Walk() {
+        }
+
         public Walk(double _weight, double _height) {
             this.weight = _weight;
             this.stepLength = (_height / 4) + 37;
@@ -245,13 +236,21 @@ public class StepCounterService extends Service {
         }
 
         // Liczba kroków x długość kroku (km) x 0,5 x waga osoby (kg)
-        public double calculateBurnedCalories() { return stepsMade * stepLength / 100000 * 0.5 * weight; }
+        public double calculateBurnedCalories() {
+            return stepsMade * stepLength / 100000 * 0.5 * weight;
+        }
+    }
+
+    public class LocalBinder extends Binder {
+        // Return this instance of StepCounterService so clients can call public methods to get walk
+        public StepCounterService getService() {
+            return StepCounterService.this;
+        }
     }
 
     public class ResetService extends TimerTask {
         @Override
         public void run() {
-            Log.d("STEP_COUNTER_RESET", "STEP COUNTER SERVICE RESET!");
             SaveDataAndResetWalk();
             initSensor();
         }

@@ -29,7 +29,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
 
         super.setContentView(fullLayout);
 
-        ((NavigationView)findViewById(R.id.navigationView)).setNavigationItemSelectedListener(this);
+        ((NavigationView) findViewById(R.id.navigationView)).setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -43,33 +43,33 @@ public abstract class DrawerActivity extends AppCompatActivity implements Naviga
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Intent newIntent = null;
 
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.navItemCalculateCalories:
-                newIntent = new Intent( this, CalculateCaloriesRequirement.class);
+                newIntent = new Intent(this, CalculateCaloriesRequirement.class);
                 break;
             case R.id.navItemManageCategories:
-                newIntent = new Intent( this, ManageCategoriesActivity.class);
+                newIntent = new Intent(this, ManageCategoriesActivity.class);
                 break;
             case R.id.navItemManageMeals:
-                newIntent = new Intent( this, ManageMealsActivity.class);
+                newIntent = new Intent(this, ManageMealsActivity.class);
                 break;
             case R.id.navItemDailyRequirements:
-                newIntent = new Intent( this, ManuallyAddDailyRequirements.class);
+                newIntent = new Intent(this, ManuallyAddDailyRequirements.class);
                 break;
             case R.id.navItemUserParameters:
-                newIntent = new Intent( this, UserParametersList.class);
+                newIntent = new Intent(this, UserParametersList.class);
                 break;
             default:
                 break;
         }
 
-        if(newIntent != null) {
-            Intent baseIntent = new Intent( this, MainActivity.class);
+        if (newIntent != null) {
+            Intent baseIntent = new Intent(this, MainActivity.class);
             baseIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            TaskStackBuilder.create( getApplicationContext() )
-                    .addNextIntent( baseIntent )
-                    .addNextIntent( newIntent )
+            TaskStackBuilder.create(getApplicationContext())
+                    .addNextIntent(baseIntent)
+                    .addNextIntent(newIntent)
                     .startActivities();
         }
 

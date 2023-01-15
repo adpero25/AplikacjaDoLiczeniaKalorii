@@ -23,22 +23,22 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
     private final static int CATEGORY_ITEM = 1;
     private final static int NORMAL_ITEM = 2;
 
-    private final Map<String,List<T>> data;
-    private final Function<T,String> nameSelector;
+    private final Map<String, List<T>> data;
+    private final Function<T, String> nameSelector;
 
     private final Supplier<String> firstButtonTextSelector;
-    private final Function<OnClickListenerSelectorContext<T>,View.OnClickListener> firstOnClickListenerSelector;
+    private final Function<OnClickListenerSelectorContext<T>, View.OnClickListener> firstOnClickListenerSelector;
 
     private final Supplier<String> secondButtonTextSelector;
-    private final Function<OnClickListenerSelectorContext<T>,View.OnClickListener> secondOnClickListenerSelector;
+    private final Function<OnClickListenerSelectorContext<T>, View.OnClickListener> secondOnClickListenerSelector;
 
-    public TwoButtonListItemAdapter(Map<String,List<T>> data,
+    public TwoButtonListItemAdapter(Map<String, List<T>> data,
                                     Function<T, String> nameSelector,
                                     Supplier<String> firstButtonTextSelector,
                                     Function<OnClickListenerSelectorContext<T>, View.OnClickListener> firstOnClickListenerSelector,
                                     Supplier<String> secondButtonTextSelector,
-                                    Function<OnClickListenerSelectorContext<T>,View.OnClickListener> secondOnClickListenerSelector) {
-        Map<String,List<T>> collect = data.entrySet().stream()
+                                    Function<OnClickListenerSelectorContext<T>, View.OnClickListener> secondOnClickListenerSelector) {
+        Map<String, List<T>> collect = data.entrySet().stream()
                 .filter(x -> !x.getValue().isEmpty())
                 .collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()));
 
@@ -78,7 +78,7 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
                 categoryHolder.setTitleTextViewText(getCategory(position));
                 break;
             case NORMAL_ITEM:
-                TwoButtonListItemHolder itemHolder = (TwoButtonListItemHolder)holder;
+                TwoButtonListItemHolder itemHolder = (TwoButtonListItemHolder) holder;
                 T currentItem = getItem(position);
                 itemHolder.setNameTextViewText(nameSelector.apply(currentItem));
 
@@ -107,8 +107,8 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         for (Map.Entry<String, List<T>> entry : data.entrySet()) {
             List<T> currentList = entry.getValue();
 
-            if(position - index <= currentList.size()){
-                if(position-index == 0){
+            if (position - index <= currentList.size()) {
+                if (position - index == 0) {
                     return CATEGORY_ITEM;
                 }
                 return NORMAL_ITEM;
@@ -118,7 +118,7 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         return NORMAL_ITEM;
     }
 
-    public void removeAt(int position){
+    public void removeAt(int position) {
         int index = 0;
 
         String keyToBeRemoved = null;
@@ -126,10 +126,9 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         for (Map.Entry<String, List<T>> entry : data.entrySet()) {
             List<T> currentList = entry.getValue();
 
-            if(position - index <= currentList.size()){
-                Log.d("tag", position+" "+index+" "+currentList.size() );
-                currentList.remove((position - index)-1);
-                if(currentList.size()==0){
+            if (position - index <= currentList.size()) {
+                currentList.remove((position - index) - 1);
+                if (currentList.size() == 0) {
                     keyToBeRemoved = entry.getKey();
                 }
                 break;
@@ -138,20 +137,20 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         }
         notifyItemRemoved(index);
 
-        if(keyToBeRemoved!=null){
+        if (keyToBeRemoved != null) {
             data.remove(keyToBeRemoved);
-            notifyItemRemoved((position - index)-1);
+            notifyItemRemoved((position - index) - 1);
         }
 
         notifyItemRangeChanged(index, getItemCount());
     }
 
-    private String getCategory(int position){
+    private String getCategory(int position) {
         int index = 0;
         for (Map.Entry<String, List<T>> entry : data.entrySet()) {
             List<T> currentList = entry.getValue();
 
-            if(position - index == 0){
+            if (position - index == 0) {
                 return entry.getKey();
             }
             index += currentList.size() + 1;
@@ -159,13 +158,13 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         return null;
     }
 
-    private T getItem(int position){
+    private T getItem(int position) {
         int index = 0;
         for (Map.Entry<String, List<T>> entry : data.entrySet()) {
             List<T> currentList = entry.getValue();
 
-            if(position - index <= currentList.size()){
-                return currentList.get((position - index)-1);
+            if (position - index <= currentList.size()) {
+                return currentList.get((position - index) - 1);
             }
             index += currentList.size() + 1;
         }
@@ -201,7 +200,7 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         }
 
         public void setSecondButtonText(String text) {
-            if(text.equals("")){
+            if (text.equals("")) {
                 secondButton.setVisibility(View.GONE);
                 secondButton.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
             }
@@ -225,7 +224,7 @@ public class TwoButtonListItemAdapter<T> extends RecyclerView.Adapter<RecyclerVi
         }
 
         public void setTitleTextViewText(String text) {
-            if(text.equals("")){
+            if (text.equals("")) {
                 titleTextView.setVisibility(View.GONE);
                 titleTextView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
             }

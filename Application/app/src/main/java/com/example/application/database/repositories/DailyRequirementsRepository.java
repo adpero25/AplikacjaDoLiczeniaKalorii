@@ -2,20 +2,13 @@ package com.example.application.database.repositories;
 
 import android.app.Application;
 
-import androidx.room.Database;
-
 import com.example.application.database.CaloriesDatabase;
-import com.example.application.database.dao.CategoryDao;
 import com.example.application.database.dao.DailyRequirementsDao;
 import com.example.application.database.dao.DayDao;
-import com.example.application.database.models.Category;
 import com.example.application.database.models.DailyRequirements;
-import com.example.application.database.models.Day;
-import com.example.application.database.models.junctions.CategoryWithMeals;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.base.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,7 +33,7 @@ public class DailyRequirementsRepository extends Repository {
 
 
     public CompletableFuture<Long> insert(DailyRequirements dailyRequirements) {
-        return CompletableFuture.supplyAsync(()->
+        return CompletableFuture.supplyAsync(() ->
         {
             Long requirementId = dailyRequirementsDao.insert(dailyRequirements);
             DayWithServings dayWithServings = dayDao.getDayByDate(dailyRequirements.entryDate);
@@ -50,13 +43,12 @@ public class DailyRequirementsRepository extends Repository {
         });
     }
 
-    public void insertOrUpdate(DailyRequirements dailyRequirements){
+    public void insertOrUpdate(DailyRequirements dailyRequirements) {
         DailyRequirements requirements = dailyRequirementsDao.getByDate(dailyRequirements.entryDate);
 
-        if(requirements == null){
+        if (requirements == null) {
             insert(dailyRequirements);
-        }
-        else{
+        } else {
             dailyRequirements.requirementId = requirements.requirementId;
             update(dailyRequirements);
         }
@@ -70,7 +62,7 @@ public class DailyRequirementsRepository extends Repository {
         queryExecutor.execute(() -> dailyRequirementsDao.delete(dailyRequirements));
     }
 
-    public CompletableFuture<List<DailyRequirements>> getAll(){
+    public CompletableFuture<List<DailyRequirements>> getAll() {
         return CompletableFuture.supplyAsync(dailyRequirementsDao::listDailyRequirements, queryExecutor);
     }
 }

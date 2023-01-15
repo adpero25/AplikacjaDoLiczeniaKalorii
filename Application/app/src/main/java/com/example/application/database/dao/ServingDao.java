@@ -5,10 +5,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
-import androidx.room.TypeConverters;
 import androidx.room.Update;
 
-import com.example.application.database.converters.DateConverters;
 import com.example.application.database.models.Serving;
 import com.example.application.database.models.junctions.ServingWithMeal;
 

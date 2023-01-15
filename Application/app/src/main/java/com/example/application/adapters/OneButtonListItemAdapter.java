@@ -18,11 +18,11 @@ import java.util.function.Supplier;
 public class OneButtonListItemAdapter<T> extends RecyclerView.Adapter<OneButtonListItemAdapter.OneButtonListItemHolder> {
 
     private final List<T> data;
-    private final Function<T,String> nameSelector;
+    private final Function<T, String> nameSelector;
     private final Supplier<String> buttonTextSelector;
-    private final Function<OnClickListenerSelectorContext<T>,View.OnClickListener> onClickListenerSelector;
+    private final Function<OnClickListenerSelectorContext<T>, View.OnClickListener> onClickListenerSelector;
 
-    public OneButtonListItemAdapter(List<T> data, Function<T,String> nameSelector, Supplier<String> buttonTextSelector, Function<OnClickListenerSelectorContext<T>,View.OnClickListener> onClickListenerSelector) {
+    public OneButtonListItemAdapter(List<T> data, Function<T, String> nameSelector, Supplier<String> buttonTextSelector, Function<OnClickListenerSelectorContext<T>, View.OnClickListener> onClickListenerSelector) {
         this.data = data;
         this.nameSelector = nameSelector;
         this.buttonTextSelector = buttonTextSelector;
@@ -43,7 +43,7 @@ public class OneButtonListItemAdapter<T> extends RecyclerView.Adapter<OneButtonL
         T currentItem = data.get(position);
         viewHolder.setNameTextViewText(nameSelector.apply(currentItem));
         viewHolder.setButtonText(buttonTextSelector.get());
-        viewHolder.setOnClickListener(onClickListenerSelector.apply(new OnClickListenerSelectorContext<T>(currentItem,this,position)));
+        viewHolder.setOnClickListener(onClickListenerSelector.apply(new OnClickListenerSelectorContext<T>(currentItem, this, position)));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class OneButtonListItemAdapter<T> extends RecyclerView.Adapter<OneButtonL
         return data.size();
     }
 
-    public void removeAt(int index){
+    public void removeAt(int index) {
         data.remove(index);
         notifyItemRemoved(index);
         notifyItemRangeChanged(index, getItemCount());

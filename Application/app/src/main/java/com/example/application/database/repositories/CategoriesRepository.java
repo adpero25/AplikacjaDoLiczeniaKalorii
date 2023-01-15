@@ -5,12 +5,9 @@ import android.app.Application;
 import com.example.application.database.CaloriesDatabase;
 import com.example.application.database.dao.CategoryDao;
 import com.example.application.database.models.Category;
-import com.example.application.database.models.Serving;
 import com.example.application.database.models.junctions.CategoryWithMeals;
-import com.example.application.database.models.junctions.ServingWithMeal;
 import com.example.application.database.repositories.base.Repository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -31,36 +28,36 @@ public class CategoriesRepository extends Repository {
     }
 
     public CompletableFuture<Long> insert(Category category) {
-        return CompletableFuture.supplyAsync(()->categoryDao.insert(category));
+        return CompletableFuture.supplyAsync(() -> categoryDao.insert(category));
     }
 
     public void insert(String categoryName) {
-        insert(new Category(){{
+        insert(new Category() {{
             name = categoryName;
         }});
     }
 
-    public CompletableFuture<Integer>  update(Category category) {
-        return CompletableFuture.supplyAsync(()->categoryDao.update(category));
+    public CompletableFuture<Integer> update(Category category) {
+        return CompletableFuture.supplyAsync(() -> categoryDao.update(category));
     }
 
     public void delete(Category category) {
         queryExecutor.execute(() -> categoryDao.delete(category));
     }
 
-    public CompletableFuture<List<CategoryWithMeals>> getAll(){
+    public CompletableFuture<List<CategoryWithMeals>> getAll() {
         return CompletableFuture.supplyAsync(categoryDao::getAll, queryExecutor);
     }
 
-    public CompletableFuture<Category> getByName(String name){
-        return CompletableFuture.supplyAsync(()->categoryDao.getByName(name), queryExecutor);
+    public CompletableFuture<Category> getByName(String name) {
+        return CompletableFuture.supplyAsync(() -> categoryDao.getByName(name), queryExecutor);
     }
 
-    public CompletableFuture<List<CategoryWithMeals>> getAllWithoutMeals(){
+    public CompletableFuture<List<CategoryWithMeals>> getAllWithoutMeals() {
         return CompletableFuture.supplyAsync(categoryDao::getAll, queryExecutor);
     }
 
     public CompletableFuture<Category> getById(Long categoryId) {
-        return CompletableFuture.supplyAsync(()->categoryDao.getById(categoryId), queryExecutor);
+        return CompletableFuture.supplyAsync(() -> categoryDao.getById(categoryId), queryExecutor);
     }
 }

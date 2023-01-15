@@ -7,12 +7,12 @@ public enum MassTarget {
 
     private final int id;
 
-    MassTarget(int id){
+    MassTarget(int id) {
         this.id = id;
     }
 
-    public static MassTarget getTarget(int id){
-        switch(id){
+    public static MassTarget getTarget(int id) {
+        switch (id) {
             case 1:
                 return MassTarget.Reduce;
             case 2:
@@ -24,7 +24,7 @@ public enum MassTarget {
         }
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 }

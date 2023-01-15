@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="input">
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
         <item name="android:layout_marginTop">5sp</item>
         <item name="android:layout_marginBottom">5sp</item>
     </style>
+
     <style name="view_title">
         <item name="android:textSize">28sp</item>
         <item name="android:layout_marginTop">15sp</item>
         <item name="android:layout_marginBottom">15sp</item>
         <item name="android:textAlignment">center</item>
     </style>
+
     <style name="labels">
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
         <item name="android:layout_marginTop">5sp</item>
     </style>
+
     <style name="subtitle">
         <item name="android:textSize">20sp</item>
         <item name="android:layout_marginTop">10sp</item>
         <item name="android:layout_marginBottom">10sp</item>
         <item name="android:textAlignment">center</item>
     </style>
+
     <style name="radio_buttons">
         <item name="android:layout_marginLeft">10sp</item>
         <item name="android:layout_marginTop">5sp</item>
         <item name="android:layout_marginBottom">5sp</item>
     </style>
+
     <style name="inner_container">
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
@@ -37,29 +43,35 @@
         <item name="android:background">@drawable/rounded_edge</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
     <style name="radio_button">
         <item name="android:textColor">@color/white</item>
         <item name="android:buttonTint">@color/white</item>
     </style>
+
     <style name="btn">
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
         <item name="android:layout_marginTop">10sp</item>
         <item name="android:layout_marginBottom">10sp</item>
     </style>
+
     <style name="spinner">
         <item name="android:background">?attr/colorPrimaryVariant</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
     </style>
+
     <style name="ButtonText" parent="@android:style/TextAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">#aacbb4</item>
     </style>
+
     <style name="AccentButton" parent="Widget.Material3.Button">
         <item name="materialThemeOverlay">@style/Theme.Application.AccentButton</item>
     </style>
+
     <style name="progress_bar">
         <item name="android:layout_marginRight">20sp</item>
         <item name="android:layout_marginLeft">20sp</item>
@@ -67,12 +79,14 @@
         <item name="android:progressTint">?attr/colorAccent</item>
         <item name="android:progressBackgroundTint">?attr/colorPrimaryVariant</item>
     </style>
+
     <style name="popup_button">
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
         <item name="android:layout_marginBottom">10sp</item>
         <item name="android:layout_marginTop">5sp</item>
     </style>
+
     <style name="popup_input">
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
@@ -81,6 +95,7 @@
         <item name="android:backgroundTint">?attr/colorOnPrimary</item>
         <item name="android:layout_width">match_parent</item>
     </style>
+
     <style name="popup_title">
         <item name="android:layout_marginRight">10sp</item>
         <item name="android:layout_marginLeft">10sp</item>
@@ -88,6 +103,7 @@
         <item name="android:textColor">?attr/colorOnPrimary</item>
 
     </style>
+
     <style name="popup_window">
         <item name="android:background">@drawable/popup_drawable</item>
         <item name="android:paddingRight">10dp</item>
@@ -95,12 +111,14 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingLeft">10dp</item>
     </style>
+
     <style name="parameter_list_image">
         <item name="android:layout_marginBottom">10dp</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>
     </style>
+
     <style name="parameter_list_text">
         <item name="android:layout_marginRight">10dp</item>
         <item name="android:layout_marginLeft">10dp</item>

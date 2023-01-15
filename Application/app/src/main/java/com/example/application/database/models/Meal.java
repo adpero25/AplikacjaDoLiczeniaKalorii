@@ -10,23 +10,21 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.example.application.database.models.enums.MealType;
-
 import java.io.Serializable;
 
-@Entity(tableName="meal",
-        foreignKeys ={
-            @ForeignKey(
-                    onDelete = SET_NULL,
-                    entity = Category.class,
-                    parentColumns = "category_id",
-                    childColumns = "category_id"
-            )
+@Entity(tableName = "meal",
+        foreignKeys = {
+                @ForeignKey(
+                        onDelete = SET_NULL,
+                        entity = Category.class,
+                        parentColumns = "category_id",
+                        childColumns = "category_id"
+                )
         },
         indices = {
-            @Index(
-                    value = "category_id"
-            )
+                @Index(
+                        value = "category_id"
+                )
         }
 )
 public class Meal implements Serializable {

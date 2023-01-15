@@ -6,10 +6,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 
 import com.example.application.database.models.OpenFoodFact;
-import com.example.application.database.models.junctions.MealWithOpenFoodFact;
 import com.example.application.database.models.junctions.OpenFoodFactWithMeal;
-
-import java.util.List;
 
 @Dao
 public interface OpenFoodFactDao {

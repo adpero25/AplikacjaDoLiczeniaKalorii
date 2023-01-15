@@ -39,9 +39,9 @@ import com.example.application.database.models.Serving;
                         to = 2
                 ),
                 @AutoMigration(
-                      from = 2,
-                      to = 3,
-                      spec = MigrationFrom2To3.class
+                        from = 2,
+                        to = 3,
+                        spec = MigrationFrom2To3.class
                 ),
                 @AutoMigration(
                         from = 3,
@@ -66,13 +66,15 @@ public abstract class CaloriesDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "calories_database";
 
     private static CaloriesDatabase databaseInstance;
+    private static final Callback roomDatabaseCallback = new RoomDatabase.Callback() {
 
-    public abstract DayDao dayDao();
-    public abstract MealDao mealDao();
-    public abstract CategoryDao categoryDao();
-    public abstract ServingDao servingDao();
-    public abstract OpenFoodFactDao openFoodFactDao();
-    public abstract DailyRequirementsDao dailyRequirementsDao();
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            databaseInstance.getQueryExecutor().execute(() -> {});
+        }
+    };
 
     public static CaloriesDatabase getDatabase(final Context context) {
         if (databaseInstance == null) {
@@ -85,16 +87,15 @@ public abstract class CaloriesDatabase extends RoomDatabase {
         return databaseInstance;
     }
 
+    public abstract DayDao dayDao();
 
-    private static final Callback roomDatabaseCallback = new RoomDatabase.Callback() {
+    public abstract MealDao mealDao();
 
-     @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
+    public abstract CategoryDao categoryDao();
 
-            databaseInstance.getQueryExecutor().execute(() -> {
-                //mb add some seeding later
-            });
-        }
-    };
+    public abstract ServingDao servingDao();
+
+    public abstract OpenFoodFactDao openFoodFactDao();
+
+    public abstract DailyRequirementsDao dailyRequirementsDao();
 }
