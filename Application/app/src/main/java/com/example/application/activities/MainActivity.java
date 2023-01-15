@@ -37,6 +37,7 @@ import com.example.application.database.models.Day;
 import com.example.application.database.models.junctions.DayWithServings;
 import com.example.application.database.repositories.DaysRepository;
 import com.example.application.fragments.ServingsFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -63,7 +64,7 @@ public class MainActivity extends DrawerActivity {
     TextView currentDateTextView;
     StepCounterService.Walk walk;
     StepCounterService scService;
-    Button registerWaterButton;
+    Button setWaterTarget;
     ProgressBar waterProgressBar;
     ProgressBar stepProgress;
     Button setStepTarget;
@@ -104,7 +105,7 @@ public class MainActivity extends DrawerActivity {
 
         currentDateTextView = findViewById(R.id.dayTextView);
         waterLabel = findViewById(R.id.howManyWaterToday);
-        registerWaterButton = findViewById(R.id.registerWater);
+        setWaterTarget = findViewById(R.id.registerWater);
         waterProgressBar = findViewById(R.id.waterProgress);
         waterProgressBar.setMax(dailyGlassesOfWater);
 
@@ -144,7 +145,7 @@ public class MainActivity extends DrawerActivity {
 
 
 
-        registerWaterButton.setOnClickListener(new View.OnClickListener() {
+        setWaterTarget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -154,7 +155,7 @@ public class MainActivity extends DrawerActivity {
                 EditText enteredValue = popupView.findViewById(R.id.WaterEnteredValue);
                 Button submitButton = popupView.findViewById(R.id.acceptWaterAmountButton);
 
-                text.setText(R.string.addWaterAmountLabel);
+                text.setText(R.string.registerWaterText);
                 int width = LinearLayout.LayoutParams.WRAP_CONTENT;
                 int height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 boolean focusable = true;
@@ -167,8 +168,9 @@ public class MainActivity extends DrawerActivity {
                         popupWindow.dismiss();
                         return;
                     }
-                    int value = Integer.parseInt(enteredValue.getText().toString());
-                    DaysRepository repo = new DaysRepository(getApplication());
+                    dailyGlassesOfWater = Integer.parseInt(enteredValue.getText().toString());
+                    updateWaterLabel();
+                    /*DaysRepository repo = new DaysRepository(getApplication());
 
                     repo.getByDate(currentDay.day.dayId).thenAccept( dayWithServings ->  {
                         dayWithServings.day.glassesOfWater += value;
@@ -177,6 +179,8 @@ public class MainActivity extends DrawerActivity {
                     popupWindow.dismiss();
                     currentDay.day.glassesOfWater += value;
                     setWaterLabel(currentDay.day);
+                    */
+                    popupWindow.dismiss();
                 });
 
 
@@ -257,6 +261,20 @@ public class MainActivity extends DrawerActivity {
             }
         });
 
+        FloatingActionButton fab = findViewById(R.id.water_fab);
+
+        fab.setOnClickListener(v -> {
+            DaysRepository repo = new DaysRepository(getApplication());
+
+            repo.getByDate(currentDay.day.dayId).thenAccept(dayWithServings -> {
+                dayWithServings.day.glassesOfWater++;
+                repo.update(dayWithServings.day);
+            });
+            currentDay.day.glassesOfWater++;
+            setWaterLabel(currentDay.day);
+
+        });
+        updateWaterLabel();
     }
 
     private void updateSelectedDay(DayWithServings day){
@@ -456,8 +474,10 @@ public class MainActivity extends DrawerActivity {
     }
 
     private void setWaterLabel(Day day){
-        waterLabel.setText(getString(R.string.glassesOfWater, day.glassesOfWater));
-        waterProgressBar.setProgress(day.glassesOfWater);
+        waterLabel.post(() -> {
+            waterLabel.setText(getString(R.string.glassesOfWater, day.glassesOfWater));
+            waterProgressBar.setProgress(day.glassesOfWater);
+        });
     }
 
     private void setCurrentDate(LocalDate currentDay) {
