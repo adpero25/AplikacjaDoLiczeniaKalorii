@@ -118,4 +118,5 @@
     <string name="no_meals_returned">Żadne dania nie pasowały do założonych kryteriów wyszukiwania!</string>
     <string name="name_of_meal">nazwa...</string>
     <string name="steps">kroki...</string>
+    <string name="non_negative">Dane nie powinny być ujemne</string>
 </resources>
