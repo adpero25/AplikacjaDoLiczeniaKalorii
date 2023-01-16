@@ -8,45 +8,6 @@
     android:orientation="vertical"
     tools:context=".activities.AddingServingActivity">
 
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/listElementMarginTopBottom"
-
-        >
-
-
-        <LinearLayout
-            android:id="@+id/scanCodeBTN23"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@drawable/rounded_edge"
-            android:orientation="horizontal"
-            android:padding="10dp"
-            app:strokeColor="@color/white">
-
-            <TextView
-                android:id="@+id/caloriesRequirementTextView"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="22"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="@string/caloriesRequired" />
-
-            <Button
-                android:id="@+id/changeCaloriesRequirementBTN"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/change"
-                android:textAppearance="@style/ButtonText"
-                android:theme="@style/AccentButton"
-                app:cornerRadius="25dp" />
-
-
-        </LinearLayout>
-    </RelativeLayout>
-
     <Button
         android:id="@+id/previousDateBTN"
 
