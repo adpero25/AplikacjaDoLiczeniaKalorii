@@ -124,9 +124,15 @@ public class MealSuggestionsFragment extends Fragment {
                                                 );
                                                 listRoot.setAdapter(adapter);
                                                 listRoot.smoothScrollToPosition(0);
-                                            } else {
+                                            }
+                                            else if(response.body() != null) {
                                                 listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.no_meals_returned)));
                                                 listRoot.smoothScrollToPosition(0);
+                                            } else{
+                                                listRoot.post(() -> {
+                                                    listRoot.setAdapter(new SingleMessageAdapter(getString(R.string.fetching_failed)));
+                                                    listRoot.smoothScrollToPosition(0);
+                                                });
                                             }
 
                                         });
